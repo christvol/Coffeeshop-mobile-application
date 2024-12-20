@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Мобильное_приложение.Controls.UserAccountTile">
+    <Frame BackgroundColor="#1C1C1E" CornerRadius="10" Padding="15" HasShadow="False">
+        <Grid ColumnDefinitions="50, *, Auto">
+            <!-- Аватар -->
+            <Image Source="{Binding Avatar}" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+            <!-- Информация -->
+            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                <Label Text="{Binding Name}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                <Label Text="{Binding PhoneNumber}" TextColor="Gray" FontSize="14"/>
+            </VerticalStackLayout>
+
+            <!-- Кнопка перехода -->
+            <ImageButton Source="{Binding ChevronIcon}" Grid.Column="2" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="End"
+                         Clicked="OnTileClicked"/>
+        </Grid>
+    </Frame>
+</ContentView>
