@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Views;
 
-namespace Мобильное_приложение.Controls
+namespace Mobile_application.Controls
 {
     public partial class PickerWithImagesPopup : Popup
     {
@@ -19,7 +19,7 @@ namespace Мобильное_приложение.Controls
             {
                 ItemSelected?.Invoke(this, selectedItem);
                 // Закрытие всплывающего окна после выбора
-                (Parent as Popup)?.Close();
+                (this.Parent as Popup)?.Close();
             }
         }
     }

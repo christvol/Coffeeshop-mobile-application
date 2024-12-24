@@ -1,9 +1,9 @@
 using DB.Classes.DB;
+using Mobile_application.Classes.API;
 using System.Text.RegularExpressions;
-using Мобильное_приложение.Classes.API;
-using static Мобильное_приложение.Classes.Common;
+using static Mobile_application.Classes.Common;
 
-namespace Мобильное_приложение.Pages;
+namespace Mobile_application.Pages;
 /// <summary>
 /// Страница авторизации
 /// </summary>
@@ -70,7 +70,7 @@ public partial class PageLogin : ContentPage
             }
 
             this.pckrPhoneCode.ItemsSource = this._countries;
-            this.pckrPhoneCode.ItemDisplayBinding = new Binding("НазваниеСтраны");
+            this.pckrPhoneCode.ItemDisplayBinding = new Binding("CountryName");
             if (App.IsDebugMode)
             {
                 this.PickerPhoneCodesSelectCountryByName("Russia");
@@ -245,7 +245,7 @@ public partial class PageLogin : ContentPage
 
     private void OnPickerSelectedIndexChanged(object sender, EventArgs e)
     {
-        if (this.pckrPhoneCode.SelectedItem is КодыСтран selectedCountry)
+        if (this.pckrPhoneCode.SelectedItem is CountryCodes selectedCountry)
         {
             this.EntryPhoneUpdateText(selectedCountry);
         }

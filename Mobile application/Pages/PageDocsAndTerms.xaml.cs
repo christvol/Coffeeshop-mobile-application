@@ -1,4 +1,4 @@
-namespace Мобильное_приложение.Pages;
+namespace Mobile_application.Pages;
 
 public partial class PageDocsAndTerms : ContentPage
 {

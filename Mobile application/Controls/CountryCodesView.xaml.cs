@@ -1,4 +1,4 @@
-namespace Мобильное_приложение.Controls
+namespace Mobile_application.Controls
 {
     public class CountryCodeModel
     {

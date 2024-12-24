@@ -1,9 +1,15 @@
-﻿namespace Мобильное_приложение.Classes.API
+﻿namespace Mobile_application.Classes.API
 {
     public class RegistrationResponse
     {
-        public string Message { get; set; }
-        public string Code { get; set; }
+        public string Message
+        {
+            get; set;
+        }
+        public string Code
+        {
+            get; set;
+        }
     }
 
 }

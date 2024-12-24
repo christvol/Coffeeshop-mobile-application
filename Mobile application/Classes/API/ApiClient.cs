@@ -1,4 +1,4 @@
-﻿namespace Мобильное_приложение.Classes.API
+﻿namespace Mobile_application.Classes.API
 {
     using DB.Classes.DB;
     using System.Net.Http;

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Мобильное_приложение.Classes
+namespace Mobile_application.Classes
 {
     public class Common
     {

@@ -1,9 +1,9 @@
 using System.Timers;
-using Мобильное_приложение.Classes;
-using Мобильное_приложение.Classes.API;
+using Mobile_application.Classes;
+using Mobile_application.Classes.API;
 using Timer = System.Timers.Timer;
 
-namespace Мобильное_приложение.Pages;
+namespace Mobile_application.Pages;
 
 public partial class PageSMSCodeVerification : ContentPage
 {

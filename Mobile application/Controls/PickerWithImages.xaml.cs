@@ -1,12 +1,18 @@
 using CommunityToolkit.Maui.Views;
 
 
-namespace Мобильное_приложение.Controls
+namespace Mobile_application.Controls
 {
     public class ItemModel
     {
-        public string DisplayName { get; set; } // Название элемента
-        public string ImageSource { get; set; } // Путь к изображению
+        public string DisplayName
+        {
+            get; set;
+        } // Название элемента
+        public string ImageSource
+        {
+            get; set;
+        } // Путь к изображению
     }
 
     public partial class PickerWithImages : ContentView
@@ -16,8 +22,8 @@ namespace Мобильное_приложение.Controls
 
         public IEnumerable<ItemModel> ItemsSource
         {
-            get => (IEnumerable<ItemModel>)GetValue(ItemsSourceProperty);
-            set => SetValue(ItemsSourceProperty, value);
+            get => (IEnumerable<ItemModel>)this.GetValue(ItemsSourceProperty);
+            set => this.SetValue(ItemsSourceProperty, value);
         }
 
         public PickerWithImages()
@@ -29,13 +35,13 @@ namespace Мобильное_приложение.Controls
 
         private void OnButtonClicked(object sender, EventArgs e)
         {
-            if (ItemsSource == null || !ItemsSource.Any())
+            if (this.ItemsSource == null || !this.ItemsSource.Any())
             {
                 return;
             }
 
-            var popup = new PickerWithImagesPopup(ItemsSource);
-            popup.ItemSelected += OnItemSelected;
+            var popup = new PickerWithImagesPopup(this.ItemsSource);
+            popup.ItemSelected += this.OnItemSelected;
             Application.Current.MainPage.ShowPopup(popup);
         }
 
