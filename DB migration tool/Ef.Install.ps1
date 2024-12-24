@@ -2,11 +2,11 @@
 # Настройка кодировки UTF-8 для консоли
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-# Получение текущей директории, где лежит скрипт
-$currentDirectory = (Get-Location).Path
+# Путь к проекту
+$projectPath = "C:\Users\kmeen\source\repos\Мобильное приложение\Сервер REST-API"
 
-# Переход в каталог текущей папки
-Set-Location -Path $currentDirectory
+# Переход в каталог проекта
+Set-Location -Path $projectPath
 
 # Установка базового пакета Entity Framework Core
 dotnet add package Microsoft.EntityFrameworkCore

@@ -1,0 +1,5 @@
+﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+Scaffold-DbContext "Server=KRISTINAVIVO\SQLEXPRESS;Database=Кофейня;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Classes\DB -NoPluralize
+Copy-Item -Path "C:\Users\kmeen\source\repos\Мобильное приложение\Утилита для БД\Classes\DB\*" -Destination "C:\Users\kmeen\source\repos\Мобильное приложение\Мобильное приложение\Classes\DB" -Recurse -Force
+
+
