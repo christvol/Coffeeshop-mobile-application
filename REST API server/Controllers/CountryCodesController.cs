@@ -1,6 +1,7 @@
 ﻿using DB.Classes.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using REST_API_SERVER.Classes;
 
 namespace REST_API_SERVER.Controllers
 {
@@ -32,7 +33,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = "Страна с указанным ID не найдена."
+                    Message = Common.Strings.ErrorMessages.CountryNotFoundById
                 });
             }
 
@@ -50,12 +51,11 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = "Страна с указанным тикером не найдена."
+                    Message = Common.Strings.ErrorMessages.CountryNotFoundByTicker
                 });
             }
 
             return country;
         }
-
     }
 }

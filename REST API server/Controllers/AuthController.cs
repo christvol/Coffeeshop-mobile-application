@@ -1,34 +1,12 @@
 ﻿using DB.Classes.DB;
 using Microsoft.AspNetCore.Mvc;
+using REST_API_SERVER.Classes;
+using REST_API_SERVER.Classes.Requests;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 namespace REST_API_SERVER.Controllers
 {
-    public class RegistrationRequest
-    {
-        public string PhoneNumber
-        {
-            get; set;
-        }
-    }
-
-    public class VerificationRequest
-    {
-        public string PhoneNumber
-        {
-            get; set;
-        }
-        public string Code
-        {
-            get; set;
-        }
-        public int UserTypeId
-        {
-            get; set;
-        }
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
@@ -50,23 +28,20 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = "Номер телефона обязателен."
+                        Message = Common.Strings.ErrorMessages.PhoneNumberRequired
                     });
                 }
 
-                // Удаление всех символов, кроме цифр и знака '+'
                 string cleanedPhoneNumber = new string(request.PhoneNumber.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
-                // Проверка формата номера телефона: начинается с '+', за которым следует от 11 до 20 цифр
-                if (!Regex.IsMatch(cleanedPhoneNumber, @"^\+\d{11,20}$"))
+                if (!Regex.IsMatch(cleanedPhoneNumber, Common.Strings.ValidationPatterns.PhoneNumber))
                 {
                     return this.BadRequest(new
                     {
-                        Message = "Неверный формат номера телефона. Ожидается формат: + и от 11 до 20 цифр."
+                        Message = Common.Strings.ErrorMessages.InvalidPhoneNumberFormat
                     });
                 }
 
-                // Проверка существования пользователя
                 var existingUser = this._context.Users.FirstOrDefault(u => u.PhoneNumber == cleanedPhoneNumber);
                 if (existingUser != null)
                 {
@@ -78,29 +53,24 @@ namespace REST_API_SERVER.Controllers
                     });
                 }
 
-                // Генерация 4-значного кода
                 var code = new Random().Next(1000, 9999).ToString();
                 var expiry = DateTime.UtcNow.AddSeconds(30);
                 VerificationCodes[cleanedPhoneNumber] = (code, expiry);
 
                 return this.Ok(new
                 {
-                    Message = "Код подтверждения отправлен.",
+                    Message = Common.Strings.SuccessMessages.VerificationCodeSent,
                     Code = code
                 });
             }
             catch (Exception)
             {
-                // Логирование ошибки (при необходимости)
-                // _logger.LogError(ex, "Ошибка в методе Register");
-
                 return this.StatusCode(500, new
                 {
-                    Message = "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже."
+                    Message = Common.Strings.ErrorMessages.ServerError
                 });
             }
         }
-
 
         [HttpPost("verify")]
         public async Task<IActionResult> Verify([FromBody] VerificationRequest request)
@@ -109,7 +79,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = "Номер телефона и код обязательны."
+                    Message = Common.Strings.ErrorMessages.PhoneNumberRequired
                 });
             }
 
@@ -120,7 +90,7 @@ namespace REST_API_SERVER.Controllers
                     VerificationCodes.TryRemove(request.PhoneNumber, out _);
                     return this.BadRequest(new
                     {
-                        Message = "Код истек. Пожалуйста, запросите новый."
+                        Message = Common.Strings.ErrorMessages.VerificationCodeExpired
                     });
                 }
 
@@ -149,7 +119,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = "Неверный код."
+                        Message = Common.Strings.ErrorMessages.InvalidVerificationCode
                     });
                 }
             }
@@ -157,7 +127,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = "Код не найден. Пожалуйста, запросите новый."
+                    Message = Common.Strings.ErrorMessages.VerificationCodeNotFound
                 });
             }
         }
