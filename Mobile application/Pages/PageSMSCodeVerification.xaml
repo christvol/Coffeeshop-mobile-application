@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Мобильное_приложение.Pages.PageSMSCodeVerification"
+             Title="SMS Code Verification"
+             BackgroundColor="Black">
+    <VerticalStackLayout Padding="20" Spacing="20" VerticalOptions="Center">
+
+        <Label 
+            x:Name="lblInfo"
+            Text="SMS-code sent to your number"
+            TextColor="White"
+            FontSize="Medium"
+            HorizontalOptions="Center" />
+
+        <Label 
+            x:Name="lblPhoneNumber"
+            Text=""
+            TextColor="White"
+            FontSize="Large"
+            HorizontalOptions="Center" />
+
+        <Entry
+    x:Name="entrySMSCode"
+    Placeholder="Enter SMS code"
+    Keyboard="Numeric"
+    TextColor="White"
+    FontSize="Large"
+    BackgroundColor="Transparent"
+    HorizontalTextAlignment="Center"
+    PlaceholderColor="Gray"
+    VerticalOptions="Center"
+    TextChanged="OnEntrySMSCodeTextChanged" />
+
+
+        <Label 
+            x:Name="lblTimer"
+            Text="00:59"
+            TextColor="Gray"
+            FontSize="Small"
+            HorizontalOptions="Center" />
+
+        <Button
+            x:Name="btnSendCode"
+            Text="Retry sending"
+            TextColor="Black"
+            BackgroundColor="Transparent"
+            Clicked="OnSendButtonClicked"
+            HorizontalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>

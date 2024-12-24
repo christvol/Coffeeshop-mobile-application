@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui.Core;
 
 namespace Mobile_application
 {
@@ -8,14 +8,29 @@ namespace Mobile_application
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-            builder.UseMauiApp<App>().ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            }).UseMauiCommunityToolkit();
+            builder
+                .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitCore()
+                .ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                });
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+
+            #region Регистрация HttpClient с базовым URL API
+            builder.Services.AddHttpClient("ApiClient", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5121/api/");
+            });
+            #endregion
+
+
             return builder.Build();
         }
     }

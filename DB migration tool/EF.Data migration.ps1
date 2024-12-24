@@ -79,37 +79,50 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Output "Scaffold DbContext успешно выполнен."
 
-        # Переход на каталог выше
-        Set-Location -Path (Join-Path -Path $currentDirectory -ChildPath "..")
-        $restApiServerDbPath = Join-Path -Path (Join-Path -Path $currentDirectory -ChildPath "REST API server") -ChildPath "Classes\DB"
+        # Переход на каталог решения
+        $solutionDirectory = Join-Path -Path $currentDirectory -ChildPath ".."
+        Set-Location -Path $solutionDirectory
 
-        # Проверяем существование папки REST API server\Classes\DB
-        if (-Not (Test-Path -Path $restApiServerDbPath)) {
-            Write-Output "Папка $restApiServerDbPath не существует. Создаем папку..."
-            New-Item -Path $restApiServerDbPath -ItemType Directory | Out-Null
-            if (Test-Path -Path $restApiServerDbPath) {
-                Write-Output "Папка $restApiServerDbPath успешно создана."
+        # Определяем пути к проектам
+        $restApiServerDbPath = Join-Path -Path $solutionDirectory -ChildPath "REST API server\Classes\DB"
+        $mobileAppDbPath = Join-Path -Path $solutionDirectory -ChildPath "Mobile application\Classes\DB"
+        $migrationToolDbPath = Join-Path -Path $solutionDirectory -ChildPath "DB migration tool\Classes\DB"
+
+        $targetPaths = @($restApiServerDbPath, $mobileAppDbPath, $migrationToolDbPath)
+
+        foreach ($targetPath in $targetPaths) {
+            # Проверяем существование папки и очищаем содержимое
+            if (-Not (Test-Path -Path $targetPath)) {
+                Write-Output "Папка $targetPath не существует. Создаем папку..."
+                New-Item -Path $targetPath -ItemType Directory | Out-Null
+                if (Test-Path -Path $targetPath) {
+                    Write-Output "Папка $targetPath успешно создана."
+                } else {
+                    Write-Output "Ошибка при создании папки $targetPath."
+                }
             } else {
-                Write-Output "Ошибка при создании папки $restApiServerDbPath."
+                Write-Output "Папка $targetPath уже существует. Очищаем содержимое..."
+                try {
+                    Remove-Item -Path "$targetPath\*" -Recurse -Force
+                    Write-Output "Содержимое папки $targetPath успешно удалено."
+                } catch {
+                    Write-Output "Ошибка при удалении содержимого папки $targetPath : ${_}"
+                }
             }
-        } else {
-            Write-Output "Папка $restApiServerDbPath уже существует. Очищаем содержимое..."
+
+            # Копируем сгенерированные файлы
+            Write-Output "Копируем файлы из $serverDbPath в $targetPath..."
             try {
-                Remove-Item -Path "$restApiServerDbPath\*" -Recurse -Force
-                Write-Output "Содержимое папки $restApiServerDbPath успешно удалено."
+                Copy-Item -Path "$serverDbPath\*" -Destination "$targetPath" -Recurse -Force
+                Write-Output "Файлы успешно скопированы в $targetPath."
             } catch {
-                Write-Output "Ошибка при удалении содержимого папки $restApiServerDbPath : ${_}"
+                Write-Output "Ошибка при копировании файлов в $targetPath : ${_}"
             }
         }
 
-        # Копируем сгенерированные файлы в REST API server\Classes\DB
-        Write-Output "Копируем файлы из $serverDbPath в $restApiServerDbPath..."
-        try {
-            Copy-Item -Path "$serverDbPath\*" -Destination "$restApiServerDbPath" -Recurse -Force
-            Write-Output "Файлы успешно скопированы."
-        } catch {
-            Write-Output "Ошибка при копировании файлов: ${_}"
-        }
+        # Возврат в исходный каталог
+        Set-Location -Path $currentDirectory
+        Write-Output "Возврат в исходный каталог: $currentDirectory."
     } else {
         Write-Output "Scaffold DbContext завершился с ошибками:"
         Write-Output $output

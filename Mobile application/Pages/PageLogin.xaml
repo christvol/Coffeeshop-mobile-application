@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Мобильное_приложение.Controls"
+             x:Class="Мобильное_приложение.Pages.PageLogin"
+             Title="Login"
+             BackgroundColor="{StaticResource MintGreen}">
+    <Grid RowDefinitions="*,Auto">
+        <!--#region Верхняя часть страницы -->
+        <VerticalStackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+
+            <!--#region Заголовок -->
+            <Label
+               x:Name="lblTitle"
+               Text="Your phone number"
+                Style="{StaticResource LabelTitleCentered}" 
+                />
+            <!--#endregion-->
+
+            <!--#region  Поле для номера телефона -->
+            <HorizontalStackLayout Padding="10" Spacing="10" VerticalOptions="Center">
+                <!-- Комбобокс (Picker) для кода страны -->
+                <Picker
+                    x:Name="pckrPhoneCode"
+                    HorizontalOptions="Start"
+                    MinimumWidthRequest="150"
+                    MaximumWidthRequest="250"
+                    WidthRequest="150"
+                    FontSize="Small"
+                   
+                    ItemDisplayBinding="{Binding НазваниеСтраны}"
+                    Style="{StaticResource PickerPrimary}"
+                    SelectedIndexChanged="OnPickerSelectedIndexChanged" />
+
+                <!-- Текстовое поле (Entry) для номера телефона -->
+                <Entry
+                    x:Name="entryPhone"
+                    Text=""
+                    Placeholder="Введите номер"
+                    Style="{StaticResource EntryPrimaryPhoneCode}"
+                    TextChanged="OnEntryPhoneTextChanged" />
+            </HorizontalStackLayout>
+
+            <!--#endregion-->
+
+        </VerticalStackLayout>
+        <!--#endregion-->
+
+        <!--#region  Нижняя часть страницы -->
+        <VerticalStackLayout VerticalOptions="End" Padding="20" Grid.Row="1">
+            <Label 
+                x:Name="lblInfo"
+                Text="Docs and terms"
+                   TextColor="#334CDC"
+                   FontSize="Small"
+                   HorizontalOptions="Center"
+                   Margin="0,10,0,30" />
+            <Button 
+                x:Name="btnLogin"
+                Text="Get SMS code"
+                TextColor="White"
+                Style="{StaticResource ButtonPrimary}"
+                Padding="15,10"
+                WidthRequest="200"
+                HorizontalOptions="Center" 
+                Clicked="OnLoginButtonClicked"
+                />
+        </VerticalStackLayout>
+        <!--#endregion-->
+    </Grid>
+</ContentPage>

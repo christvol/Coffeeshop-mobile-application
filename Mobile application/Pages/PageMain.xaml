@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Мобильное_приложение.Controls"
+             x:Class="Мобильное_приложение.Pages.PageMain"
+             Title="Profile"
+             BackgroundColor="Black">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Плитка с информацией об аккаунте -->
+            <VerticalStackLayout Padding="20" Spacing="10">
+                <!-- Использование кастомного элемента -->
+                <controls:UserAccountTile 
+            Name="Кристина"
+            PhoneNumber="+7 903 265-12-12"
+            Avatar="profile_placeholder.png"
+            ChevronIcon="chevron_right.png"
+            Command="{Binding NavigateToProfileCommand}" />
+            </VerticalStackLayout>
+
+            <!-- Заголовок "Действия" -->
+            <Label Text="Actions" TextColor="White" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+
+            <!-- Список действий -->
+            <VerticalStackLayout Spacing="10">
+                <!-- Пример одного действия -->
+                <Frame BackgroundColor="#1C1C1E" CornerRadius="10" Padding="15" HasShadow="False">
+                    <Grid ColumnDefinitions="50, *, Auto">
+                        <!-- Иконка -->
+                        <Image Source="action_icon1.png" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                        <!-- Название действия -->
+                        <Label Text="Action 1" TextColor="White" FontSize="16" Grid.Column="1" VerticalOptions="Center"/>
+
+                        <!-- Кнопка перехода -->
+                        <ImageButton Source="chevron_right.png" Grid.Column="2" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="End"/>
+                    </Grid>
+                </Frame>
+
+                <!-- Пример другого действия -->
+                <Frame BackgroundColor="#1C1C1E" CornerRadius="10" Padding="15" HasShadow="False">
+                    <Grid ColumnDefinitions="50, *, Auto">
+                        <Image Source="action_icon2.png" WidthRequest="40" HeightRequest="40" VerticalOptions="Center" HorizontalOptions="Start"/>
+                        <Label Text="Action 2" TextColor="White" FontSize="16" Grid.Column="1" VerticalOptions="Center"/>
+                        <ImageButton Source="chevron_right.png" Grid.Column="2" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="End"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
