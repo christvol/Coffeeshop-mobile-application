@@ -70,6 +70,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Retry sending.
+        /// </summary>
+        internal static string ButtonRetrySending {
+            get {
+                return ResourceManager.GetString("ButtonRetrySending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Docs and terms.
         /// </summary>
         internal static string LabelDocsAndTerms {
@@ -88,6 +97,33 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на SMS-code sent to your number.
+        /// </summary>
+        internal static string LabelSMSSent {
+            get {
+                return ResourceManager.GetString("LabelSMSSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на 00:59.
+        /// </summary>
+        internal static string LabelTimerDefault {
+            get {
+                return ResourceManager.GetString("LabelTimerDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter SMS code.
+        /// </summary>
+        internal static string PlaceholderEnterSMS {
+            get {
+                return ResourceManager.GetString("PlaceholderEnterSMS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Enter your number.
         /// </summary>
         internal static string PlaceholderPhone {
@@ -102,6 +138,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string TitleLogin {
             get {
                 return ResourceManager.GetString("TitleLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на SMS Code Verification.
+        /// </summary>
+        internal static string TitleSMSCodeVerification {
+            get {
+                return ResourceManager.GetString("TitleSMSCodeVerification", resourceCulture);
             }
         }
     }

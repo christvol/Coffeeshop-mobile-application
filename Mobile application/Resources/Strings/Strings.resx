@@ -132,4 +132,19 @@
   <data name="LabelDocsAndTerms" xml:space="preserve">
     <value>Docs and terms</value>
   </data>
+  <data name="TitleSMSCodeVerification" xml:space="preserve">
+    <value>SMS Code Verification</value>
+  </data>
+  <data name="LabelSMSSent" xml:space="preserve">
+    <value>SMS-code sent to your number</value>
+  </data>
+  <data name="PlaceholderEnterSMS" xml:space="preserve">
+    <value>Enter SMS code</value>
+  </data>
+  <data name="LabelTimerDefault" xml:space="preserve">
+    <value>00:59</value>
+  </data>
+  <data name="ButtonRetrySending" xml:space="preserve">
+    <value>Retry sending</value>
+  </data>
 </root>
