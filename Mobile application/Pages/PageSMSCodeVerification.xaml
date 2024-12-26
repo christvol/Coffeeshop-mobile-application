@@ -4,48 +4,43 @@
              xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
              x:Class="Mobile_application.Pages.PageSMSCodeVerification"
              Title="{x:Static res:Strings.TitleSMSCodeVerification}"
-             BackgroundColor="Black">
+             BackgroundColor="{StaticResource MintGreen}">
     <VerticalStackLayout Padding="20" Spacing="20" VerticalOptions="Center">
 
+        <!-- Текст "SMS-code sent to your number" -->
         <Label 
             x:Name="lblInfo"
             Text="{x:Static res:Strings.LabelSMSSent}"
-            TextColor="White"
-            FontSize="Medium"
-            HorizontalOptions="Center" />
+            Style="{StaticResource LabelTitleCentered}" />
 
+        <!-- Текст "Номер телефона" -->
         <Label 
             x:Name="lblPhoneNumber"
             Text=""
-            TextColor="White"
-            FontSize="Large"
+            Style="{StaticResource LabelTitleCentered}" 
+            TextColor="{StaticResource White}"
             HorizontalOptions="Center" />
 
+        <!-- Поле ввода кода -->
         <Entry
             x:Name="entrySMSCode"
             Placeholder="{x:Static res:Strings.PlaceholderEnterSMS}"
-            Keyboard="Numeric"
-            TextColor="White"
-            FontSize="Large"
-            BackgroundColor="Transparent"
-            HorizontalTextAlignment="Center"
-            PlaceholderColor="Gray"
-            VerticalOptions="Center"
+            Style="{StaticResource EntryPrimaryPhoneCode}"
             TextChanged="OnEntrySMSCodeTextChanged" />
 
+        <!-- Таймер -->
         <Label 
             x:Name="lblTimer"
             Text="{x:Static res:Strings.LabelTimerDefault}"
-            TextColor="Gray"
-            FontSize="Small"
+            TextColor="{StaticResource White}"
+            FontSize="14"
             HorizontalOptions="Center" />
 
+        <!-- Кнопка повторной отправки -->
         <Button
             x:Name="btnSendCode"
             Text="{x:Static res:Strings.ButtonRetrySending}"
-            TextColor="Black"
-            BackgroundColor="Transparent"
-            Clicked="OnSendButtonClicked"
-            HorizontalOptions="Center" />
+            Style="{StaticResource ButtonPrimaryShort}"
+            Clicked="OnSendButtonClicked" />
     </VerticalStackLayout>
 </ContentPage>

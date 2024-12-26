@@ -1,6 +1,6 @@
-using System.Timers;
 using Mobile_application.Classes;
 using Mobile_application.Classes.API;
+using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace Mobile_application.Pages;
@@ -10,15 +10,15 @@ public partial class PageSMSCodeVerification : ContentPage
     #region Поля    
     private readonly string phoneNumber;
     private string code;
-    private bool isCodeCorrect;
-    private int countdownDefault = 60;
+    private readonly bool isCodeCorrect;
+    private readonly int countdownDefault = 60;
     private int countdown = 60;
     private Timer countdownTimer;
 
     #endregion
 
     #region Свойства
-    public string PhoneNumber => phoneNumber;
+    public string PhoneNumber => this.phoneNumber;
     #endregion
 
     #region Методы
@@ -28,9 +28,9 @@ public partial class PageSMSCodeVerification : ContentPage
     /// </summary>
     private void StartCountdown()
     {
-        countdownTimer = new Timer(1000); // 1 секунда
-        countdownTimer.Elapsed += OnCountdownElapsed;
-        countdownTimer.Start();
+        this.countdownTimer = new Timer(1000); // 1 секунда
+        this.countdownTimer.Elapsed += this.OnCountdownElapsed;
+        this.countdownTimer.Start();
     }
 
     /// <summary>
@@ -38,12 +38,12 @@ public partial class PageSMSCodeVerification : ContentPage
     /// </summary>
     private void StopCountdown()
     {
-        if (countdownTimer != null)
+        if (this.countdownTimer != null)
         {
-            countdownTimer.Stop();
-            countdownTimer.Elapsed -= OnCountdownElapsed;
-            countdownTimer.Dispose();
-            countdownTimer = null;
+            this.countdownTimer.Stop();
+            this.countdownTimer.Elapsed -= this.OnCountdownElapsed;
+            this.countdownTimer.Dispose();
+            this.countdownTimer = null;
         }
     }
 
@@ -55,17 +55,17 @@ public partial class PageSMSCodeVerification : ContentPage
         try
         {
             var apiClient = new ApiClient(Common.API.entryPoint);
-            var response = await apiClient.RegisterAsync(PhoneNumber);
-            code = response.Code;
+            var response = await apiClient.RegisterAsync(this.PhoneNumber);
+            this.code = response.Code;
 
             if (response != null)
             {
-                await DisplayAlert("Информация", $"Код подтверждения: {code}", "OK");
+                await this.DisplayAlert("Информация", $"Код подтверждения: {this.code}", "OK");
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", $"Не удалось получить код: {ex.Message}", "OK");
+            await this.DisplayAlert("Ошибка", $"Не удалось получить код: {ex.Message}", "OK");
         }
     }
 
@@ -74,16 +74,16 @@ public partial class PageSMSCodeVerification : ContentPage
     /// </summary>
     private async Task ValidateCodeAsync(string enteredCode)
     {
-        if (enteredCode == code)
+        if (enteredCode == this.code)
         {
-            StopCountdown();
-            await DisplayAlert("Успех", "Код подтвержден!", "OK");
+            this.StopCountdown();
+            await this.DisplayAlert("Успех", "Код подтвержден!", "OK");
             // Логика успешной проверки, например, переход на следующую страницу
-            await Navigation.PushAsync(new PageMain());
+            await this.Navigation.PushAsync(new PageMain());
         }
         else if (enteredCode.Length == 4) // Проверяем, только если введено 4 символа
         {
-            await DisplayAlert("Ошибка", "Неверный код. Попробуйте еще раз.", "OK");
+            await this.DisplayAlert("Ошибка", "Неверный код. Попробуйте еще раз.", "OK");
         }
     }
 
@@ -93,19 +93,19 @@ public partial class PageSMSCodeVerification : ContentPage
 
     public PageSMSCodeVerification(string phoneNumber)
     {
-        InitializeComponent();
+        this.InitializeComponent();
         this.phoneNumber = phoneNumber;
 
         // Установить отображение номера телефона
-        lblPhoneNumber.Text = this.phoneNumber;
+        this.lblPhoneNumber.Text = this.phoneNumber;
         if (App.IsDebugMode)
         {
-            countdownDefault = 3;
-            countdown = countdownDefault;
+            this.countdownDefault = 3;
+            this.countdown = this.countdownDefault;
         }
         // Запустить таймер и запросить код
-        StartCountdown();
-        GetCode();
+        this.StartCountdown();
+        this.GetCode();
     }
 
     #endregion
@@ -117,19 +117,19 @@ public partial class PageSMSCodeVerification : ContentPage
     /// </summary>
     private void OnCountdownElapsed(object sender, ElapsedEventArgs e)
     {
-        countdown--;
+        this.countdown--;
 
         // Обновление UI из потока
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            lblTimer.Text = TimeSpan.FromSeconds(countdown).ToString(@"mm\:ss");
+            this.lblTimer.Text = TimeSpan.FromSeconds(this.countdown).ToString(@"mm\:ss");
 
-            if (countdown <= 0)
+            if (this.countdown <= 0)
             {
-                StopCountdown();
-                btnSendCode.IsEnabled = true;
-                btnSendCode.BackgroundColor = Colors.Azure;
-                lblTimer.Text = "00:00";
+                this.StopCountdown();
+                this.btnSendCode.IsEnabled = true;
+                //btnSendCode.BackgroundColor = Colors.Azure;
+                this.lblTimer.Text = "00:00";
             }
         });
     }
@@ -141,14 +141,14 @@ public partial class PageSMSCodeVerification : ContentPage
     {
         try
         {
-            btnSendCode.IsEnabled = false;
-            countdown = countdownDefault;
-            StartCountdown();
-            GetCode();
+            this.btnSendCode.IsEnabled = false;
+            this.countdown = this.countdownDefault;
+            this.StartCountdown();
+            this.GetCode();
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ошибка", $"Не удалось отправить код: {ex.Message}", "OK");
+            await this.DisplayAlert("Ошибка", $"Не удалось отправить код: {ex.Message}", "OK");
         }
     }
 
@@ -157,7 +157,7 @@ public partial class PageSMSCodeVerification : ContentPage
     /// </summary>
     private async void OnEntrySMSCodeTextChanged(object sender, TextChangedEventArgs e)
     {
-        await ValidateCodeAsync(e.NewTextValue);
+        await this.ValidateCodeAsync(e.NewTextValue);
     }
 
     /// <summary>
@@ -166,7 +166,7 @@ public partial class PageSMSCodeVerification : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        StopCountdown();
+        this.StopCountdown();
     }
 
     #endregion

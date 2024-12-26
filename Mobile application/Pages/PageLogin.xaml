@@ -42,30 +42,26 @@
             </HorizontalStackLayout>
 
             <!--#endregion-->
-
+            <!--#region  Нижняя часть страницы -->
+            <VerticalStackLayout VerticalOptions="End" Padding="20" Grid.Row="1">
+                <Label 
+         x:Name="lblInfo"
+         Text="{x:Static res:Strings.LabelDocsAndTerms}"
+         TextColor="#334CDC"
+         FontSize="Small"
+         HorizontalOptions="Center"
+         Margin="0,10,0,30" />
+                <Button 
+         x:Name="btnLogin"
+         Text="{x:Static res:Strings.ButtonGetSmsCode}"
+         Style="{StaticResource ButtonPrimaryShort}"
+         Clicked="OnLoginButtonClicked"
+         />
+            </VerticalStackLayout>
+            <!--#endregion-->
         </VerticalStackLayout>
         <!--#endregion-->
 
-        <!--#region  Нижняя часть страницы -->
-        <VerticalStackLayout VerticalOptions="End" Padding="20" Grid.Row="1">
-            <Label 
-                x:Name="lblInfo"
-                Text="{x:Static res:Strings.LabelDocsAndTerms}"
-                TextColor="#334CDC"
-                FontSize="Small"
-                HorizontalOptions="Center"
-                Margin="0,10,0,30" />
-            <Button 
-                x:Name="btnLogin"
-                Text="{x:Static res:Strings.ButtonGetSmsCode}"
-                TextColor="White"
-                Style="{StaticResource ButtonPrimary}"
-                Padding="15,10"
-                WidthRequest="200"
-                HorizontalOptions="Center" 
-                Clicked="OnLoginButtonClicked"
-                />
-        </VerticalStackLayout>
-        <!--#endregion-->
+
     </Grid>
 </ContentPage>

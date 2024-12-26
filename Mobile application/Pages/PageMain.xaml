@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:Mobile_application.Controls"
              x:Class="Mobile_application.Pages.PageMain"
              Title="Profile"
-             BackgroundColor="Black">
+             BackgroundColor="{StaticResource MintGreen}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
