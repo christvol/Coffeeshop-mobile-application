@@ -86,6 +86,9 @@
 	  <MauiXaml Update="CountryCodesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PageProducts.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
