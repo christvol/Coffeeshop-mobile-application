@@ -1,6 +1,7 @@
 ﻿namespace Mobile_application.Classes.API
 {
-    using DB.Classes.DB;
+    using global::Common.Classes.DB;
+    using global::Common.Classes.DTO;
     using System.Net.Http;
     using System.Net.Http.Json;
     using System.Text.Json;
@@ -212,6 +213,42 @@
         }
 
         #endregion
+
+        #region UserTypes
+
+        /// <summary>
+        /// Получение типа пользователя по ID.
+        /// </summary>
+        /// <param name="id">ID пользователя.</param>
+        /// <returns>Объект <see cref="UserTypeDto"/> или null, если не найден.</returns>
+        /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
+        public async Task<UserTypeDto?> GetUserTypeByUserIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Users/{id}/UserType");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<UserTypeDto>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении типа пользователя по ID: {ex.Message}");
+            }
+        }
+
+        #endregion
+
 
         public async Task<RegistrationResponse?> RegisterAsync(string phoneNumber)
         {

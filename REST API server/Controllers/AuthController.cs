@@ -1,9 +1,9 @@
-﻿using DB.Classes.DB;
+﻿using Common.Classes.DB;
 using Microsoft.AspNetCore.Mvc;
-using REST_API_SERVER.Classes;
 using REST_API_SERVER.Classes.Requests;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using Strings = REST_API_SERVER.Classes.CommonLocal.Strings;
 
 namespace REST_API_SERVER.Controllers
 {
@@ -28,17 +28,17 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = Common.Strings.ErrorMessages.PhoneNumberRequired
+                        Message = Strings.ErrorMessages.PhoneNumberRequired
                     });
                 }
 
                 string cleanedPhoneNumber = new string(request.PhoneNumber.Where(c => char.IsDigit(c) || c == '+').ToArray());
 
-                if (!Regex.IsMatch(cleanedPhoneNumber, Common.Strings.ValidationPatterns.PhoneNumber))
+                if (!Regex.IsMatch(cleanedPhoneNumber, Strings.ValidationPatterns.PhoneNumber))
                 {
                     return this.BadRequest(new
                     {
-                        Message = Common.Strings.ErrorMessages.InvalidPhoneNumberFormat
+                        Message = Strings.ErrorMessages.InvalidPhoneNumberFormat
                     });
                 }
 
@@ -59,7 +59,7 @@ namespace REST_API_SERVER.Controllers
 
                 return this.Ok(new
                 {
-                    Message = Common.Strings.SuccessMessages.VerificationCodeSent,
+                    Message = Strings.SuccessMessages.VerificationCodeSent,
                     Code = code
                 });
             }
@@ -67,7 +67,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.StatusCode(500, new
                 {
-                    Message = Common.Strings.ErrorMessages.ServerError
+                    Message = Strings.ErrorMessages.ServerError
                 });
             }
         }
@@ -79,7 +79,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = Common.Strings.ErrorMessages.PhoneNumberRequired
+                    Message = Strings.ErrorMessages.PhoneNumberRequired
                 });
             }
 
@@ -90,7 +90,7 @@ namespace REST_API_SERVER.Controllers
                     VerificationCodes.TryRemove(request.PhoneNumber, out _);
                     return this.BadRequest(new
                     {
-                        Message = Common.Strings.ErrorMessages.VerificationCodeExpired
+                        Message = Strings.ErrorMessages.VerificationCodeExpired
                     });
                 }
 
@@ -119,7 +119,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = Common.Strings.ErrorMessages.InvalidVerificationCode
+                        Message = Strings.ErrorMessages.InvalidVerificationCode
                     });
                 }
             }
@@ -127,7 +127,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = Common.Strings.ErrorMessages.VerificationCodeNotFound
+                    Message = Strings.ErrorMessages.VerificationCodeNotFound
                 });
             }
         }

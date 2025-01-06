@@ -1,7 +1,7 @@
-﻿using DB.Classes.DB;
+﻿using Common.Classes.DB;
+using Common.Classes.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using REST_API_SERVER.Controllers.DTO;
 
 namespace REST_API_SERVER.Controllers;
 

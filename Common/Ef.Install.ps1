@@ -3,7 +3,7 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 # Путь к проекту
-$projectPath = "C:\Users\kmeen\source\repos\Coffeeshop mobile application\DB migration tool"
+$projectPath = "C:\Users\kmeen\source\repos\Coffeeshop mobile application\Common"
 
 # Переход в каталог проекта
 Set-Location -Path $projectPath

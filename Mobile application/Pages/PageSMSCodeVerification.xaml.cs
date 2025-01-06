@@ -1,8 +1,7 @@
-using Mobile_application.Classes;
 using Mobile_application.Classes.API;
 using System.Timers;
+using API = Mobile_application.Classes.Common.API;
 using Timer = System.Timers.Timer;
-
 namespace Mobile_application.Pages;
 
 public partial class PageSMSCodeVerification : ContentPage
@@ -54,7 +53,7 @@ public partial class PageSMSCodeVerification : ContentPage
     {
         try
         {
-            var apiClient = new ApiClient(Common.API.entryPoint);
+            var apiClient = new ApiClient(API.entryPoint);
             var response = await apiClient.RegisterAsync(this.PhoneNumber);
             this.code = response.Code;
 
@@ -78,6 +77,18 @@ public partial class PageSMSCodeVerification : ContentPage
         {
             this.StopCountdown();
             await this.DisplayAlert("Успех", "Код подтвержден!", "OK");
+            var apiClient = new ApiClient(API.entryPoint);
+            //TODO: добавить методы в контроллер
+            //var user =
+            //var userType = apiClient.GetUserTypeByUserIdAsync(1);
+            //if (userType.Result.Title == "Admin")
+            //{
+
+            //}
+            //else
+            //{
+
+            //}
             // Логика успешной проверки, например, переход на следующую страницу
             await this.Navigation.PushAsync(new PageMain());
         }

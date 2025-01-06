@@ -124,7 +124,6 @@ namespace Mobile_application.Classes
             }
 
         }
-
         public static class API
         {
             public static readonly string entryPoint = "http://localhost:5121/api/";

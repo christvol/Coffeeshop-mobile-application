@@ -45,30 +45,34 @@ if (-Not (Test-Path -Path $projectFilePath)) {
 # Определяем пути для DB
 $serverDbPath = Join-Path -Path $currentDirectory -ChildPath "Classes\DB"
 
-# Проверяем существование папки и создаем, если она отсутствует
-if (-Not (Test-Path -Path $serverDbPath)) {
-    Write-Output "Папка $serverDbPath не существует. Создаем папку..."
-    New-Item -Path $serverDbPath -ItemType Directory | Out-Null
-    if (Test-Path -Path $serverDbPath) {
-        Write-Output "Папка $serverDbPath успешно создана."
-    } else {
-        Write-Output "Ошибка при создании папки $serverDbPath."
+# Проверяем существование папки и выводим предупреждение
+if (Test-Path -Path $serverDbPath) {
+    Write-Output "Папка $serverDbPath уже существует. Её содержимое будет перезаписано."
+    $response = Read-Host "Вы уверены, что хотите продолжить? (д/н / y/n)"
+    if ($response -notin @("д", "y", "Y", "Д")) {
+        Write-Output "Операция отменена пользователем."
+        exit 0
     }
-} else {
-    Write-Output "Папка $serverDbPath уже существует."
-}
 
-# Удаляем все файлы и папки в целевой директории
-if (Test-Path -Path "$serverDbPath\*") {
+    # Удаляем содержимое папки
     Write-Output "Удаляем содержимое папки $serverDbPath..."
     try {
         Remove-Item -Path "$serverDbPath\*" -Recurse -Force
         Write-Output "Содержимое папки $serverDbPath успешно удалено."
     } catch {
         Write-Output "Ошибка при удалении содержимого папки $serverDbPath : ${_}"
+        exit 1
     }
 } else {
-    Write-Output "Содержимое папки $serverDbPath отсутствует или уже удалено."
+    # Создаём папку, если её нет
+    Write-Output "Папка $serverDbPath не существует. Создаем папку..."
+    New-Item -Path $serverDbPath -ItemType Directory | Out-Null
+    if (Test-Path -Path $serverDbPath) {
+        Write-Output "Папка $serverDbPath успешно создана."
+    } else {
+        Write-Output "Ошибка при создании папки $serverDbPath."
+        exit 1
+    }
 }
 
 # Scaffold DbContext
@@ -79,45 +83,39 @@ try {
     if ($LASTEXITCODE -eq 0) {
         Write-Output "Scaffold DbContext успешно выполнен."
 
-        # Переход на каталог решения
+        # Определяем путь к общему проекту относительно решения
         $solutionDirectory = Join-Path -Path $currentDirectory -ChildPath ".."
-        Set-Location -Path $solutionDirectory
+        $commonProjectDbPath = Join-Path -Path $solutionDirectory -ChildPath "Common\Classes\DB"
 
-        # Определяем пути к проектам
-        $restApiServerDbPath = Join-Path -Path $solutionDirectory -ChildPath "REST API server\Classes\DB"
-        $mobileAppDbPath = Join-Path -Path $solutionDirectory -ChildPath "Mobile application\Classes\DB"
-        $migrationToolDbPath = Join-Path -Path $solutionDirectory -ChildPath "DB migration tool\Classes\DB"
-
-        $targetPaths = @($restApiServerDbPath, $mobileAppDbPath, $migrationToolDbPath)
-
-        foreach ($targetPath in $targetPaths) {
-            # Проверяем существование папки и очищаем содержимое
-            if (-Not (Test-Path -Path $targetPath)) {
-                Write-Output "Папка $targetPath не существует. Создаем папку..."
-                New-Item -Path $targetPath -ItemType Directory | Out-Null
-                if (Test-Path -Path $targetPath) {
-                    Write-Output "Папка $targetPath успешно создана."
-                } else {
-                    Write-Output "Ошибка при создании папки $targetPath."
-                }
+        # Проверяем существование папки и очищаем содержимое
+        if (-Not (Test-Path -Path $commonProjectDbPath)) {
+            Write-Output "Папка $commonProjectDbPath не существует. Создаем папку..."
+            New-Item -Path $commonProjectDbPath -ItemType Directory | Out-Null
+            if (Test-Path -Path $commonProjectDbPath) {
+                Write-Output "Папка $commonProjectDbPath успешно создана."
             } else {
-                Write-Output "Папка $targetPath уже существует. Очищаем содержимое..."
-                try {
-                    Remove-Item -Path "$targetPath\*" -Recurse -Force
-                    Write-Output "Содержимое папки $targetPath успешно удалено."
-                } catch {
-                    Write-Output "Ошибка при удалении содержимого папки $targetPath : ${_}"
-                }
+                Write-Output "Ошибка при создании папки $commonProjectDbPath."
+                exit 1
             }
-
-            # Копируем сгенерированные файлы
-            Write-Output "Копируем файлы из $serverDbPath в $targetPath..."
+        } else {
+            Write-Output "Папка $commonProjectDbPath уже существует. Очищаем содержимое..."
             try {
-                Copy-Item -Path "$serverDbPath\*" -Destination "$targetPath" -Recurse -Force
-                Write-Output "Файлы успешно скопированы в $targetPath."
+                Remove-Item -Path "$commonProjectDbPath\*" -Recurse -Force
+                Write-Output "Содержимое папки $commonProjectDbPath успешно удалено."
             } catch {
-                Write-Output "Ошибка при копировании файлов в $targetPath : ${_}"
+                Write-Output "Ошибка при удалении содержимого папки $commonProjectDbPath : ${_}"
+                exit 1
             }
+        }
+
+        # Копируем сгенерированные файлы
+        Write-Output "Копируем файлы из $serverDbPath в $commonProjectDbPath..."
+        try {
+            Copy-Item -Path "$serverDbPath\*" -Destination "$commonProjectDbPath" -Recurse -Force
+            Write-Output "Файлы успешно скопированы в $commonProjectDbPath."
+        } catch {
+            Write-Output "Ошибка при копировании файлов в $commonProjectDbPath : ${_}"
+            exit 1
         }
 
         # Возврат в исходный каталог

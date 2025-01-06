@@ -1,7 +1,7 @@
-﻿using DB.Classes.DB;
+﻿using Common.Classes.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using REST_API_SERVER.Classes;
+using Strings = REST_API_SERVER.Classes.CommonLocal.Strings;
 
 namespace REST_API_SERVER.Controllers
 {
@@ -33,7 +33,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = Common.Strings.ErrorMessages.CountryNotFoundById
+                    Message = Strings.ErrorMessages.CountryNotFoundById
                 });
             }
 
@@ -51,7 +51,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = Common.Strings.ErrorMessages.CountryNotFoundByTicker
+                    Message = Strings.ErrorMessages.CountryNotFoundByTicker
                 });
             }
 
