@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mobile_application.Controls.PageHeader"
+             BackgroundColor="#FFF8E1">
+    <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
+        <!-- Cafe Logo -->
+        <Image Source="cafe_logo.png" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" />
+
+        <!-- Page Title -->
+        <Label Text="Biba 'n' Boba"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               TextColor="#5A2A65"
+               Grid.Column="1" />
+
+        <!-- User Icon -->
+        <Image Source="user_avatar.png" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" Grid.Column="2" />
+    </Grid>
+</ContentView>

@@ -1,6 +1,7 @@
+using Common.Classes.DTO;
+using Mobile_application.Classes;
 using Mobile_application.Classes.API;
 using System.Timers;
-using API = Mobile_application.Classes.Common.API;
 using Timer = System.Timers.Timer;
 namespace Mobile_application.Pages;
 
@@ -53,50 +54,111 @@ public partial class PageSMSCodeVerification : ContentPage
     {
         try
         {
-            var apiClient = new ApiClient(API.entryPoint);
+            var apiClient = new ApiClient(CommonLocal.API.entryPoint);
             var response = await apiClient.RegisterAsync(this.PhoneNumber);
             this.code = response.Code;
 
             if (response != null)
             {
-                await this.DisplayAlert("Информация", $"Код подтверждения: {this.code}", "OK");
+                await this.DisplayAlert(CommonLocal.DialogTitles.Information,
+                    string.Format(CommonLocal.Strings.SuccessMessages.CodeFetched, this.code), "OK");
+                if (App.IsDebugMode)
+                {
+                    this.entrySMSCode.Text = this.code;
+                }
             }
         }
         catch (Exception ex)
         {
-            await this.DisplayAlert("Ошибка", $"Не удалось получить код: {ex.Message}", "OK");
+            await this.DisplayAlert(CommonLocal.DialogTitles.Error,
+                string.Format(CommonLocal.Strings.ErrorMessages.CodeFetchFailed, ex.Message), "OK");
         }
     }
+
 
     /// <summary>
     /// Проверка введенного кода.
-    /// </summary>
+    /// </summary>Phone number must be exactly 10 digits
     private async Task ValidateCodeAsync(string enteredCode)
     {
+        if (enteredCode.Length < this.code.Length)
+            return;
+        if (string.IsNullOrEmpty(enteredCode))
+        {
+            await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.EmptyCode, "OK");
+            return;
+        }
+
         if (enteredCode == this.code)
         {
-            this.StopCountdown();
-            await this.DisplayAlert("Успех", "Код подтвержден!", "OK");
-            var apiClient = new ApiClient(API.entryPoint);
-            //TODO: добавить методы в контроллер
-            //var user =
-            //var userType = apiClient.GetUserTypeByUserIdAsync(1);
-            //if (userType.Result.Title == "Admin")
-            //{
+            try
+            {
+                this.StopCountdown();
+                await this.DisplayAlert(CommonLocal.DialogTitles.Success, CommonLocal.Strings.SuccessMessages.CodeVerified, "OK");
 
-            //}
-            //else
-            //{
+                var apiClient = new ApiClient(CommonLocal.API.entryPoint);
 
-            //}
-            // Логика успешной проверки, например, переход на следующую страницу
-            await this.Navigation.PushAsync(new PageMain());
+                // Получаем пользователя по номеру телефона
+                var user = await apiClient.GetUserByPhoneNumberAsync(this.phoneNumber.Trim());
+                if (user == null)
+                {
+                    // Если пользователь не найден, создаем его
+                    var newUser = new UserRequestDto
+                    {
+                        PhoneNumber = this.phoneNumber.Trim(),
+                        IdUserType = CommonLocal.DefaultUserData.IdUserType,
+                        FirstName = CommonLocal.DefaultUserData.FirstName,
+                        LastName = CommonLocal.DefaultUserData.LastName,
+                        BirthDate = DateTime.UtcNow.AddYears(CommonLocal.DefaultUserData.BirthYearOffset),
+                        Email = CommonLocal.DefaultUserData.Email
+                    };
+
+                    user = await apiClient.CreateUserAsync(newUser);
+
+                    if (user == null)
+                    {
+                        await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserCreationFailed, "OK");
+                        return;
+                    }
+                }
+
+                // Получаем тип пользователя
+                var userType = await apiClient.GetUserTypeByUserIdAsync(user.Id);
+                if (userType == null)
+                {
+                    await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserTypeNotFound, "OK");
+                    return;
+                }
+
+                // Переход на соответствующую страницу в зависимости от типа пользователя
+                switch (userType.Title)
+                {
+                    case CommonLocal.UserTypes.Customer:
+                        await this.Navigation.PushAsync(new PageMainCustomer());
+                        break;
+                    case CommonLocal.UserTypes.Employee:
+                    case CommonLocal.UserTypes.Admin:
+                        await this.Navigation.PushAsync(new PageMainEmployee());
+                        break;
+                    default:
+                        await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UnknownUserType, "OK");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayAlert(CommonLocal.DialogTitles.Error,
+                    string.Format(CommonLocal.Strings.ErrorMessages.DataProcessingError, ex.Message), "OK");
+            }
         }
-        else if (enteredCode.Length == 4) // Проверяем, только если введено 4 символа
+        else
         {
-            await this.DisplayAlert("Ошибка", "Неверный код. Попробуйте еще раз.", "OK");
+            await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.InvalidCode, "OK");
         }
     }
+
+
+
 
     #endregion
 
@@ -122,6 +184,12 @@ public partial class PageSMSCodeVerification : ContentPage
     #endregion
 
     #region Обработчики событий
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+    }
 
     /// <summary>
     /// Обработка таймера обратного отсчета.

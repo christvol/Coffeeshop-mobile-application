@@ -10,6 +10,10 @@ namespace REST_API_SERVER.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly CoffeeShopContext _context;
+    private bool UserExists(int id)
+    {
+        return this._context.Set<Users>().Any(e => e.Id == id);
+    }
 
     public UsersController(CoffeeShopContext context)
     {
@@ -39,6 +43,26 @@ public class UsersController : ControllerBase
 
         return user;
     }
+
+    // GET: api/Users/phone/{phoneNumber}
+    [HttpGet("phone/{phoneNumber}")]
+    public async Task<ActionResult<Users>> GetUserByPhoneNumber(string phoneNumber)
+    {
+        var user = await this._context.Set<Users>()
+            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
+        if (user == null)
+        {
+            return this.NotFound(new
+            {
+                Message = "User with the specified phone number not found."
+            });
+        }
+
+        return user;
+    }
+
+
 
     // POST: api/Users
     [HttpPost]
@@ -158,9 +182,4 @@ public class UsersController : ControllerBase
         return this.Ok(userTypeDto);
     }
 
-
-    private bool UserExists(int id)
-    {
-        return this._context.Set<Users>().Any(e => e.Id == id);
-    }
 }

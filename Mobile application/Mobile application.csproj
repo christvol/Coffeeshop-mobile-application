@@ -78,6 +78,9 @@
 	  <MauiXaml Update="Controls\CountryCodesView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Controls\PageHeader.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Controls\PickerWithImages.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -96,6 +99,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\PageMainCustomer.xaml.cs">
+	    <DependentUpon>PageMainCustomer.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>

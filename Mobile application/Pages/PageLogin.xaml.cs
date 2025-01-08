@@ -1,7 +1,7 @@
 using Common.Classes.DB;
 using Mobile_application.Classes.API;
 using System.Text.RegularExpressions;
-using static Mobile_application.Classes.Common;
+using static Mobile_application.Classes.CommonLocal;
 
 namespace Mobile_application.Pages;
 /// <summary>

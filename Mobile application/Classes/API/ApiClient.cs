@@ -214,6 +214,101 @@
 
         #endregion
 
+        #region Users
+
+        /// <summary>
+        /// Создание нового пользователя.
+        /// </summary>
+        /// <param name="userDto">Объект <see cref="UserRequestDto"/>, содержащий данные для создания пользователя.</param>
+        /// <returns>Объект <see cref="Users"/> с данными созданного пользователя или null, если запрос завершился неудачно.</returns>
+        /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
+        public async Task<Users?> CreateUserAsync(UserRequestDto userDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PostAsJsonAsync("Users", userDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании пользователя: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение пользователя по ID.
+        /// </summary>
+        /// <param name="id">ID пользователя.</param>
+        /// <returns>Объект <see cref="Users"/> или null, если не найден.</returns>
+        /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
+        public async Task<Users?> GetUserByIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Users/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении пользователя по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение пользователя по номеру телефона.
+        /// </summary>
+        /// <param name="phoneNumber">Номер телефона пользователя.</param>
+        /// <returns>Объект <see cref="Users"/> или null, если не найден.</returns>
+        /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
+        public async Task<Users?> GetUserByPhoneNumberAsync(string phoneNumber)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Users/phone/{phoneNumber}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении пользователя по номеру телефона: {ex.Message}");
+            }
+        }
+
+        #endregion
+
         #region UserTypes
 
         /// <summary>
@@ -248,7 +343,6 @@
         }
 
         #endregion
-
 
         public async Task<RegistrationResponse?> RegisterAsync(string phoneNumber)
         {

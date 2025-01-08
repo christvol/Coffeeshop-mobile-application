@@ -2,7 +2,7 @@
 
 namespace Mobile_application.Classes
 {
-    public class Common
+    public class CommonLocal
     {
         public static class ResourceFileLoader
         {
@@ -127,6 +127,48 @@ namespace Mobile_application.Classes
         public static class API
         {
             public static readonly string entryPoint = "http://localhost:5121/api/";
+        }
+        public static class Strings
+        {
+            public static class ErrorMessages
+            {
+                public const string EmptyCode = "Код не может быть пустым.";
+                public const string InvalidCode = "Неверный код. Попробуйте еще раз.";
+                public const string UserCreationFailed = "Не удалось создать пользователя.";
+                public const string UserTypeNotFound = "Тип пользователя не найден.";
+                public const string UnknownUserType = "Неизвестный тип пользователя.";
+                public const string DataProcessingError = "Произошла ошибка при обработке данных: {0}";
+                public const string CodeFetchFailed = "Не удалось получить код: {0}";
+            }
+
+            public static class SuccessMessages
+            {
+                public const string CodeVerified = "Код подтвержден!";
+                public const string CodeFetched = "Код подтверждения: {0}";
+            }
+        }
+
+        public static class DialogTitles
+        {
+            public const string Information = "Информация";
+            public const string Error = "Ошибка";
+            public const string Success = "Успех";
+        }
+
+        public static class DefaultUserData
+        {
+            public const int IdUserType = 2; // Тип пользователя: Customer
+            public const string FirstName = "Новый";
+            public const string LastName = "Пользователь";
+            public const string Email = "your@mail.com";
+            public const int BirthYearOffset = -18; // Возраст по умолчанию: 18 лет назад
+        }
+
+        public static class UserTypes
+        {
+            public const string Customer = "Customer";
+            public const string Employee = "Employee";
+            public const string Admin = "Admin";
         }
     }
 }
