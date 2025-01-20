@@ -147,4 +147,28 @@
   <data name="ButtonRetrySending" xml:space="preserve">
     <value>Retry sending</value>
   </data>
+  <data name="PlaceholderName" xml:space="preserve">
+    <value>Enter your name</value>
+  </data>
+  <data name="PlaceholderEmail" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="LabelNotifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="LabelEmailforreceipts" xml:space="preserve">
+    <value>We'll call you when the order is ready. And let you know about new offers.</value>
+  </data>
+  <data name="ButtonAboutApp" xml:space="preserve">
+    <value>About app</value>
+  </data>
+  <data name="ButtonFeedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ButtonLogout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
 </root>

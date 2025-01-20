@@ -3,20 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mobile_application.Controls.PageHeader"
              BackgroundColor="#FFF8E1">
-    <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
-        <!-- Cafe Logo -->
-        <Image Source="cafe_logo.png" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" />
+    <Grid Padding="10" ColumnDefinitions="Auto,*,Auto"
+          BackgroundColor="{StaticResource Primary}">
+        <!-- Логотип кафе -->
+        <Image Source="{Binding CafeLogoSource}" HeightRequest="40" WidthRequest="120" VerticalOptions="Center" />
 
-        <!-- Page Title -->
-        <Label Text="Biba 'n' Boba"
-               FontSize="20"
-               FontAttributes="Bold"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               TextColor="#5A2A65"
-               Grid.Column="1" />
+        <!-- Пустой прямоугольник -->
+        <BoxView BackgroundColor="Transparent" Grid.Column="1" />
 
-        <!-- User Icon -->
-        <Image Source="user_avatar.png" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" Grid.Column="2" />
+        <!-- Аватар пользователя -->
+        <Frame HeightRequest="40"
+               WidthRequest="40"
+               CornerRadius="20"
+               BorderColor="{StaticResource PrimaryDark}"          
+               Padding="0"
+               IsClippedToBounds="True"
+               VerticalOptions="Center"              
+               Grid.Column="2">
+            <!--<Image Source="{Binding UserAvatarSource}"/>-->
+
+          
+            <Button 
+                x:Name="btnAvatar"
+                HeightRequest="40"
+                WidthRequest="40"
+                BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    ImageSource="{Binding UserAvatarSource}"              
+                    Clicked="btnAvatar_Clicked"/>
+        </Frame>
     </Grid>
 </ContentView>

@@ -158,8 +158,8 @@ namespace Mobile_application.Classes
         public static class DefaultUserData
         {
             public const int IdUserType = 2; // Тип пользователя: Customer
-            public const string FirstName = "Новый";
-            public const string LastName = "Пользователь";
+            public const string FirstName = "Your first name";
+            public const string LastName = "Your last name";
             public const string Email = "your@mail.com";
             public const int BirthYearOffset = -18; // Возраст по умолчанию: 18 лет назад
         }

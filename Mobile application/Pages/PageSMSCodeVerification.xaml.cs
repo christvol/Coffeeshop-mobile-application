@@ -1,11 +1,11 @@
 using Common.Classes.DTO;
+using Common.Classes.Session;
 using Mobile_application.Classes;
-using Mobile_application.Classes.API;
 using System.Timers;
 using Timer = System.Timers.Timer;
 namespace Mobile_application.Pages;
 
-public partial class PageSMSCodeVerification : ContentPage
+public partial class PageSMSCodeVerification : CustomContentPage
 {
     #region Поля    
     private readonly string phoneNumber;
@@ -54,8 +54,8 @@ public partial class PageSMSCodeVerification : ContentPage
     {
         try
         {
-            var apiClient = new ApiClient(CommonLocal.API.entryPoint);
-            var response = await apiClient.RegisterAsync(this.PhoneNumber);
+
+            var response = await this.ApiClient.GetCodeAsync(this.PhoneNumber);
             this.code = response.Code;
 
             if (response != null)
@@ -96,10 +96,10 @@ public partial class PageSMSCodeVerification : ContentPage
                 this.StopCountdown();
                 await this.DisplayAlert(CommonLocal.DialogTitles.Success, CommonLocal.Strings.SuccessMessages.CodeVerified, "OK");
 
-                var apiClient = new ApiClient(CommonLocal.API.entryPoint);
+
 
                 // Получаем пользователя по номеру телефона
-                var user = await apiClient.GetUserByPhoneNumberAsync(this.phoneNumber.Trim());
+                var user = await this.ApiClient.GetUserByPhoneNumberAsync(this.phoneNumber.Trim());
                 if (user == null)
                 {
                     // Если пользователь не найден, создаем его
@@ -113,7 +113,7 @@ public partial class PageSMSCodeVerification : ContentPage
                         Email = CommonLocal.DefaultUserData.Email
                     };
 
-                    user = await apiClient.CreateUserAsync(newUser);
+                    user = await this.ApiClient.CreateUserAsync(newUser);
 
                     if (user == null)
                     {
@@ -123,22 +123,30 @@ public partial class PageSMSCodeVerification : ContentPage
                 }
 
                 // Получаем тип пользователя
-                var userType = await apiClient.GetUserTypeByUserIdAsync(user.Id);
+                var userType = await this.ApiClient.GetUserTypeByUserIdAsync(user.Id);
                 if (userType == null)
                 {
                     await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserTypeNotFound, "OK");
                     return;
                 }
 
+                // Формируем SessionData
+                this.SessionData = new SessionData
+                {
+                    CurrentUser = user,
+                    Data = null, // Можно передать дополнительные данные, если нужно
+                    Mode = WindowMode.Read
+                };
+
                 // Переход на соответствующую страницу в зависимости от типа пользователя
                 switch (userType.Title)
                 {
                     case CommonLocal.UserTypes.Customer:
-                        await this.Navigation.PushAsync(new PageMainCustomer());
+                        await this.Navigation.PushAsync(new PageMainCustomer(this.SessionData));
                         break;
                     case CommonLocal.UserTypes.Employee:
                     case CommonLocal.UserTypes.Admin:
-                        await this.Navigation.PushAsync(new PageMainEmployee());
+                        await this.Navigation.PushAsync(new PageMainEmployee(this.SessionData));
                         break;
                     default:
                         await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UnknownUserType, "OK");
@@ -156,6 +164,7 @@ public partial class PageSMSCodeVerification : ContentPage
             await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.InvalidCode, "OK");
         }
     }
+
 
 
 

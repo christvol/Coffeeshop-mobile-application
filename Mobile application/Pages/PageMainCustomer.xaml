@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Mobile_application.Controls"
              x:Class="Mobile_application.Pages.PageMainCustomer"
-             Title="PageMainClient">
+             
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             Title="PageMainCustomer"
+             BackgroundColor="{StaticResource MintGreen}">
     <Grid RowDefinitions="Auto,*">
         <!-- Page Header -->
-        <controls:PageHeader Grid.Row="0" />
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0" />
 
         <!-- Main Content -->
         <VerticalStackLayout Grid.Row="1">
@@ -16,4 +19,4 @@
                 HorizontalOptions="Center" />
         </VerticalStackLayout>
     </Grid>
-</ContentPage>
+</pages:CustomContentPage>

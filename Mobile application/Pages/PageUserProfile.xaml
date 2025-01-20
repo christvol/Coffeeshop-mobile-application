@@ -1,12 +1,71 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+             
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
              x:Class="Mobile_application.Pages.PageUserProfile"
-             Title="PageUserProfile">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentPage>
+             Title="Profile"
+             BackgroundColor="{StaticResource MintGreen}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- Your Name -->
+            <Entry
+                x:Name="entryUserFirstName"
+                Placeholder="{x:Static res:Strings.PlaceholderName}"
+                Text="Кристина"
+                Style="{StaticResource EntryPrimary}" />
+            <!-- Phone -->
+            <Entry
+                x:Name="entryPhone"
+                Placeholder="{x:Static res:Strings.PlaceholderPhone}"
+                Text="+7 903 265-12-12"
+                Keyboard="Telephone"
+                Style="{StaticResource EntryPrimary}" />
+            <!-- Notifications Toggle -->
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start">
+                <Label 
+                       Text="{x:Static res:Strings.LabelNotifications}"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Start"
+                       Style="{StaticResource LabelPrimary}" />
+                <Switch IsToggled="True"
+                        x:Name="switchNotifications" 
+                        WidthRequest="100"
+                        Margin="20,0,0,0" />
+            </StackLayout>
+            <!-- Email for receipts -->
+            <Label Text="{x:Static res:Strings.LabelEmailforreceipts}"
+                   FontSize="12"
+                   TextColor="{StaticResource Gray600}" 
+                   />
+            <Entry
+                x:Name="entryEmail"
+                Placeholder="{x:Static res:Strings.PlaceholderEmail}"
+                Keyboard="Email"
+                Style="{StaticResource EntryPrimary}" />
+            <!-- About App -->
+            <Button
+                x:Name="btnAboutApp"
+                Text="{x:Static res:Strings.ButtonAboutApp}"
+                Style="{StaticResource ButtonPrimary}" />
+            <!-- Feedback -->
+            <Button
+                x:Name="btnFeedback"
+                Text="{x:Static res:Strings.ButtonFeedback}"
+                Style="{StaticResource ButtonPrimary}" />
+            <!-- Save -->
+            <Button
+                 x:Name="btnSave"
+                 Text="{x:Static res:Strings.ButtonSave}"
+                Clicked="btnSave_Clicked"
+                 Style="{StaticResource ButtonPrimary}" />
+            <!-- Logout -->
+            <Button
+                x:Name="btnLogout"
+               Text="{x:Static res:Strings.ButtonLogout}"
+                Clicked="btnLogout_Clicked"
+                Style="{StaticResource ButtonTertiary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</pages:CustomContentPage>

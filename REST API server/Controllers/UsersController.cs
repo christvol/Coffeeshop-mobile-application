@@ -2,6 +2,7 @@
 using Common.Classes.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using REST_API_SERVER.Classes;
 
 namespace REST_API_SERVER.Controllers;
 
@@ -48,8 +49,10 @@ public class UsersController : ControllerBase
     [HttpGet("phone/{phoneNumber}")]
     public async Task<ActionResult<Users>> GetUserByPhoneNumber(string phoneNumber)
     {
+        var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(phoneNumber);
+
         var user = await this._context.Set<Users>()
-            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            .FirstOrDefaultAsync(u => u.PhoneNumber == cleanedPhoneNumber);
 
         if (user == null)
         {
@@ -63,11 +66,24 @@ public class UsersController : ControllerBase
     }
 
 
-
     // POST: api/Users
     [HttpPost]
     public async Task<ActionResult<Users>> CreateUser([FromBody] UserRequestDto userDto)
     {
+        // Очистка номера телефона от пробелов и знака '+'
+        var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(userDto.PhoneNumber);
+
+        // Проверяем, существует ли пользователь с таким номером телефона
+        var existingUser = await this._context.Users
+            .FirstOrDefaultAsync(u => u.PhoneNumber == cleanedPhoneNumber);
+
+        if (existingUser != null)
+        {
+            // Если пользователь существует, возвращаем его
+            return this.Ok(existingUser);
+        }
+
+        // Если пользователя с таким номером телефона нет, создаём нового
         var user = new Users
         {
             IdUserType = userDto.IdUserType,
@@ -75,7 +91,7 @@ public class UsersController : ControllerBase
             LastName = userDto.LastName,
             BirthDate = userDto.BirthDate,
             Email = userDto.Email,
-            PhoneNumber = userDto.PhoneNumber,
+            PhoneNumber = cleanedPhoneNumber,
             CreationDate = DateTime.UtcNow
         };
 
@@ -87,6 +103,7 @@ public class UsersController : ControllerBase
             id = user.Id
         }, user);
     }
+
 
 
     // PUT: api/Users/{id}

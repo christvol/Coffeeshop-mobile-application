@@ -1,13 +1,11 @@
 using Common.Classes.DB;
-using Mobile_application.Classes.API;
 using System.Text.RegularExpressions;
-using static Mobile_application.Classes.CommonLocal;
 
 namespace Mobile_application.Pages;
 /// <summary>
 /// Страница авторизации
 /// </summary>
-public partial class PageLogin : ContentPage
+public partial class PageLogin : CustomContentPage
 {
     #region Поля
     /// <summary>
@@ -60,8 +58,7 @@ public partial class PageLogin : ContentPage
     {
         try
         {
-            var apiClient = new ApiClient(API.entryPoint);
-            this._countries = await apiClient.GetCountryCodesAsync();
+            this._countries = await this.ApiClient.GetCountryCodesAsync();
 
             if (this._countries == null || this._countries.Count == 0)
             {

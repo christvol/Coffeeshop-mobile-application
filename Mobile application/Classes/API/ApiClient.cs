@@ -307,6 +307,31 @@
             }
         }
 
+        /// <summary>
+        /// Обновление данных пользователя.
+        /// </summary>
+        /// <param name="id">ID пользователя.</param>
+        /// <param name="userDto">Данные пользователя для обновления.</param>
+        /// <returns>True, если обновление прошло успешно; иначе false.</returns>
+        public async Task<bool> UpdateUserAsync(int id, UserRequestDto userDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PutAsJsonAsync($"Users/{id}", userDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении пользователя: {ex.Message}");
+            }
+        }
+
         #endregion
 
         #region UserTypes
@@ -344,7 +369,7 @@
 
         #endregion
 
-        public async Task<RegistrationResponse?> RegisterAsync(string phoneNumber)
+        public async Task<RegistrationResponse?> GetCodeAsync(string phoneNumber)
         {
             try
             {

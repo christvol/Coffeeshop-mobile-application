@@ -61,11 +61,38 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на About app.
+        /// </summary>
+        internal static string ButtonAboutApp {
+            get {
+                return ResourceManager.GetString("ButtonAboutApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Feedback.
+        /// </summary>
+        internal static string ButtonFeedback {
+            get {
+                return ResourceManager.GetString("ButtonFeedback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Get SMS code.
         /// </summary>
         internal static string ButtonGetSmsCode {
             get {
                 return ResourceManager.GetString("ButtonGetSmsCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Logout.
+        /// </summary>
+        internal static string ButtonLogout {
+            get {
+                return ResourceManager.GetString("ButtonLogout", resourceCulture);
             }
         }
         
@@ -79,11 +106,38 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Save.
+        /// </summary>
+        internal static string ButtonSave {
+            get {
+                return ResourceManager.GetString("ButtonSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Docs and terms.
         /// </summary>
         internal static string LabelDocsAndTerms {
             get {
                 return ResourceManager.GetString("LabelDocsAndTerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на We&apos;ll call you when the order is ready. And let you know about new offers..
+        /// </summary>
+        internal static string LabelEmailforreceipts {
+            get {
+                return ResourceManager.GetString("LabelEmailforreceipts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Notifications.
+        /// </summary>
+        internal static string LabelNotifications {
+            get {
+                return ResourceManager.GetString("LabelNotifications", resourceCulture);
             }
         }
         
@@ -115,11 +169,29 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter your email.
+        /// </summary>
+        internal static string PlaceholderEmail {
+            get {
+                return ResourceManager.GetString("PlaceholderEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Enter SMS code.
         /// </summary>
         internal static string PlaceholderEnterSMS {
             get {
                 return ResourceManager.GetString("PlaceholderEnterSMS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter your name.
+        /// </summary>
+        internal static string PlaceholderName {
+            get {
+                return ResourceManager.GetString("PlaceholderName", resourceCulture);
             }
         }
         

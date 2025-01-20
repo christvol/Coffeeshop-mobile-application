@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages;
 
-public partial class PageMain : ContentPage
+public partial class PageMain : CustomContentPage
 {
     public ObservableCollection<ProductTypes> ProductCategories { get; private set; } = new();
 
@@ -28,8 +28,7 @@ public partial class PageMain : ContentPage
     {
         try
         {
-            var apiClient = new ApiClient();
-            var categories = await apiClient.GetAllProductTypesAsync();
+            var categories = await ApiClient.GetAllProductTypesAsync();
 
             this.ProductCategories.Clear();
             foreach (var category in categories)
