@@ -1,6 +1,7 @@
 ﻿using Common.Classes.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Strings = REST_API_SERVER.Classes.CommonLocal.Strings;
 
 namespace REST_API_SERVER.Controllers
 {
@@ -32,7 +33,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = "Категория не найдена"
+                    Message = Strings.ProductTypesController.ProductTypeNotFound
                 });
             }
 
@@ -47,7 +48,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = "Название категории обязательно"
+                    Message = Strings.ProductTypesController.ProductTypeNameRequired
                 });
             }
 
@@ -68,7 +69,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = "ID категории не совпадает"
+                    Message = Strings.ProductTypesController.ProductTypeIdMismatch
                 });
             }
 
@@ -76,7 +77,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = "Название категории обязательно"
+                    Message = Strings.ProductTypesController.ProductTypeNameRequired
                 });
             }
 
@@ -92,7 +93,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.NotFound(new
                     {
-                        Message = "Категория не найдена"
+                        Message = Strings.ProductTypesController.ProductTypeNotFound
                     });
                 }
 
@@ -112,7 +113,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = "Категория не найдена"
+                    Message = Strings.ProductTypesController.ProductTypeNotFound
                 });
             }
 

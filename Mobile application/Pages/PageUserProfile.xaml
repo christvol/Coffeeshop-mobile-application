@@ -48,11 +48,13 @@
             <Button
                 x:Name="btnAboutApp"
                 Text="{x:Static res:Strings.ButtonAboutApp}"
+                Clicked="btnAboutApp_Clicked"
                 Style="{StaticResource ButtonPrimary}" />
             <!-- Feedback -->
             <Button
                 x:Name="btnFeedback"
                 Text="{x:Static res:Strings.ButtonFeedback}"
+                Clicked="btnFeedback_Clicked"
                 Style="{StaticResource ButtonPrimary}" />
             <!-- Save -->
             <Button

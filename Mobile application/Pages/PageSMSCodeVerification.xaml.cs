@@ -81,6 +81,8 @@ public partial class PageSMSCodeVerification : CustomContentPage
     /// </summary>Phone number must be exactly 10 digits
     private async Task ValidateCodeAsync(string enteredCode)
     {
+        if (enteredCode == null || this.code == null)
+            return;
         if (enteredCode.Length < this.code.Length)
             return;
         if (string.IsNullOrEmpty(enteredCode))

@@ -33,7 +33,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = Strings.ErrorMessages.CountryNotFoundById
+                    Message = Strings.CountryCodesController.CountryNotFoundById
                 });
             }
 
@@ -51,7 +51,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.NotFound(new
                 {
-                    Message = Strings.ErrorMessages.CountryNotFoundByTicker
+                    Message = Strings.CountryCodesController.CountryNotFoundByTicker
                 });
             }
 

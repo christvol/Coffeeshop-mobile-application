@@ -70,6 +70,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add category.
+        /// </summary>
+        internal static string ButtonAddCategory {
+            get {
+                return ResourceManager.GetString("ButtonAddCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Feedback.
         /// </summary>
         internal static string ButtonFeedback {

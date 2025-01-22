@@ -3,6 +3,7 @@ using Common.Classes.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using REST_API_SERVER.Classes;
+using Strings = REST_API_SERVER.Classes.CommonLocal.Strings;
 
 namespace REST_API_SERVER.Controllers;
 
@@ -11,14 +12,15 @@ namespace REST_API_SERVER.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly CoffeeShopContext _context;
-    private bool UserExists(int id)
-    {
-        return this._context.Set<Users>().Any(e => e.Id == id);
-    }
 
     public UsersController(CoffeeShopContext context)
     {
         this._context = context;
+    }
+
+    private bool UserExists(int id)
+    {
+        return this._context.Set<Users>().Any(e => e.Id == id);
     }
 
     // GET: api/Users
@@ -38,7 +40,7 @@ public class UsersController : ControllerBase
         {
             return this.NotFound(new
             {
-                Message = "User not found."
+                Message = Strings.UsersController.UserNotFound
             });
         }
 
@@ -58,32 +60,27 @@ public class UsersController : ControllerBase
         {
             return this.NotFound(new
             {
-                Message = "User with the specified phone number not found."
+                Message = Strings.UsersController.UserPhoneNotFound
             });
         }
 
         return user;
     }
 
-
     // POST: api/Users
     [HttpPost]
     public async Task<ActionResult<Users>> CreateUser([FromBody] UserRequestDto userDto)
     {
-        // Очистка номера телефона от пробелов и знака '+'
         var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(userDto.PhoneNumber);
 
-        // Проверяем, существует ли пользователь с таким номером телефона
         var existingUser = await this._context.Users
             .FirstOrDefaultAsync(u => u.PhoneNumber == cleanedPhoneNumber);
 
         if (existingUser != null)
         {
-            // Если пользователь существует, возвращаем его
             return this.Ok(existingUser);
         }
 
-        // Если пользователя с таким номером телефона нет, создаём нового
         var user = new Users
         {
             IdUserType = userDto.IdUserType,
@@ -104,8 +101,6 @@ public class UsersController : ControllerBase
         }, user);
     }
 
-
-
     // PUT: api/Users/{id}
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UserRequestDto userDto)
@@ -114,20 +109,20 @@ public class UsersController : ControllerBase
         {
             return this.BadRequest(new
             {
-                Message = "User ID mismatch."
+                Message = Strings.UsersController.UserIdMismatch
             });
         }
 
         var existingUser = await this._context.Users.FindAsync(id);
+
         if (existingUser == null)
         {
             return this.NotFound(new
             {
-                Message = "User not found."
+                Message = Strings.UsersController.UserNotFound
             });
         }
 
-        // Обновляем поля
         existingUser.IdUserType = userDto.IdUserType;
         existingUser.FirstName = userDto.FirstName;
         existingUser.LastName = userDto.LastName;
@@ -143,13 +138,12 @@ public class UsersController : ControllerBase
         {
             return this.StatusCode(500, new
             {
-                Message = "Concurrency conflict occurred while updating the user."
+                Message = Strings.UsersController.ConcurrencyConflict
             });
         }
 
         return this.NoContent();
     }
-
 
     // DELETE: api/Users/{id}
     [HttpDelete("{id}")]
@@ -159,10 +153,9 @@ public class UsersController : ControllerBase
 
         if (user == null)
         {
-            // Пользователь уже удалён
             return this.NotFound(new
             {
-                Message = "Пользователь с указанным ID не найден."
+                Message = Strings.UsersController.UserNotFound
             });
         }
 
@@ -171,7 +164,6 @@ public class UsersController : ControllerBase
 
         return this.NoContent();
     }
-
 
     // GET: api/Users/{id}/UserType
     [HttpGet("{id}/UserType")]
@@ -185,11 +177,10 @@ public class UsersController : ControllerBase
         {
             return this.NotFound(new
             {
-                Message = "User or user type not found."
+                Message = Strings.UsersController.UserNotFound
             });
         }
 
-        // Преобразуем в DTO
         var userTypeDto = new UserTypeDto
         {
             Id = user.IdUserTypeNavigation.Id,
@@ -198,5 +189,4 @@ public class UsersController : ControllerBase
 
         return this.Ok(userTypeDto);
     }
-
 }

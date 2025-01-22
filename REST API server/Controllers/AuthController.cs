@@ -28,7 +28,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = Strings.ErrorMessages.PhoneNumberRequired
+                        Message = Strings.AuthController.PhoneNumberRequired
                     });
                 }
 
@@ -38,7 +38,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = Strings.ErrorMessages.InvalidPhoneNumberFormat
+                        Message = Strings.AuthController.InvalidPhoneNumberFormat
                     });
                 }
 
@@ -59,7 +59,7 @@ namespace REST_API_SERVER.Controllers
 
                 return this.Ok(new
                 {
-                    Message = Strings.SuccessMessages.VerificationCodeSent,
+                    Message = Strings.AuthController.VerificationCodeSent,
                     Code = code
                 });
             }
@@ -67,7 +67,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.StatusCode(500, new
                 {
-                    Message = Strings.ErrorMessages.ServerError
+                    Message = Strings.AuthController.ServerError
                 });
             }
         }
@@ -79,7 +79,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = Strings.ErrorMessages.PhoneNumberRequired
+                    Message = Strings.AuthController.PhoneNumberRequired
                 });
             }
 
@@ -87,10 +87,10 @@ namespace REST_API_SERVER.Controllers
             {
                 if (codeInfo.Expiry < DateTime.UtcNow)
                 {
-                    VerificationCodes.TryRemove(request.PhoneNumber, out _);
+                    _ = VerificationCodes.TryRemove(request.PhoneNumber, out _);
                     return this.BadRequest(new
                     {
-                        Message = Strings.ErrorMessages.VerificationCodeExpired
+                        Message = Strings.AuthController.VerificationCodeExpired
                     });
                 }
 
@@ -103,11 +103,11 @@ namespace REST_API_SERVER.Controllers
                         IdUserType = request.UserTypeId
                     };
 
-                    this._context.Users.Add(newUser);
-                    await this._context.SaveChangesAsync();
+                    _ = this._context.Users.Add(newUser);
+                    _ = await this._context.SaveChangesAsync();
 
                     var authToken = this.GenerateAuthToken();
-                    VerificationCodes.TryRemove(request.PhoneNumber, out _);
+                    _ = VerificationCodes.TryRemove(request.PhoneNumber, out _);
 
                     return this.Ok(new
                     {
@@ -119,7 +119,7 @@ namespace REST_API_SERVER.Controllers
                 {
                     return this.BadRequest(new
                     {
-                        Message = Strings.ErrorMessages.InvalidVerificationCode
+                        Message = Strings.AuthController.InvalidVerificationCode
                     });
                 }
             }
@@ -127,7 +127,7 @@ namespace REST_API_SERVER.Controllers
             {
                 return this.BadRequest(new
                 {
-                    Message = Strings.ErrorMessages.VerificationCodeNotFound
+                    Message = Strings.AuthController.VerificationCodeNotFound
                 });
             }
         }

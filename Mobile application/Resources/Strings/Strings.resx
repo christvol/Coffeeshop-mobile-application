@@ -171,4 +171,7 @@
   <data name="ButtonLogout" xml:space="preserve">
     <value>Logout</value>
   </data>
+  <data name="ButtonAddCategory" xml:space="preserve">
+    <value>Add category</value>
+  </data>
 </root>

@@ -32,4 +32,9 @@ public partial class PageMainEmployee : CustomContentPage
             header.SessionData = this.SessionData;
         }
     }
+
+    private void btnAddCategory_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

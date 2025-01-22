@@ -233,7 +233,8 @@ public partial class PageLogin : CustomContentPage
             _ = this.PickerPhoneCodesUpdateAsync();
             if (App.IsDebugMode)
             {
-                this.entryPhone.Text = "9111789930";
+                //his.entryPhone.Text = "9111789930";
+                this.entryPhone.Text = "2345678930";
             }
             this.btnLogin.IsEnabled = this.ValidatePhone(this.entryPhone.Text);
         }

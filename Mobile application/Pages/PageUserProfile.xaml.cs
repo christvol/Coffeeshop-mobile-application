@@ -1,5 +1,6 @@
 ﻿using Common.Classes.DTO;
 using Common.Classes.Session;
+using Mobile_application.Classes;
 
 namespace Mobile_application.Pages;
 
@@ -80,9 +81,8 @@ public partial class PageUserProfile : CustomContentPage
     #region Обработчики событий
     private void btnLogout_Clicked(object sender, EventArgs e)
     {
-        Application.Current.MainPage.Navigation.PushAsync(new PageLogin());
+        _ = NavigateToPage(new PageLogin());
     }
-
     private async void btnSave_Clicked(object sender, EventArgs e)
     {
         try
@@ -121,6 +121,28 @@ public partial class PageUserProfile : CustomContentPage
                 this.SessionData.CurrentUser.Email = updatedUser.Email;
 
                 await this.DisplayAlert("Успех", "Данные успешно сохранены.", "OK");
+
+                // Получаем тип пользователя
+                var userType = await this.ApiClient.GetUserTypeByUserIdAsync(this.SessionData.CurrentUser.Id);
+                if (userType == null)
+                {
+                    await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserTypeNotFound, "OK");
+                    return;
+                }
+                // Переход на соответствующую страницу в зависимости от типа пользователя
+                switch (userType.Title)
+                {
+                    case CommonLocal.UserTypes.Customer:
+                        await this.Navigation.PushAsync(new PageMainCustomer(this.SessionData));
+                        break;
+                    case CommonLocal.UserTypes.Employee:
+                    case CommonLocal.UserTypes.Admin:
+                        await this.Navigation.PushAsync(new PageMainEmployee(this.SessionData));
+                        break;
+                    default:
+                        await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UnknownUserType, "OK");
+                        break;
+                }
             }
             else
             {
@@ -131,6 +153,14 @@ public partial class PageUserProfile : CustomContentPage
         {
             await this.DisplayAlert("Ошибка", $"Произошла ошибка при сохранении данных: {ex.Message}", "OK");
         }
+    }
+    private void btnAboutApp_Clicked(object sender, EventArgs e)
+    {
+        _ = NavigateToPage(new PageAbout());
+    }
+    private void btnFeedback_Clicked(object sender, EventArgs e)
+    {
+        _ = NavigateToPage(new PageFeedback());
     }
     #endregion
 

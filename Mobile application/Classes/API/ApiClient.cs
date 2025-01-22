@@ -67,7 +67,7 @@
                     return null;
                 }
 
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -126,7 +126,7 @@
                     return null;
                 }
 
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductTypes>(json, new JsonSerializerOptions
@@ -262,7 +262,7 @@
                     return null;
                 }
 
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
@@ -293,7 +293,7 @@
                     return null;
                 }
 
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
@@ -353,7 +353,7 @@
                     return null;
                 }
 
-                response.EnsureSuccessStatusCode();
+                _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<UserTypeDto>(json, new JsonSerializerOptions

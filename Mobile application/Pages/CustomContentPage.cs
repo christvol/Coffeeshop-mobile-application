@@ -16,6 +16,41 @@ namespace Mobile_application.Pages
 
         #region Методы
 
+        public static async Task NavigateToPage(Page page)
+        {
+            if (page == null)
+            {
+                throw new ArgumentNullException(nameof(page), "The target page cannot be null.");
+            }
+
+            if (Application.Current == null)
+            {
+                throw new InvalidOperationException("The application instance is null.");
+            }
+
+            var mainPage = Application.Current.MainPage;
+            if (mainPage == null)
+            {
+                throw new InvalidOperationException("The main page is null.");
+            }
+
+            var navigation = mainPage.Navigation;
+            if (navigation == null)
+            {
+                throw new InvalidOperationException("Navigation stack is null.");
+            }
+
+            try
+            {
+                await navigation.PushAsync(page);
+            }
+            catch (Exception ex)
+            {
+                // Здесь можно добавить логирование ошибки или другое действие
+                throw new InvalidOperationException("Failed to navigate to the specified page.", ex);
+            }
+        }
+
         public void CheckSessionData()
         {
             if (this.SessionData == null)
