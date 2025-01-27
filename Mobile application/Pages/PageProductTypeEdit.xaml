@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageProductTypeEdit"
+                         Title="Edit Product Type">
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <!-- Заголовок страницы -->
+        <Label Text="Edit Category Title" FontSize="20" HorizontalOptions="Center" />
+
+        <!-- Поле для редактирования названия категории -->
+        <Entry Text="{Binding Category.Title}" Placeholder="Enter category title" />
+
+        <!-- Кнопки -->
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Save" Clicked="OnSaveClicked" />
+            <Button Text="Cancel" Clicked="OnCancelClicked" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</pages:CustomContentPage>

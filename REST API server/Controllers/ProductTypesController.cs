@@ -52,8 +52,8 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            this._context.ProductTypes.Add(productType);
-            await this._context.SaveChangesAsync();
+            _ = this._context.ProductTypes.Add(productType);
+            _ = await this._context.SaveChangesAsync();
 
             return this.CreatedAtAction(nameof(GetProductType), new
             {
@@ -85,7 +85,7 @@ namespace REST_API_SERVER.Controllers
 
             try
             {
-                await this._context.SaveChangesAsync();
+                _ = await this._context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -100,8 +100,10 @@ namespace REST_API_SERVER.Controllers
                 throw;
             }
 
-            return this.NoContent();
+            // Возвращаем обновленный объект в ответе
+            return this.Ok(productType);
         }
+
 
         // DELETE: api/ProductTypes/{id}
         [HttpDelete("{id}")]
@@ -117,8 +119,8 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            this._context.ProductTypes.Remove(productType);
-            await this._context.SaveChangesAsync();
+            _ = this._context.ProductTypes.Remove(productType);
+            _ = await this._context.SaveChangesAsync();
 
             return this.NoContent();
         }

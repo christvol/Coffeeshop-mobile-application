@@ -12,6 +12,7 @@
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="SecondaryDarkText">#6d60c9</Color>
     <Color x:Key="Tertiary">#c96089</Color>
+    <Color x:Key="Danger">#A53862</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

@@ -174,4 +174,7 @@
   <data name="ButtonAddCategory" xml:space="preserve">
     <value>Add category</value>
   </data>
+  <data name="lblPoductTypes" xml:space="preserve">
+    <value>Categories list:</value>
+  </data>
 </root>

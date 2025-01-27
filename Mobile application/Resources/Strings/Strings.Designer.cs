@@ -178,6 +178,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Categories list:.
+        /// </summary>
+        internal static string lblPoductTypes {
+            get {
+                return ResourceManager.GetString("lblPoductTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Enter your email.
         /// </summary>
         internal static string PlaceholderEmail {
