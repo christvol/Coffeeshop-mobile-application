@@ -72,9 +72,36 @@ namespace Mobile_application.Resources.Strings {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Add category.
         /// </summary>
-        internal static string ButtonAddCategory {
+        internal static string ButtonAddProductType {
             get {
-                return ResourceManager.GetString("ButtonAddCategory", resourceCulture);
+                return ResourceManager.GetString("ButtonAddProductType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Cancel.
+        /// </summary>
+        internal static string ButtonCancel {
+            get {
+                return ResourceManager.GetString("ButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Delete.
+        /// </summary>
+        internal static string ButtonDeleteProductType {
+            get {
+                return ResourceManager.GetString("ButtonDeleteProductType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Edit.
+        /// </summary>
+        internal static string ButtonEditProductType {
+            get {
+                return ResourceManager.GetString("ButtonEditProductType", resourceCulture);
             }
         }
         
@@ -160,6 +187,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Edit category.
+        /// </summary>
+        internal static string LabelProductTypeEditWindow {
+            get {
+                return ResourceManager.GetString("LabelProductTypeEditWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на SMS-code sent to your number.
         /// </summary>
         internal static string LabelSMSSent {
@@ -219,6 +255,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string PlaceholderPhone {
             get {
                 return ResourceManager.GetString("PlaceholderPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Enter category title.
+        /// </summary>
+        internal static string PlaceholderProductTypeTitle {
+            get {
+                return ResourceManager.GetString("PlaceholderProductTypeTitle", resourceCulture);
             }
         }
         

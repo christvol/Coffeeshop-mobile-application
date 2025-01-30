@@ -2,19 +2,28 @@
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                          xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
                          x:Class="Mobile_application.Pages.PageProductTypeEdit"
-                         Title="Edit Product Type">
+                         Title="Edit Product Type" 
+                         BackgroundColor="{StaticResource MintGreen}">
+
     <VerticalStackLayout Padding="20" Spacing="10">
         <!-- Заголовок страницы -->
-        <Label Text="Edit Category Title" FontSize="20" HorizontalOptions="Center" />
+        <Label Text="{x:Static res:Strings.LabelProductTypeEditWindow}" FontSize="20" HorizontalOptions="Center" />
 
         <!-- Поле для редактирования названия категории -->
-        <Entry Text="{Binding Category.Title}" Placeholder="Enter category title" />
+        <Entry Text="{Binding Category.Title}" 
+               Style="{StaticResource EntryPrimary}"
+               Placeholder="{x:Static res:Strings.PlaceholderProductTypeTitle}" />
 
         <!-- Кнопки -->
-        <HorizontalStackLayout Spacing="10">
-            <Button Text="Save" Clicked="OnSaveClicked" />
-            <Button Text="Cancel" Clicked="OnCancelClicked" />
-        </HorizontalStackLayout>
+        <VerticalStackLayout Spacing="10">
+            <Button Text="{x:Static res:Strings.ButtonSave}" 
+                    Style="{StaticResource ButtonPrimary}"
+                    Clicked="OnSaveClicked" />
+            <Button Text="{x:Static res:Strings.ButtonCancel}"
+                    Style="{StaticResource ButtonDanger}"
+                    Clicked="OnCancelClicked" />
+        </VerticalStackLayout>
     </VerticalStackLayout>
 </pages:CustomContentPage>
