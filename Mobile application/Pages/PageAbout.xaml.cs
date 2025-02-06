@@ -2,8 +2,8 @@ namespace Mobile_application.Pages;
 
 public partial class PageAbout : ContentPage
 {
-	public PageAbout()
-	{
-		InitializeComponent();
-	}
+    public PageAbout()
+    {
+        this.InitializeComponent();
+    }
 }

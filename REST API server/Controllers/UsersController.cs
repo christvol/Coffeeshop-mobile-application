@@ -92,8 +92,8 @@ public class UsersController : ControllerBase
             CreationDate = DateTime.UtcNow
         };
 
-        this._context.Users.Add(user);
-        await this._context.SaveChangesAsync();
+        _ = this._context.Users.Add(user);
+        _ = await this._context.SaveChangesAsync();
 
         return this.CreatedAtAction(nameof(GetUserById), new
         {
@@ -132,7 +132,7 @@ public class UsersController : ControllerBase
 
         try
         {
-            await this._context.SaveChangesAsync();
+            _ = await this._context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -159,8 +159,8 @@ public class UsersController : ControllerBase
             });
         }
 
-        this._context.Users.Remove(user);
-        await this._context.SaveChangesAsync();
+        _ = this._context.Users.Remove(user);
+        _ = await this._context.SaveChangesAsync();
 
         return this.NoContent();
     }

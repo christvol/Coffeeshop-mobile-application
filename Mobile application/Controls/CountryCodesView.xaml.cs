@@ -2,16 +2,25 @@ namespace Mobile_application.Controls
 {
     public class CountryCodeModel
     {
-        public string CountryCode { get; set; }
-        public string CountryFlag { get; set; }
-        public string CountryName { get; set; }
+        public string CountryCode
+        {
+            get; set;
+        }
+        public string CountryFlag
+        {
+            get; set;
+        }
+        public string CountryName
+        {
+            get; set;
+        }
     }
 
     public partial class CountryCodesView : ContentView
     {
         public CountryCodesView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         // Метод для установки источника данных
@@ -19,7 +28,7 @@ namespace Mobile_application.Controls
         {
             if (items != null)
             {
-                CountryPicker.ItemsSource = items.ToList();
+                this.CountryPicker.ItemsSource = items.ToList();
             }
         }
     }

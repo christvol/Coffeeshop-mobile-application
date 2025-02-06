@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Common.Classes.DB;
+﻿namespace Common.Classes.DB;
 
 public partial class CountryCodes
 {
-    public int Id { get; set; }
+    public int Id
+    {
+        get; set;
+    }
 
     public string CountryTicker { get; set; } = null!;
 

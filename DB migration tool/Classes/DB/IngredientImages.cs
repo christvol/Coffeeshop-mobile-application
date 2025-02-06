@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Common.Classes.DB;
+﻿namespace Common.Classes.DB;
 
 public partial class IngredientImages
 {
-    public byte Id { get; set; }
+    public byte Id
+    {
+        get; set;
+    }
 
-    public int IdIngredient { get; set; }
+    public int IdIngredient
+    {
+        get; set;
+    }
 
-    public int IdImage { get; set; }
+    public int IdImage
+    {
+        get; set;
+    }
 
     public virtual Images IdImageNavigation { get; set; } = null!;
 

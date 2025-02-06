@@ -28,7 +28,7 @@ namespace Mobile_application.Controls
 
         public PickerWithImages()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
 
@@ -48,7 +48,7 @@ namespace Mobile_application.Controls
 
         private void OnItemSelected(object sender, ItemModel e)
         {
-            SelectedItemButton.Text = $"{e.DisplayName}";
+            this.SelectedItemButton.Text = $"{e.DisplayName}";
         }
 
         private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)

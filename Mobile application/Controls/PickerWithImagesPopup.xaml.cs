@@ -8,9 +8,9 @@ namespace Mobile_application.Controls
 
         public PickerWithImagesPopup(IEnumerable<ItemModel> items)
         {
-            InitializeComponent();
-            ItemsCollectionView.ItemsSource = items;
-            ItemsCollectionView.SelectionChanged += OnSelectionChanged;
+            this.InitializeComponent();
+            this.ItemsCollectionView.ItemsSource = items;
+            this.ItemsCollectionView.SelectionChanged += this.OnSelectionChanged;
         }
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -4,7 +4,7 @@ public partial class UserAccountTile : ContentView
 {
     public UserAccountTile()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
     // Свойства для привязки данных
@@ -25,37 +25,37 @@ public partial class UserAccountTile : ContentView
 
     public string Name
     {
-        get => (string)GetValue(NameProperty);
-        set => SetValue(NameProperty, value);
+        get => (string)this.GetValue(NameProperty);
+        set => this.SetValue(NameProperty, value);
     }
 
     public string PhoneNumber
     {
-        get => (string)GetValue(PhoneNumberProperty);
-        set => SetValue(PhoneNumberProperty, value);
+        get => (string)this.GetValue(PhoneNumberProperty);
+        set => this.SetValue(PhoneNumberProperty, value);
     }
 
     public string Avatar
     {
-        get => (string)GetValue(AvatarProperty);
-        set => SetValue(AvatarProperty, value);
+        get => (string)this.GetValue(AvatarProperty);
+        set => this.SetValue(AvatarProperty, value);
     }
 
     public string ChevronIcon
     {
-        get => (string)GetValue(ChevronIconProperty);
-        set => SetValue(ChevronIconProperty, value);
+        get => (string)this.GetValue(ChevronIconProperty);
+        set => this.SetValue(ChevronIconProperty, value);
     }
 
     public Command Command
     {
-        get => (Command)GetValue(CommandProperty);
-        set => SetValue(CommandProperty, value);
+        get => (Command)this.GetValue(CommandProperty);
+        set => this.SetValue(CommandProperty, value);
     }
 
     // Обработчик нажатия на плитку
     private void OnTileClicked(object sender, EventArgs e)
     {
-        Command?.Execute(null);
+        this.Command?.Execute(null);
     }
 }

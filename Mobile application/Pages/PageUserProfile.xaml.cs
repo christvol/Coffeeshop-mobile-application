@@ -65,7 +65,7 @@ public partial class PageUserProfile : CustomContentPage
         this.SessionData = sessionData;
 
         // Асинхронная загрузка данных пользователя
-        Task.Run(async () => await this.LoadUserDataAsync());
+        _ = Task.Run(async () => await this.LoadUserDataAsync());
     }
 
     public PageUserProfile()

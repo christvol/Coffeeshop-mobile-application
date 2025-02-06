@@ -183,7 +183,7 @@ public partial class PageLogin : CustomContentPage
         }
         catch (Exception ex)
         {
-            this.DisplayAlert("Ошибка", $"Ошибка при обработке номера телефона: {ex.Message}", "OK");
+            _ = this.DisplayAlert("Ошибка", $"Ошибка при обработке номера телефона: {ex.Message}", "OK");
         }
     }
 
@@ -205,7 +205,7 @@ public partial class PageLogin : CustomContentPage
         }
         catch (Exception ex)
         {
-            this.DisplayAlert("Ошибка", $"Не удалось обновить номер телефона: {ex.Message}", "OK");
+            _ = this.DisplayAlert("Ошибка", $"Не удалось обновить номер телефона: {ex.Message}", "OK");
         }
     }
 
@@ -263,7 +263,7 @@ public partial class PageLogin : CustomContentPage
 
             if (string.IsNullOrEmpty(phoneNumber))
             {
-                this.DisplayAlert("Ошибка", "Пожалуйста, введите номер телефона.", "OK");
+                _ = this.DisplayAlert("Ошибка", "Пожалуйста, введите номер телефона.", "OK");
                 return;
             }
 

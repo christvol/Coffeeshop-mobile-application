@@ -1,5 +1,4 @@
 using Common.Classes.DB;
-using Mobile_application.Classes.API;
 using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages;
@@ -21,14 +20,14 @@ public partial class PageMain : CustomContentPage
         this.NavigateToCategoryCommand = new Command<ProductTypes>(this.OnCategorySelected);
         this.BindingContext = this;
 
-        this.LoadCategoriesAsync();
+        _ = this.LoadCategoriesAsync();
     }
 
     private async Task LoadCategoriesAsync()
     {
         try
         {
-            var categories = await ApiClient.GetAllProductTypesAsync();
+            var categories = await this.ApiClient.GetAllProductTypesAsync();
 
             this.ProductCategories.Clear();
             foreach (var category in categories)

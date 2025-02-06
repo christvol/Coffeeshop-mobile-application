@@ -90,7 +90,7 @@ namespace Mobile_application.Classes
                 {
                     // Формируем путь для сохранения
                     string directoryPath = Path.Combine(FileSystem.AppDataDirectory, flagsDirName);
-                    Directory.CreateDirectory(directoryPath); // Создаем директорию, если ее нет
+                    _ = Directory.CreateDirectory(directoryPath); // Создаем директорию, если ее нет
                     string filePath = Path.Combine(directoryPath, $"{countryTicker}.png");
 
                     // Проверяем наличие файла и поведение в зависимости от флага isForce
@@ -107,7 +107,7 @@ namespace Mobile_application.Classes
                     HttpResponseMessage response = await httpClient.GetAsync(url);
 
                     // Проверяем успешность запроса
-                    response.EnsureSuccessStatusCode();
+                    _ = response.EnsureSuccessStatusCode();
 
                     // Считываем содержимое ответа как массив байтов
                     byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();

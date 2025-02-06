@@ -22,8 +22,8 @@ var app = builder.Build();
 // Настройте конвейер обработки HTTP-запросов
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
 }
 
 app.UseAuthorization();

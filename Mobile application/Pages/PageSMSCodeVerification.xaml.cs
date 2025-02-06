@@ -82,9 +82,15 @@ public partial class PageSMSCodeVerification : CustomContentPage
     private async Task ValidateCodeAsync(string enteredCode)
     {
         if (enteredCode == null || this.code == null)
+        {
             return;
+        }
+
         if (enteredCode.Length < this.code.Length)
+        {
             return;
+        }
+
         if (string.IsNullOrEmpty(enteredCode))
         {
             await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.EmptyCode, "OK");

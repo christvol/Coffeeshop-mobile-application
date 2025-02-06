@@ -70,7 +70,7 @@ namespace Mobile_application.Controls
             {
                 // Переход на страницу профиля с передачей SessionData
                 this.SessionData.Mode = WindowMode.Update;
-                Application.Current.MainPage.Navigation.PushAsync(new PageUserProfile(this.SessionData));
+                _ = Application.Current.MainPage.Navigation.PushAsync(new PageUserProfile(this.SessionData));
             }
         }
     }

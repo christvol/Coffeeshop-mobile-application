@@ -54,14 +54,18 @@ namespace Mobile_application.Pages
         public void CheckSessionData()
         {
             if (this.SessionData == null)
+            {
                 throw new InvalidOperationException("SessionData не может быть null.");
+            }
         }
 
         public void CheckCurrentUser()
         {
             this.CheckSessionData();
             if (this.SessionData.CurrentUser == null)
+            {
                 throw new InvalidOperationException("Текущий пользователь не задан в SessionData.");
+            }
         }
         #endregion
     }
