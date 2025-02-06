@@ -1,8 +1,8 @@
-﻿// DTO (Data Transfer Object) version of Products class to avoid navigation property recursion
-namespace REST_API_SERVER.DTOs;
+﻿namespace REST_API_SERVER.DTOs;
 
 public class ProductDTO
 {
+    #region Свойства
     public int Id
     {
         get; set;
@@ -25,7 +25,6 @@ public class ProductDTO
         get; set;
     }
 
-    public string ProductTypeTitle { get; set; } = null!; // Added to include basic information about ProductType
-
-    public List<string> ProductImages { get; set; } = new(); // A list of image URLs or identifiers
+    public List<string> ProductImages { get; set; } = new();
+    #endregion
 }

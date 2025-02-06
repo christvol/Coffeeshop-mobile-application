@@ -16,7 +16,7 @@ namespace REST_API_SERVER.Controllers
             this._context = context;
         }
 
-        // GET: api/Products
+        #region GET Methods
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
@@ -31,7 +31,6 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductTypeTitle = p.IdProductTypeNavigation.Title,
                     ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
                 })
                 .ToListAsync();
@@ -39,7 +38,6 @@ namespace REST_API_SERVER.Controllers
             return products;
         }
 
-        // GET: api/Products/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
@@ -54,7 +52,6 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductTypeTitle = p.IdProductTypeNavigation.Title,
                     ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
                 })
                 .FirstOrDefaultAsync(p => p.Id == id);
@@ -70,7 +67,6 @@ namespace REST_API_SERVER.Controllers
             return product;
         }
 
-        // GET: api/Products/ByType/{typeId}
         [HttpGet("ByType/{typeId}")]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductsByType(int typeId)
         {
@@ -86,15 +82,15 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductTypeTitle = p.IdProductTypeNavigation.Title,
                     ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
                 })
                 .ToListAsync();
 
             return products;
         }
+        #endregion
 
-        // POST: api/Products
+        #region POST Methods
         [HttpPost]
         public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductDTO productDTO)
         {
@@ -115,7 +111,6 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            // Преобразуем DTO в сущность Products для сохранения в БД
             var product = new Products
             {
                 Title = productDTO.Title,
@@ -127,7 +122,6 @@ namespace REST_API_SERVER.Controllers
             _ = this._context.Products.Add(product);
             _ = await this._context.SaveChangesAsync();
 
-            // Формируем DTO для возврата
             var createdProductDTO = new ProductDTO
             {
                 Id = product.Id,
@@ -135,8 +129,7 @@ namespace REST_API_SERVER.Controllers
                 Description = product.Description,
                 Fee = product.Fee,
                 IdProductType = product.IdProductType,
-                ProductTypeTitle = productType.Title,
-                ProductImages = new List<string>() // Пока изображений нет, создаем пустой список
+                ProductImages = new List<string>()
             };
 
             return this.CreatedAtAction(nameof(GetProduct), new
@@ -144,14 +137,13 @@ namespace REST_API_SERVER.Controllers
                 id = product.Id
             }, createdProductDTO);
         }
+        #endregion
 
-
-
-        // PUT: api/Products/{id}
+        #region PUT Methods
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Products product)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDTO productDTO)
         {
-            if (id != product.Id)
+            if (id != productDTO.Id)
             {
                 return this.BadRequest(new
                 {
@@ -159,7 +151,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            if (string.IsNullOrEmpty(product.Title))
+            if (string.IsNullOrEmpty(productDTO.Title))
             {
                 return this.BadRequest(new
                 {
@@ -167,40 +159,28 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var productType = await this._context.ProductTypes.FindAsync(product.IdProductType);
-            if (productType == null)
+            var product = await this._context.Products.FindAsync(id);
+            if (product == null)
             {
-                return this.BadRequest(new
+                return this.NotFound(new
                 {
-                    Message = "Указанный тип продукта не существует"
+                    Message = "Продукт не найден"
                 });
             }
 
-            this._context.Entry(product).State = EntityState.Modified;
+            product.Title = productDTO.Title;
+            product.Description = productDTO.Description;
+            product.Fee = productDTO.Fee;
+            product.IdProductType = productDTO.IdProductType;
 
-            try
-            {
-                _ = await this._context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!this.ProductExists(id))
-                {
-                    return this.NotFound(new
-                    {
-                        Message = "Продукт не найден"
-                    });
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            this._context.Entry(product).State = EntityState.Modified;
+            _ = await this._context.SaveChangesAsync();
 
             return this.NoContent();
         }
+        #endregion
 
-        // DELETE: api/Products/{id}
+        #region DELETE Methods
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -218,6 +198,7 @@ namespace REST_API_SERVER.Controllers
 
             return this.NoContent();
         }
+        #endregion
 
         private bool ProductExists(int id)
         {

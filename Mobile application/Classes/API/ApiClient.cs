@@ -2,6 +2,7 @@
 {
     using global::Common.Classes.DB;
     using global::Common.Classes.DTO;
+    using REST_API_SERVER.DTOs;
     using System.Net.Http;
     using System.Net.Http.Json;
     using System.Text.Json;
@@ -364,6 +365,158 @@
             catch (Exception ex)
             {
                 throw new Exception($"Ошибка при получении типа пользователя по ID: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region Products
+
+        /// <summary>
+        /// Получение списка всех продуктов.
+        /// </summary>
+        public async Task<List<ProductDTO>> GetAllProductsAsync()
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync("Products");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<ProductDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<ProductDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении списка продуктов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение продуктов по ID типа.
+        /// </summary>
+        public async Task<List<ProductDTO>> GetProductsByTypeAsync(int typeId)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Products/ByType/{typeId}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<ProductDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<ProductDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении продуктов по типу: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение продукта по ID.
+        /// </summary>
+        public async Task<ProductDTO?> GetProductByIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Products/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<ProductDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении продукта по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Создание нового продукта.
+        /// </summary>
+        public async Task<ProductDTO?> CreateProductAsync(ProductDTO productDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PostAsJsonAsync("Products", productDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<ProductDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании продукта: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обновление продукта.
+        /// </summary>
+        public async Task<bool> UpdateProductAsync(int id, ProductDTO productDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PutAsJsonAsync($"Products/{id}", productDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении продукта: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Удаление продукта.
+        /// </summary>
+        public async Task DeleteProductAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.DeleteAsync($"Products/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении продукта: {ex.Message}");
             }
         }
 

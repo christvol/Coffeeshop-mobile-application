@@ -1,19 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Common.Classes.DB;
+﻿namespace Common.Classes.DB;
 
 public partial class Images
 {
-    public int Id { get; set; }
+    public int Id
+    {
+        get; set;
+    }
 
-    public string? Title { get; set; }
+    public string? Title
+    {
+        get; set;
+    }
 
-    public string? Description { get; set; }
+    public string? Description
+    {
+        get; set;
+    }
 
     public string Url { get; set; } = null!;
 
-    public byte[]? Data { get; set; }
+    public byte[]? Data
+    {
+        get; set;
+    }
 
     public virtual ICollection<IngredientImages> IngredientImages { get; set; } = new List<IngredientImages>();
 
