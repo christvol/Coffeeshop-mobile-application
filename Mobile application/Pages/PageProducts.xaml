@@ -2,12 +2,62 @@
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         
              x:Class="Mobile_application.Pages.PageProducts"
              Title="PageProducts">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Заголовок -->
+            <Label Text="{Binding Title}" 
+                   TextColor="Black" 
+                   FontSize="18" 
+                   FontAttributes="Bold" />
+
+            <!-- Список товаров -->
+            <CollectionView x:Name="ProductsCollectionView"
+                            ItemsSource="{Binding Products}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#F0F0F0" CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5">
+                            <Grid ColumnDefinitions="50, *, Auto" RowDefinitions="Auto, Auto">
+                                <!-- Иконка товара -->
+                                <Image Source="{Binding ProductImages[0]}" 
+                                       WidthRequest="40" 
+                                       HeightRequest="40" 
+                                       VerticalOptions="Start" 
+                                       HorizontalOptions="Start"
+                                       Grid.RowSpan="2"/>
+
+                                <!-- Название товара -->
+                                <Label Text="{Binding Title}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       Grid.Column="1" 
+                                       VerticalOptions="Start" />
+
+                                <!-- Цена товара -->
+                                <Label Text="{Binding Fee, StringFormat='₽ {0:F2}'}" 
+                                       FontSize="14" 
+                                       Grid.Column="1" 
+                                       Grid.Row="1"
+                                       VerticalOptions="Start" 
+                                       TextColor="Gray" />
+
+                                <!-- Кнопка перехода -->
+                                <ImageButton Source="chevron_right.png" 
+                                             Grid.Column="2" 
+                                             WidthRequest="20" 
+                                             HeightRequest="20" 
+                                             VerticalOptions="Center" 
+                                             HorizontalOptions="End" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </pages:CustomContentPage>

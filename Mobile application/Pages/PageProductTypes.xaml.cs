@@ -1,9 +1,155 @@
+﻿using Common.Classes.DB;
+using Common.Classes.Session;
+using System.Collections.ObjectModel;
+
 namespace Mobile_application.Pages;
 
 public partial class PageCategories : CustomContentPage
 {
-    public PageCategories()
+
+    #region Поля
+
+    #endregion
+
+    #region Свойства
+    public ObservableCollection<ProductTypes> Categories
+    {
+        get; set;
+    }
+    #endregion
+
+    #region Методы
+    private void LoadUserData()
+    {
+        if (this.SessionData.CurrentUser != null)
+        {
+            this.Title = $"Dashboard: {this.SessionData.CurrentUser.FirstName}";
+        }
+    }
+
+    private void BindSessionDataToHeader()
+    {
+        if (this.FindByName("PageHeader") is Controls.PageHeader header)
+        {
+            header.SessionData = this.SessionData;
+        }
+    }
+
+    private async void LoadCategoriesAsync()
+    {
+        try
+        {
+            var categories = await this.ApiClient.GetAllProductTypesAsync();
+            this.Categories.Clear();
+            foreach (var category in categories)
+            {
+                this.Categories.Add(category);
+            }
+        }
+        catch (Exception ex)
+        {
+            await this.DisplayAlert("Ошибка", $"Не удалось загрузить категории: {ex.Message}", "OK");
+        }
+    }
+    #endregion
+
+    #region Конструкторы/Деструкторы
+    public PageCategories(SessionData sessionData)
     {
         this.InitializeComponent();
+        this.Categories = new ObservableCollection<ProductTypes>();
+        this.SessionData = sessionData;
+        this.BindingContext = this;
+
+        NavigationPage.SetHasBackButton(this, false);
+        this.LoadUserData();
+        this.BindSessionDataToHeader();
+        this.LoadCategoriesAsync();
     }
+    #endregion
+
+    #region Операторы
+
+    #endregion
+
+    #region Обработчики событий
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        this.LoadCategoriesAsync();
+    }
+    private async void OnAddClicked(object sender, EventArgs e)
+    {
+        var newSessionData = new SessionData
+        {
+            CurrentUser = this.SessionData.CurrentUser,
+            Mode = WindowMode.Create, // Устанавливаем режим Create
+            Data = null // Для новой категории данные не нужны
+        };
+
+        // Переход на страницу PageProductTypeEdit
+        await this.Navigation.PushAsync(new PageProductTypeEdit(newSessionData));
+    }
+    private async void OnCategorySelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is ProductTypes selectedCategory)
+        {
+            // Создание нового SessionData с текущим пользователем и категорией
+            var newSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData.CurrentUser,
+                Data = selectedCategory
+            };
+
+            // Переход на страницу PageProducts
+            await this.Navigation.PushAsync(new PageProducts(newSessionData));
+
+            // Сбрасываем выбор
+            ((CollectionView)sender).SelectedItem = null;
+        }
+    }
+    private async void OnEditClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is ProductTypes category)
+        {
+            var editSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData.CurrentUser,
+                Mode = WindowMode.Update, // Устанавливаем режим Update
+                Data = category
+            };
+
+            // Переход на страницу PageProductTypeEdit
+            await this.Navigation.PushAsync(new PageProductTypeEdit(editSessionData));
+        }
+    }
+    private async void OnDeleteClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is ProductTypes category)
+        {
+            var confirm = await this.DisplayAlert("Delete", $"Вы уверены, что хотите удалить категорию: {category.Title}?", "Yes", "No");
+            if (!confirm)
+            {
+                return;
+            }
+
+            try
+            {
+                // Вызов метода API для удаления
+                await this.ApiClient.DeleteProductTypeAsync(category.Id);
+
+                // Удаление категории из локального списка
+                _ = this.Categories.Remove(category);
+
+                await this.DisplayAlert("Success", $"Категория {category.Title} успешно удалена.", "OK");
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибок при удалении
+                await this.DisplayAlert("Error", $"Не удалось удалить категорию: {ex.Message}", "OK");
+            }
+        }
+    }
+    #endregion
+
 }

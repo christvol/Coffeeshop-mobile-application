@@ -147,19 +147,20 @@ public partial class PageSMSCodeVerification : CustomContentPage
                 };
 
                 // Переход на соответствующую страницу в зависимости от типа пользователя
-                switch (userType.Title)
-                {
-                    case CommonLocal.UserTypes.Customer:
-                        await this.Navigation.PushAsync(new PageMainCustomer(this.SessionData));
-                        break;
-                    case CommonLocal.UserTypes.Employee:
-                    case CommonLocal.UserTypes.Admin:
-                        await this.Navigation.PushAsync(new PageMainEmployee(this.SessionData));
-                        break;
-                    default:
-                        await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UnknownUserType, "OK");
-                        break;
-                }
+                await this.Navigation.PushAsync(new PageCategories(this.SessionData));
+                //switch (userType.Title)
+                //{
+                //    case CommonLocal.UserTypes.Customer:
+                //        await this.Navigation.PushAsync(new PageMainCustomer(this.SessionData));
+                //        break;
+                //    case CommonLocal.UserTypes.Employee:
+                //    case CommonLocal.UserTypes.Admin:
+                //        await this.Navigation.PushAsync(new PageMainEmployee(this.SessionData));
+                //        break;
+                //    default:
+                //        await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UnknownUserType, "OK");
+                //        break;
+                //}
             }
             catch (Exception ex)
             {
