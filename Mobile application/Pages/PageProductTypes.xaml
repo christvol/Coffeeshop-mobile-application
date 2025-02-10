@@ -33,8 +33,8 @@
 
                                 <!-- Кнопки для редактирования и удаления -->
                                 <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="5">
-                                    <Button Text="{x:Static res:Strings.ButtonEditProductType}" Clicked="OnEditClicked" BackgroundColor="{StaticResource Primary}" TextColor="White" CornerRadius="5" />
-                                    <Button Text="{x:Static res:Strings.ButtonDeleteProductType}" Clicked="OnDeleteClicked" BackgroundColor="{StaticResource Danger}" TextColor="White" CornerRadius="5" />
+                                    <Button Text="{x:Static res:Strings.ButtonEdit}" Clicked="OnEditClicked" BackgroundColor="{StaticResource Primary}" TextColor="White" CornerRadius="5" />
+                                    <Button Text="{x:Static res:Strings.ButtonDelete}" Clicked="OnDeleteClicked" BackgroundColor="{StaticResource Danger}" TextColor="White" CornerRadius="5" />
                                 </StackLayout>
                             </StackLayout>
                         </Frame>

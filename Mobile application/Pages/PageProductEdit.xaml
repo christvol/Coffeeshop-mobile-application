@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             x:Class="Mobile_application.Pages.PageProductEdit"
+             Title="Редактирование продукта"
+             BackgroundColor="{StaticResource MintGreen}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Название продукта -->
+            <Label Text="Название продукта" FontSize="16" TextColor="White" />
+            <Entry x:Name="EntryTitle" Text="{Binding Product.Title}" Placeholder="Введите название" />
+
+            <!-- Описание продукта -->
+            <Label Text="Описание" FontSize="16" TextColor="White" />
+            <Editor x:Name="EditorDescription" Text="{Binding Product.Description}" Placeholder="Введите описание" HeightRequest="100" />
+
+            <!-- Цена продукта -->
+            <Label Text="Цена" FontSize="16" TextColor="White" />
+            <Entry x:Name="EntryFee" Text="{Binding Product.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
+
+            <!-- Тип продукта -->
+            <Label Text="Тип продукта" FontSize="16" TextColor="White" />
+            <Picker x:Name="PickerProductType" ItemsSource="{Binding ProductTypes}" ItemDisplayBinding="{Binding Title}" SelectedItem="{Binding SelectedProductType}" />
+
+            <!-- Кнопки -->
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />
+                <Button Text="Отмена" Clicked="OnCancelClicked" BackgroundColor="#F44336" TextColor="White" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</pages:CustomContentPage>

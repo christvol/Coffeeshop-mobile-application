@@ -70,6 +70,24 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add.
+        /// </summary>
+        internal static string ButtonAdd {
+            get {
+                return ResourceManager.GetString("ButtonAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add product.
+        /// </summary>
+        internal static string ButtonAddProduct {
+            get {
+                return ResourceManager.GetString("ButtonAddProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Add category.
         /// </summary>
         internal static string ButtonAddProductType {
@@ -90,18 +108,18 @@ namespace Mobile_application.Resources.Strings {
         /// <summary>
         ///   Ищет локализованную строку, похожую на Delete.
         /// </summary>
-        internal static string ButtonDeleteProductType {
+        internal static string ButtonDelete {
             get {
-                return ResourceManager.GetString("ButtonDeleteProductType", resourceCulture);
+                return ResourceManager.GetString("ButtonDelete", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на Edit.
         /// </summary>
-        internal static string ButtonEditProductType {
+        internal static string ButtonEdit {
             get {
-                return ResourceManager.GetString("ButtonEditProductType", resourceCulture);
+                return ResourceManager.GetString("ButtonEdit", resourceCulture);
             }
         }
         

@@ -177,10 +177,10 @@
   <data name="lblPoductTypes" xml:space="preserve">
     <value>Categories list:</value>
   </data>
-  <data name="ButtonEditProductType" xml:space="preserve">
+  <data name="ButtonEdit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="ButtonDeleteProductType" xml:space="preserve">
+  <data name="ButtonDelete" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
@@ -191,5 +191,11 @@
   </data>
   <data name="LabelProductTypeEditWindow" xml:space="preserve">
     <value>Edit category</value>
+  </data>
+  <data name="ButtonAddProduct" xml:space="preserve">
+    <value>Add product</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Add</value>
   </data>
 </root>

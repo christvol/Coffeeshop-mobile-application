@@ -98,6 +98,9 @@
 	  <MauiXaml Update="Pages\PageFeedback.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PageProductEdit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PageProducts.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -109,9 +112,6 @@
 	<ItemGroup>
 	  <Compile Update="Pages\PageProductTypes.xaml.cs">
 	    <DependentUpon>PageProductTypes.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\PageMainCustomer.xaml.cs">
-	    <DependentUpon>PageMainCustomer.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">
 	    <DesignTime>True</DesignTime>
