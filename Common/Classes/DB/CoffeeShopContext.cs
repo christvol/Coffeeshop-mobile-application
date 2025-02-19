@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Common.Classes.DB;
 
@@ -13,75 +15,35 @@ public partial class CoffeeShopContext : DbContext
     {
     }
 
-    public virtual DbSet<AllowedIngredients> AllowedIngredients
-    {
-        get; set;
-    }
+    public virtual DbSet<AllowedIngredients> AllowedIngredients { get; set; }
 
-    public virtual DbSet<CountryCodes> CountryCodes
-    {
-        get; set;
-    }
+    public virtual DbSet<CountryCodes> CountryCodes { get; set; }
 
-    public virtual DbSet<Images> Images
-    {
-        get; set;
-    }
+    public virtual DbSet<Images> Images { get; set; }
 
-    public virtual DbSet<IngredientImages> IngredientImages
-    {
-        get; set;
-    }
+    public virtual DbSet<IngredientImages> IngredientImages { get; set; }
 
-    public virtual DbSet<IngredientTypes> IngredientTypes
-    {
-        get; set;
-    }
+    public virtual DbSet<IngredientTypes> IngredientTypes { get; set; }
 
-    public virtual DbSet<Ingredients> Ingredients
-    {
-        get; set;
-    }
+    public virtual DbSet<Ingredients> Ingredients { get; set; }
 
-    public virtual DbSet<OrderIngredients> OrderIngredients
-    {
-        get; set;
-    }
+    public virtual DbSet<OrderItemIngredients> OrderItemIngredients { get; set; }
 
-    public virtual DbSet<OrderProducts> OrderProducts
-    {
-        get; set;
-    }
+    public virtual DbSet<OrderItems> OrderItems { get; set; }
 
-    public virtual DbSet<Orders> Orders
-    {
-        get; set;
-    }
+    public virtual DbSet<OrderProducts> OrderProducts { get; set; }
 
-    public virtual DbSet<ProductImages> ProductImages
-    {
-        get; set;
-    }
+    public virtual DbSet<Orders> Orders { get; set; }
 
-    public virtual DbSet<ProductTypes> ProductTypes
-    {
-        get; set;
-    }
+    public virtual DbSet<ProductImages> ProductImages { get; set; }
 
-    public virtual DbSet<Products> Products
-    {
-        get; set;
-    }
+    public virtual DbSet<ProductTypes> ProductTypes { get; set; }
 
-    public virtual DbSet<UserTypes> UserTypes
-    {
-        get; set;
-    }
+    public virtual DbSet<Products> Products { get; set; }
 
-    public virtual DbSet<Users> Users
-    {
-        get; set;
-    }
+    public virtual DbSet<UserTypes> UserTypes { get; set; }
+
+    public virtual DbSet<Users> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -89,290 +51,297 @@ public partial class CoffeeShopContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        _ = modelBuilder.Entity<AllowedIngredients>(entity =>
+        modelBuilder.Entity<AllowedIngredients>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Allowed __3213E83F3C759896");
+            entity.HasKey(e => e.Id).HasName("PK__Allowed __3213E83F21AB76A6");
 
-            _ = entity.ToTable("Allowed ingredients");
+            entity.ToTable("Allowed ingredients");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.AllowedNumber).HasColumnName("allowedNumber");
-            _ = entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
-            _ = entity.Property(e => e.IdProduct).HasColumnName("idProduct");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AllowedNumber).HasColumnName("allowedNumber");
+            entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
+            entity.Property(e => e.IdProduct).HasColumnName("idProduct");
 
-            _ = entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.AllowedIngredients)
+            entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.AllowedIngredients)
                 .HasForeignKey(d => d.IdIngredient)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Allowed i__idIng__76177A41");
+                .HasConstraintName("FK__Allowed i__idIng__62265B84");
 
-            _ = entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.AllowedIngredients)
+            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.AllowedIngredients)
                 .HasForeignKey(d => d.IdProduct)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Allowed i__idPro__770B9E7A");
+                .HasConstraintName("FK__Allowed i__idPro__631A7FBD");
         });
 
-        _ = modelBuilder.Entity<CountryCodes>(entity =>
+        modelBuilder.Entity<CountryCodes>(entity =>
         {
-            _ = entity.HasKey(e => e.CountryTicker).HasName("PK__CountryC__A0F54A7FA5675D1F");
+            entity.HasKey(e => e.CountryTicker).HasName("PK__CountryC__A0F54A7F8B91DA9A");
 
-            _ = entity.Property(e => e.CountryTicker)
+            entity.Property(e => e.CountryTicker)
                 .HasMaxLength(2)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("countryTicker");
-            _ = entity.Property(e => e.CountryCode)
+            entity.Property(e => e.CountryCode)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("countryCode");
-            _ = entity.Property(e => e.CountryName)
+            entity.Property(e => e.CountryName)
                 .HasMaxLength(100)
                 .HasColumnName("countryName");
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
         });
 
-        _ = modelBuilder.Entity<Images>(entity =>
+        modelBuilder.Entity<Images>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Images__3213E83F94E98833");
+            entity.HasKey(e => e.Id).HasName("PK__Images__3213E83F3CAE4579");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Data).HasColumnName("data");
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Data).HasColumnName("data");
+            entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
-            _ = entity.Property(e => e.Url)
+            entity.Property(e => e.Url)
                 .HasMaxLength(1024)
                 .HasColumnName("url");
         });
 
-        _ = modelBuilder.Entity<IngredientImages>(entity =>
+        modelBuilder.Entity<IngredientImages>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83FB0BE4738");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F59862F4E");
 
-            _ = entity.ToTable("Ingredient images");
+            entity.ToTable("Ingredient images");
 
-            _ = entity.Property(e => e.Id)
+            entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            _ = entity.Property(e => e.IdImage).HasColumnName("idImage");
-            _ = entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
+            entity.Property(e => e.IdImage).HasColumnName("idImage");
+            entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
 
-            _ = entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.IngredientImages)
+            entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.IngredientImages)
                 .HasForeignKey(d => d.IdImage)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Ingredien__idIma__6F6A7CB2");
+                .HasConstraintName("FK__Ingredien__idIma__5F49EED9");
 
-            _ = entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.IngredientImages)
+            entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.IngredientImages)
                 .HasForeignKey(d => d.IdIngredient)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Ingredien__idIng__6E765879");
+                .HasConstraintName("FK__Ingredien__idIng__5E55CAA0");
         });
 
-        _ = modelBuilder.Entity<IngredientTypes>(entity =>
+        modelBuilder.Entity<IngredientTypes>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F9ADE2438");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83FF758752A");
 
-            _ = entity.ToTable("Ingredient types");
+            entity.ToTable("Ingredient types");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
         });
 
-        _ = modelBuilder.Entity<Ingredients>(entity =>
+        modelBuilder.Entity<Ingredients>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F92FB85BA");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F2D720FC0");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            _ = entity.Property(e => e.Fee).HasColumnName("fee");
-            _ = entity.Property(e => e.IdIngredientType).HasColumnName("idIngredientType");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Fee).HasColumnName("fee");
+            entity.Property(e => e.IdIngredientType).HasColumnName("idIngredientType");
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
 
-            _ = entity.HasOne(d => d.IdIngredientTypeNavigation).WithMany(p => p.Ingredients)
+            entity.HasOne(d => d.IdIngredientTypeNavigation).WithMany(p => p.Ingredients)
                 .HasForeignKey(d => d.IdIngredientType)
-                .HasConstraintName("FK__Ingredien__idIng__6D823440");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__Ingredien__idIng__5D61A667");
         });
 
-        _ = modelBuilder.Entity<OrderIngredients>(entity =>
+        modelBuilder.Entity<OrderItemIngredients>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Order in__3213E83F09F30BEC");
+            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83F04D5A162");
 
-            _ = entity.ToTable("Order ingredients");
+            entity.ToTable("Order item ingredients");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
-            _ = entity.Property(e => e.IdOrder).HasColumnName("idOrder");
-            _ = entity.Property(e => e.Number).HasColumnName("number");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.IdIngredient).HasColumnName("idIngredient");
+            entity.Property(e => e.IdOrderProduct).HasColumnName("idOrderProduct");
 
-            _ = entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.OrderIngredients)
+            entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.OrderItemIngredients)
                 .HasForeignKey(d => d.IdIngredient)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order ing__idIng__733B0D96");
+                .HasConstraintName("FK__Order ite__idIng__67DF34DA");
 
-            _ = entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderIngredients)
-                .HasForeignKey(d => d.IdOrder)
+            entity.HasOne(d => d.IdOrderProductNavigation).WithMany(p => p.OrderItemIngredients)
+                .HasForeignKey(d => d.IdOrderProduct)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order ing__idOrd__7246E95D");
+                .HasConstraintName("FK__Order ite__idOrd__66EB10A1");
         });
 
-        _ = modelBuilder.Entity<OrderProducts>(entity =>
+        modelBuilder.Entity<OrderItems>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Order pr__3213E83F70BC6228");
+            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83FF418422F");
 
-            _ = entity.ToTable("Order products");
+            entity.ToTable("Order items");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.IdOrder).HasColumnName("idOrder");
-            _ = entity.Property(e => e.IdProduct).HasColumnName("idProduct");
-            _ = entity.Property(e => e.Number).HasColumnName("number");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdOrder).HasColumnName("idOrder");
+            entity.Property(e => e.IdOrderProduct).HasColumnName("idOrderProduct");
 
-            _ = entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderProducts)
+            entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.IdOrder)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order pro__idOrd__742F31CF");
+                .HasConstraintName("FK__Order ite__idOrd__640EA3F6");
 
-            _ = entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.OrderProducts)
+            entity.HasOne(d => d.IdOrderProductNavigation).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.IdOrderProduct)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Order ite__idOrd__6502C82F");
+        });
+
+        modelBuilder.Entity<OrderProducts>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Order pr__3213E83FF47A2533");
+
+            entity.ToTable("Order products");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdProduct).HasColumnName("idProduct");
+            entity.Property(e => e.Total).HasColumnName("total");
+
+            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.OrderProducts)
                 .HasForeignKey(d => d.IdProduct)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order pro__idPro__75235608");
+                .HasConstraintName("FK__Order pro__idPro__65F6EC68");
         });
 
-        _ = modelBuilder.Entity<Orders>(entity =>
+        modelBuilder.Entity<Orders>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Orders__3213E83F76C75460");
+            entity.HasKey(e => e.Id).HasName("PK__Orders__3213E83F484B1E4C");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.CreationDate)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("creationDate");
-            _ = entity.Property(e => e.IdCustomer).HasColumnName("idCustomer");
-            _ = entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
+            entity.Property(e => e.IdCustomer).HasColumnName("idCustomer");
+            entity.Property(e => e.IdEmployee).HasColumnName("idEmployee");
 
-            _ = entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.OrdersIdCustomerNavigation)
+            entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.OrdersIdCustomerNavigation)
                 .HasForeignKey(d => d.IdCustomer)
-                .HasConstraintName("FK__Orders__idCustom__6AA5C795");
+                .HasConstraintName("FK__Orders__idCustom__5A8539BC");
 
-            _ = entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.OrdersIdEmployeeNavigation)
+            entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.OrdersIdEmployeeNavigation)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__Orders__idEmploy__6B99EBCE");
+                .HasConstraintName("FK__Orders__idEmploy__5B795DF5");
         });
 
-        _ = modelBuilder.Entity<ProductImages>(entity =>
+        modelBuilder.Entity<ProductImages>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F437BF2F7");
+            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F639DAD6C");
 
-            _ = entity.ToTable("Product images");
+            entity.ToTable("Product images");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.IdImage).HasColumnName("idImage");
-            _ = entity.Property(e => e.IdProduct).HasColumnName("idProduct");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.IdImage).HasColumnName("idImage");
+            entity.Property(e => e.IdProduct).HasColumnName("idProduct");
 
-            _ = entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.ProductImages)
+            entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.IdImage)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Product i__idIma__7152C524");
+                .HasConstraintName("FK__Product i__idIma__6132374B");
 
-            _ = entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.ProductImages)
+            entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.IdProduct)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Product i__idPro__705EA0EB");
+                .HasConstraintName("FK__Product i__idPro__603E1312");
         });
 
-        _ = modelBuilder.Entity<ProductTypes>(entity =>
+        modelBuilder.Entity<ProductTypes>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F7078F0D8");
+            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F53D6A905");
 
-            _ = entity.ToTable("Product types");
+            entity.ToTable("Product types");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
         });
 
-        _ = modelBuilder.Entity<Products>(entity =>
+        modelBuilder.Entity<Products>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Products__3213E83F3DBF203E");
+            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83F8F7D1E0D");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Description)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-            _ = entity.Property(e => e.Fee).HasColumnName("fee");
-            _ = entity.Property(e => e.IdProductType).HasColumnName("idProductType");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Fee).HasColumnName("fee");
+            entity.Property(e => e.IdProductType).HasColumnName("idProductType");
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
 
-            _ = entity.HasOne(d => d.IdProductTypeNavigation).WithMany(p => p.Products)
+            entity.HasOne(d => d.IdProductTypeNavigation).WithMany(p => p.Products)
                 .HasForeignKey(d => d.IdProductType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Products__idProd__6C8E1007");
+                .HasConstraintName("FK__Products__idProd__5C6D822E");
         });
 
-        _ = modelBuilder.Entity<UserTypes>(entity =>
+        modelBuilder.Entity<UserTypes>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__User typ__3213E83FC742DF74");
+            entity.HasKey(e => e.Id).HasName("PK__User typ__3213E83F9DCC0682");
 
-            _ = entity.ToTable("User types");
+            entity.ToTable("User types");
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.Title)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
         });
 
-        _ = modelBuilder.Entity<Users>(entity =>
+        modelBuilder.Entity<Users>(entity =>
         {
-            _ = entity.HasKey(e => e.Id).HasName("PK__Users__3213E83F4D8D7B00");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3213E83F8F4A6049");
 
-            _ = entity.ToTable(tb => tb.HasTrigger("trg_ValidatePhoneNumber"));
+            entity.ToTable(tb => tb.HasTrigger("trg_ValidatePhoneNumber"));
 
-            _ = entity.Property(e => e.Id).HasColumnName("id");
-            _ = entity.Property(e => e.BirthDate)
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BirthDate)
                 .HasColumnType("datetime")
                 .HasColumnName("birthDate");
-            _ = entity.Property(e => e.CreationDate)
+            entity.Property(e => e.CreationDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
                 .HasColumnName("creationDate");
-            _ = entity.Property(e => e.Email)
+            entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
-            _ = entity.Property(e => e.FirstName)
+            entity.Property(e => e.FirstName)
                 .HasMaxLength(255)
                 .HasColumnName("firstName");
-            _ = entity.Property(e => e.IdImage).HasColumnName("idImage");
-            _ = entity.Property(e => e.IdUserType).HasColumnName("idUserType");
-            _ = entity.Property(e => e.LastName)
+            entity.Property(e => e.IdImage).HasColumnName("idImage");
+            entity.Property(e => e.IdUserType).HasColumnName("idUserType");
+            entity.Property(e => e.LastName)
                 .HasMaxLength(255)
                 .HasColumnName("lastName");
-            _ = entity.Property(e => e.PhoneNumber)
+            entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(255)
                 .HasColumnName("phoneNumber");
 
-            _ = entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.Users)
+            entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdImage)
-                .HasConstraintName("FK__Users__idImage__69B1A35C");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__Users__idImage__59911583");
 
-            _ = entity.HasOne(d => d.IdUserTypeNavigation).WithMany(p => p.Users)
+            entity.HasOne(d => d.IdUserTypeNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdUserType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Users__idUserTyp__68BD7F23");
+                .HasConstraintName("FK__Users__idUserTyp__589CF14A");
         });
 
-        this.OnModelCreatingPartial(modelBuilder);
+        OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

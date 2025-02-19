@@ -21,7 +21,6 @@
             }
             #endregion
 
-
             #region UsersController
             public static class UsersController
             {
@@ -42,6 +41,19 @@
                 public const string InvalidVerificationCode = "Invalid verification code.";
                 public const string ServerError = "Internal server error. Please try again later.";
                 public const string VerificationCodeSent = "Verification code sent.";
+            }
+            #endregion
+
+            #region IngredientsController
+            public static class IngredientsController
+            {
+                public const string IngredientNotFound = "Ingredient not found.";
+                public const string IngredientCreated = "Ingredient created successfully.";
+                public const string IngredientUpdated = "Ingredient updated successfully.";
+                public const string IngredientDeleted = "Ingredient deleted successfully.";
+                public const string IngredientAlreadyExists = "Ingredient with the specified title already exists.";
+                public const string IngredientIdMismatch = "Ingredient ID mismatch.";
+                public const string ConcurrencyConflict = "Concurrency conflict occurred while updating the ingredient.";
             }
             #endregion
 

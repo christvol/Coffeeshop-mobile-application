@@ -1,21 +1,15 @@
-﻿namespace Common.Classes.DB;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Common.Classes.DB;
 
 public partial class ProductImages
 {
-    public int Id
-    {
-        get; set;
-    }
+    public int Id { get; set; }
 
-    public int IdProduct
-    {
-        get; set;
-    }
+    public int IdProduct { get; set; }
 
-    public int IdImage
-    {
-        get; set;
-    }
+    public int IdImage { get; set; }
 
     public virtual Images IdImageNavigation { get; set; } = null!;
 

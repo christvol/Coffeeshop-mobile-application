@@ -1,6 +1,7 @@
 ﻿using Common.Classes.DB;
 using Common.Classes.Session;
 using REST_API_SERVER.DTOs;
+using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages
 {
@@ -10,7 +11,7 @@ namespace Mobile_application.Pages
         {
             get; set;
         }
-        public List<ProductTypes> ProductTypes { get; private set; } = new();
+        public ObservableCollection<ProductTypes> ProductTypes { get; private set; } = new();
         public ProductTypes SelectedProductType
         {
             get; set;
@@ -23,16 +24,25 @@ namespace Mobile_application.Pages
         public PageProductEdit(SessionData sessionData)
         {
             this.InitializeComponent();
-            this.BindingContext = this;
 
             this.SessionData = sessionData;
-            this.Mode = sessionData.Mode; // Получаем текущий режим окна
+            this.Mode = sessionData.Mode;
             this.Product = sessionData.Data as ProductDTO ?? new ProductDTO();
 
-            // Если режим не Create, загружаем данные типа продуктов
-            if (this.Mode != WindowMode.Create)
+            // Устанавливаем BindingContext на весь объект, чтобы привязки работали корректно
+            this.BindingContext = this;
+
+            // Загружаем типы продуктов
+            this.LoadProductTypes();
+
+            // Блокируем поля, если режим Read
+            if (this.Mode == WindowMode.Read)
             {
-                this.LoadProductTypes();
+                this.BtnSave.IsVisible = false;
+                this.EntryTitle.IsEnabled = false;
+                this.EditorDescription.IsEnabled = false;
+                this.EntryFee.IsEnabled = false;
+                this.PickerProductType.IsEnabled = false;
             }
         }
 
@@ -40,8 +50,17 @@ namespace Mobile_application.Pages
         {
             try
             {
-                this.ProductTypes = await this.ApiClient.GetAllProductTypesAsync();
+                var types = await this.ApiClient.GetAllProductTypesAsync();
+                this.ProductTypes.Clear();
+
+                foreach (var type in types)
+                {
+                    this.ProductTypes.Add(type);
+                }
+
                 this.SelectedProductType = this.ProductTypes.FirstOrDefault(pt => pt.Id == this.Product.IdProductType);
+                this.OnPropertyChanged(nameof(this.ProductTypes)); // Обновление привязки списка
+                this.OnPropertyChanged(nameof(this.SelectedProductType)); // Обновление привязки выбранного типа
             }
             catch (Exception ex)
             {
@@ -53,21 +72,29 @@ namespace Mobile_application.Pages
         {
             try
             {
+                // Удаляем символ валюты и пробелы, заменяем запятую на точку
+                string feeText = this.EntryFee.Text?.Replace("₽", "").Trim().Replace(",", ".") ?? "0";
+
+                // Пробуем преобразовать строку в decimal
+                if (!decimal.TryParse(feeText, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var fee))
+                {
+                    await this.DisplayAlert("Ошибка", "Некорректный формат цены. Используйте число с точкой или запятой.", "OK");
+                    return;
+                }
+
                 // Обновляем данные продукта
-                this.Product.Title = EntryTitle.Text;
-                this.Product.Description = EditorDescription.Text;
-                this.Product.Fee = Int32.TryParse(EntryFee.Text, out var fee) ? fee : 0;
+                this.Product.Title = this.EntryTitle.Text;
+                this.Product.Description = this.EditorDescription.Text;
+                this.Product.Fee = (float)fee; // Сохраняем правильное значение
                 this.Product.IdProductType = this.SelectedProductType?.Id ?? this.Product.IdProductType;
 
                 if (this.Mode == WindowMode.Create)
                 {
-                    // Создаем новый продукт
                     _ = await this.ApiClient.CreateProductAsync(this.Product);
                     await this.DisplayAlert("Успех", "Продукт успешно создан.", "OK");
                 }
                 else if (this.Mode == WindowMode.Update)
                 {
-                    // Обновляем существующий продукт
                     _ = await this.ApiClient.UpdateProductAsync(this.Product.Id, this.Product);
                     await this.DisplayAlert("Успех", "Продукт успешно обновлен.", "OK");
                 }
@@ -79,6 +106,7 @@ namespace Mobile_application.Pages
                 await this.DisplayAlert("Ошибка", $"Не удалось сохранить продукт: {ex.Message}", "OK");
             }
         }
+
 
         private async void OnCancelClicked(object sender, EventArgs e)
         {

@@ -24,9 +24,6 @@ namespace Mobile_application.Pages
 
             // Настраиваем заголовок
             this.Title = $"Продукты категории: {this.Category?.Title ?? "Неизвестно"}";
-
-            // Загружаем продукты категории
-            this.LoadProducts();
         }
 
         private async void LoadProducts()
@@ -50,6 +47,33 @@ namespace Mobile_application.Pages
             catch (Exception ex)
             {
                 await this.DisplayAlert("Ошибка", $"Не удалось загрузить продукты: {ex.Message}", "OK");
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            // Загружаем продукты категории
+            this.LoadProducts();
+        }
+
+        private async void OnProductSelected(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.FirstOrDefault() is ProductDTO selectedProduct)
+            {
+                // Создаем объект SessionData для режима Read
+                var readSessionData = new SessionData
+                {
+                    CurrentUser = this.SessionData.CurrentUser,
+                    Mode = WindowMode.Read, // Режим чтения
+                    Data = selectedProduct // Передаем выбранный продукт
+                };
+
+                // Переходим на страницу редактирования в режиме Read
+                await this.Navigation.PushAsync(new PageProductEdit(readSessionData));
+
+                // Сбрасываем выбор
+                ((CollectionView)sender).SelectedItem = null;
             }
         }
 

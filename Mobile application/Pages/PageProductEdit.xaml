@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
              xmlns:pages="clr-namespace:Mobile_application.Pages"
              x:Class="Mobile_application.Pages.PageProductEdit"
              Title="Редактирование продукта"
@@ -9,26 +10,29 @@
         <VerticalStackLayout Padding="20" Spacing="10">
 
             <!-- Название продукта -->
-            <Label Text="Название продукта" FontSize="16" TextColor="White" />
-            <Entry x:Name="EntryTitle" Text="{Binding Product.Title}" Placeholder="Введите название" />
+            <Label Text="Название продукта" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Entry x:Name="EntryTitle" Text="{Binding Product.Title}" 
+                   TextColor="{StaticResource Gray900}" 
+                   Placeholder="Введите название" />
 
             <!-- Описание продукта -->
-            <Label Text="Описание" FontSize="16" TextColor="White" />
+            <Label Text="Описание" FontSize="16" TextColor="{StaticResource Gray900}" />
             <Editor x:Name="EditorDescription" Text="{Binding Product.Description}" Placeholder="Введите описание" HeightRequest="100" />
 
             <!-- Цена продукта -->
-            <Label Text="Цена" FontSize="16" TextColor="White" />
-            <Entry x:Name="EntryFee" Text="{Binding Product.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
+            <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Entry x:Name="EntryFee" Text="{Binding Product.Fee, StringFormat='₽ {0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" 
+                   TextColor="{StaticResource Gray900}"/>
 
             <!-- Тип продукта -->
-            <Label Text="Тип продукта" FontSize="16" TextColor="White" />
-            <Picker x:Name="PickerProductType" ItemsSource="{Binding ProductTypes}" ItemDisplayBinding="{Binding Title}" SelectedItem="{Binding SelectedProductType}" />
+            <Label Text="Тип продукта" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Picker x:Name="PickerProductType" ItemsSource="{Binding ProductTypes}" ItemDisplayBinding="{Binding Title}" SelectedItem="{Binding SelectedProductType, Mode=TwoWay}" />
 
             <!-- Кнопки -->
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />
-                <Button Text="Отмена" Clicked="OnCancelClicked" BackgroundColor="#F44336" TextColor="White" />
-            </HorizontalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Button x:Name="BtnSave" Text="{x:Static res:Strings.ButtonSave}" Clicked="OnSaveClicked" Style="{StaticResource ButtonPrimary}" />
+                <Button x:Name="BtnCancel" Text="{x:Static res:Strings.ButtonCancel}" Clicked="OnCancelClicked" Style="{StaticResource ButtonDanger}" />
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </pages:CustomContentPage>

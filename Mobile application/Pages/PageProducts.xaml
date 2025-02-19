@@ -17,9 +17,11 @@
 
         <!-- Список товаров -->
         <CollectionView Grid.Row="1"
-                        x:Name="ProductsCollectionView"
-                        ItemsSource="{Binding Products}"
-                        SelectionMode="None">
+                x:Name="ProductsCollectionView"
+                ItemsSource="{Binding Products}"
+                SelectionMode="Single"
+                SelectionChanged="OnProductSelected">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5" BackgroundColor="{StaticResource Tertiary}">
@@ -49,6 +51,19 @@
 
                             <!-- Кнопки редактирования и удаления -->
                             <StackLayout Grid.Column="2" Orientation="Horizontal" Spacing="5">
+                                <HorizontalStackLayout Spacing="5">
+                                    <Button Text="+"  WidthRequest="40" CornerRadius="10"
+                                        TextColor="White"
+                                        BackgroundColor="ForestGreen"/>
+                                    <Label Text="999"
+                                       FontSize="14"
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="{StaticResource Gray900}"/>
+                                    <Button Text="-"  WidthRequest="40" CornerRadius="10"
+                                         TextColor="White"
+                                         BackgroundColor="DarkRed"/>
+                                </HorizontalStackLayout>
+
                                 <Button Text="{x:Static res:Strings.ButtonEdit}"
                                         Clicked="OnEditProductClicked"
                                        BackgroundColor="{StaticResource Primary}"
