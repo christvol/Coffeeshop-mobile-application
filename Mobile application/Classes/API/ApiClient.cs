@@ -220,10 +220,10 @@
         /// <summary>
         /// Создание нового пользователя.
         /// </summary>
-        /// <param name="userDto">Объект <see cref="UserRequestDto"/>, содержащий данные для создания пользователя.</param>
+        /// <param name="userDto">Объект <see cref="UserDTO"/>, содержащий данные для создания пользователя.</param>
         /// <returns>Объект <see cref="Users"/> с данными созданного пользователя или null, если запрос завершился неудачно.</returns>
         /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
-        public async Task<Users?> CreateUserAsync(UserRequestDto userDto)
+        public async Task<Users?> CreateUserAsync(UserDTO userDto)
         {
             try
             {
@@ -314,7 +314,7 @@
         /// <param name="id">ID пользователя.</param>
         /// <param name="userDto">Данные пользователя для обновления.</param>
         /// <returns>True, если обновление прошло успешно; иначе false.</returns>
-        public async Task<bool> UpdateUserAsync(int id, UserRequestDto userDto)
+        public async Task<bool> UpdateUserAsync(int id, UserDTO userDto)
         {
             try
             {
@@ -341,9 +341,9 @@
         /// Получение типа пользователя по ID.
         /// </summary>
         /// <param name="id">ID пользователя.</param>
-        /// <returns>Объект <see cref="UserTypeDto"/> или null, если не найден.</returns>
+        /// <returns>Объект <see cref="UserTypeDTO"/> или null, если не найден.</returns>
         /// <exception cref="HttpRequestException">Возникает при ошибке запроса.</exception>
-        public async Task<UserTypeDto?> GetUserTypeByUserIdAsync(int id)
+        public async Task<UserTypeDTO?> GetUserTypeByUserIdAsync(int id)
         {
             try
             {
@@ -357,7 +357,7 @@
                 _ = response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<UserTypeDto>(json, new JsonSerializerOptions
+                return JsonSerializer.Deserialize<UserTypeDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
@@ -517,6 +517,164 @@
             catch (Exception ex)
             {
                 throw new Exception($"Ошибка при удалении продукта: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region Ingredients
+
+        /// <summary>
+        /// Получение всех ингредиентов.
+        /// </summary>
+        public async Task<List<IngredientDTO>> GetIngredientsAsync()
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync("Ingredients");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<IngredientDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<IngredientDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении ингредиентов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение ингредиента по ID.
+        /// </summary>
+        public async Task<IngredientDTO?> GetIngredientByIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Ingredients/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении ингредиента по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Создание нового ингредиента.
+        /// </summary>
+        public async Task<IngredientDTO?> CreateIngredientAsync(IngredientDTO ingredientDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PostAsJsonAsync("Ingredients", ingredientDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании ингредиента: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обновление ингредиента по ID.
+        /// </summary>
+        public async Task<IngredientDTO?> UpdateIngredientAsync(int id, IngredientDTO ingredientDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PutAsJsonAsync($"Ingredients/{id}", ingredientDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении ингредиента: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Удаление ингредиента по ID.
+        /// </summary>
+        public async Task DeleteIngredientAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.DeleteAsync($"Ingredients/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении ингредиента: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение типа ингредиента по ID.
+        /// </summary>
+        public async Task<IngredientTypeDTO?> GetIngredientTypeAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"Ingredients/{id}/IngredientType");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientTypeDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении типа ингредиента: {ex.Message}");
             }
         }
 

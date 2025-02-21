@@ -111,7 +111,7 @@ public partial class PageSMSCodeVerification : CustomContentPage
                 if (user == null)
                 {
                     // Если пользователь не найден, создаем его
-                    var newUser = new UserRequestDto
+                    var newUser = new UserDTO
                     {
                         PhoneNumber = this.phoneNumber.Trim(),
                         IdUserType = CommonLocal.DefaultUserData.IdUserType,

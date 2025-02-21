@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             x:Class="Mobile_application.Pages.PageIngredientEdit"
+             Title="PageIngredientEdit"
+             BackgroundColor="{StaticResource MintGreen}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Название ингредиента -->
+            <Label Text="Название ингредиента" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Entry x:Name="EntryTitle" Text="{Binding Ingredient.Title}" Placeholder="Введите название" />
+
+            <!-- Описание ингредиента -->
+            <Label Text="Описание" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Editor x:Name="EditorDescription" Text="{Binding Ingredient.Description}" Placeholder="Введите описание" HeightRequest="100" />
+
+            <!-- Цена ингредиента -->
+            <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <Entry x:Name="EntryFee" Text="{Binding Ingredient.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
+
+            <!-- Кнопки -->
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />
+                <Button Text="Отмена" Clicked="OnCancelClicked" BackgroundColor="#F44336" TextColor="White" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</pages:CustomContentPage>

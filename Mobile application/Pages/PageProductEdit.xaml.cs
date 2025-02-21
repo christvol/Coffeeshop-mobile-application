@@ -1,4 +1,5 @@
 ﻿using Common.Classes.DB;
+using Common.Classes.DTO;
 using Common.Classes.Session;
 using REST_API_SERVER.DTOs;
 using System.Collections.ObjectModel;
@@ -38,7 +39,7 @@ namespace Mobile_application.Pages
             // Блокируем поля, если режим Read
             if (this.Mode == WindowMode.Read)
             {
-                this.BtnSave.IsVisible = false;
+                //this.BtnSave.IsVisible = false;
                 this.EntryTitle.IsEnabled = false;
                 this.EditorDescription.IsEnabled = false;
                 this.EntryFee.IsEnabled = false;
@@ -67,7 +68,69 @@ namespace Mobile_application.Pages
                 await this.DisplayAlert("Ошибка", $"Не удалось загрузить типы продуктов: {ex.Message}", "OK");
             }
         }
+        private async void OnAddIngredientClicked(object sender, EventArgs e)
+        {
+            // Создаем новый объект ингредиента
+            var newIngredient = new IngredientDTO
+            {
+                Title = string.Empty,
+                Description = string.Empty,
+                Fee = 0
+            };
 
+            // Создаем объект SessionData для режима Create
+            var newSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData.CurrentUser,
+                Mode = WindowMode.Create, // Режим создания
+                Data = newIngredient // Передаем новый ингредиент
+            };
+
+            // Переходим на страницу редактирования ингредиента
+            await this.Navigation.PushAsync(new PageIngredientEdit(newSessionData));
+        }
+        private async void OnEditIngredientClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is IngredientDTO ingredient)
+            {
+                // Создаем объект SessionData для режима Update
+                var editSessionData = new SessionData
+                {
+                    CurrentUser = this.SessionData.CurrentUser,
+                    Mode = WindowMode.Update, // Режим обновления
+                    Data = ingredient // Передаем выбранный ингредиент для редактирования
+                };
+
+                // Переходим на страницу редактирования ингредиента
+                await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
+            }
+        }
+        private async void OnDeleteIngredientClicked(object sender, EventArgs e)
+        {
+            //if (sender is Button button && button.BindingContext is IngredientDTO ingredient)
+            //{
+            //    var confirm = await this.DisplayAlert("Подтверждение", $"Вы уверены, что хотите удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
+            //    if (!confirm)
+            //    {
+            //        return;
+            //    }
+
+            //    try
+            //    {
+            //        // Удаляем ингредиент через API
+            //        await this.ApiClient.DeleteIngredientAsync(ingredient.Id);
+
+            //        // Удаляем ингредиент из локального списка
+            //        _ = this.Product.Ingredients.Remove(ingredient);
+
+            //        await this.DisplayAlert("Успех", "Ингредиент успешно удален.", "OK");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        await this.DisplayAlert("Ошибка", $"Не удалось удалить ингредиент: {ex.Message}", "OK");
+            //    }
+            //}
+        }
         private async void OnSaveClicked(object sender, EventArgs e)
         {
             try
@@ -106,8 +169,6 @@ namespace Mobile_application.Pages
                 await this.DisplayAlert("Ошибка", $"Не удалось сохранить продукт: {ex.Message}", "OK");
             }
         }
-
-
         private async void OnCancelClicked(object sender, EventArgs e)
         {
             _ = await this.Navigation.PopAsync();

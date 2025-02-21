@@ -1,6 +1,6 @@
 ﻿namespace Common.Classes.DTO
 {
-    public class UserTypeDto
+    public class UserTypeDTO
     {
         public int Id
         {

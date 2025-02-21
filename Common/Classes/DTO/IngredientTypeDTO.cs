@@ -1,6 +1,6 @@
 ﻿namespace Common.Classes.DTO
 {
-    public class IngredientTypeDto
+    public class IngredientTypeDTO
     {
         public int Id
         {

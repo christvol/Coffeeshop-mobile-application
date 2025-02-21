@@ -96,7 +96,7 @@ public partial class PageUserProfile : CustomContentPage
             }
 
             // Обновление данных пользователя из полей ввода
-            var updatedUser = new UserRequestDto
+            var updatedUser = new UserDTO
             {
                 Id = this.SessionData.CurrentUser.Id,
                 FirstName = this.entryUserFirstName.Text,

@@ -24,19 +24,19 @@ namespace REST_API_SERVER.Controllers
 
         // GET: api/Ingredients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IngredientResponseDto>>> GetIngredients()
+        public async Task<ActionResult<IEnumerable<IngredientDTO>>> GetIngredients()
         {
             var ingredients = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
                 .ToListAsync();
 
-            var ingredientDtos = ingredients.Select(i => new IngredientResponseDto
+            var ingredientDtos = ingredients.Select(i => new IngredientDTO
             {
                 Id = i.Id,
                 Title = i.Title,
                 Description = i.Description,
                 Fee = i.Fee,
-                IngredientType = i.IdIngredientTypeNavigation != null ? new IngredientTypeDto
+                IngredientType = i.IdIngredientTypeNavigation != null ? new IngredientTypeDTO
                 {
                     Id = i.IdIngredientTypeNavigation.Id,
                     Title = i.IdIngredientTypeNavigation.Title
@@ -48,7 +48,7 @@ namespace REST_API_SERVER.Controllers
 
         // GET: api/Ingredients/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<IngredientResponseDto>> GetIngredientById(int id)
+        public async Task<ActionResult<IngredientDTO>> GetIngredientById(int id)
         {
             var ingredient = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
@@ -62,13 +62,13 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var ingredientDto = new IngredientResponseDto
+            var ingredientDto = new IngredientDTO
             {
                 Id = ingredient.Id,
                 Title = ingredient.Title,
                 Description = ingredient.Description,
                 Fee = ingredient.Fee,
-                IngredientType = ingredient.IdIngredientTypeNavigation != null ? new IngredientTypeDto
+                IngredientType = ingredient.IdIngredientTypeNavigation != null ? new IngredientTypeDTO
                 {
                     Id = ingredient.IdIngredientTypeNavigation.Id,
                     Title = ingredient.IdIngredientTypeNavigation.Title
@@ -80,11 +80,11 @@ namespace REST_API_SERVER.Controllers
 
         // POST: api/Ingredients
         [HttpPost]
-        public async Task<ActionResult<IngredientResponseDto>> CreateIngredient([FromBody] IngredientRequestDto ingredientDto)
+        public async Task<ActionResult<IngredientDTO>> CreateIngredient([FromBody] IngredientDTO ingredientDto)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest(this.ModelState);  // Возвращаем ошибку, если модель не валидна
+                return this.BadRequest(this.ModelState);  // Return error if model is invalid
             }
 
             var ingredient = new Ingredients
@@ -98,13 +98,13 @@ namespace REST_API_SERVER.Controllers
             _ = this._context.Ingredients.Add(ingredient);
             _ = await this._context.SaveChangesAsync();
 
-            var ingredientResponseDto = new IngredientResponseDto
+            var ingredientResponseDto = new IngredientDTO
             {
                 Id = ingredient.Id,
                 Title = ingredient.Title,
                 Description = ingredient.Description,
                 Fee = ingredient.Fee,
-                IngredientType = ingredient.IdIngredientTypeNavigation != null ? new IngredientTypeDto
+                IngredientType = ingredient.IdIngredientTypeNavigation != null ? new IngredientTypeDTO
                 {
                     Id = ingredient.IdIngredientTypeNavigation.Id,
                     Title = ingredient.IdIngredientTypeNavigation.Title
@@ -117,10 +117,9 @@ namespace REST_API_SERVER.Controllers
             }, ingredientResponseDto);
         }
 
-
         // PUT: api/Ingredients/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateIngredient(int id, [FromBody] IngredientRequestDto ingredientDto)
+        public async Task<IActionResult> UpdateIngredient(int id, [FromBody] IngredientDTO ingredientDto)
         {
             if (id != ingredientDto.Id)
             {
@@ -157,14 +156,13 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            // Возвращаем обновленный объект
-            var ingredientResponseDto = new IngredientResponseDto
+            var ingredientResponseDto = new IngredientDTO
             {
                 Id = existingIngredient.Id,
                 Title = existingIngredient.Title,
                 Description = existingIngredient.Description,
                 Fee = existingIngredient.Fee,
-                IngredientType = existingIngredient.IdIngredientTypeNavigation != null ? new IngredientTypeDto
+                IngredientType = existingIngredient.IdIngredientTypeNavigation != null ? new IngredientTypeDTO
                 {
                     Id = existingIngredient.IdIngredientTypeNavigation.Id,
                     Title = existingIngredient.IdIngredientTypeNavigation.Title
@@ -173,7 +171,6 @@ namespace REST_API_SERVER.Controllers
 
             return this.Ok(ingredientResponseDto);
         }
-
 
         // DELETE: api/Ingredients/{id}
         [HttpDelete("{id}")]
@@ -197,7 +194,7 @@ namespace REST_API_SERVER.Controllers
 
         // GET: api/Ingredients/{id}/IngredientType
         [HttpGet("{id}/IngredientType")]
-        public async Task<ActionResult<IngredientTypeDto>> GetIngredientType(int id)
+        public async Task<ActionResult<IngredientTypeDTO>> GetIngredientType(int id)
         {
             var ingredient = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
@@ -211,7 +208,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var ingredientTypeDto = new IngredientTypeDto
+            var ingredientTypeDto = new IngredientTypeDTO
             {
                 Id = ingredient.IdIngredientTypeNavigation.Id,
                 Title = ingredient.IdIngredientTypeNavigation.Title

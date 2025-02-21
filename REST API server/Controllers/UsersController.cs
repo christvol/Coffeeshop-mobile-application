@@ -69,7 +69,7 @@ public class UsersController : ControllerBase
 
     // POST: api/Users
     [HttpPost]
-    public async Task<ActionResult<Users>> CreateUser([FromBody] UserRequestDto userDto)
+    public async Task<ActionResult<Users>> CreateUser([FromBody] UserDTO userDto)
     {
         var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(userDto.PhoneNumber);
 
@@ -103,7 +103,7 @@ public class UsersController : ControllerBase
 
     // PUT: api/Users/{id}
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(int id, [FromBody] UserRequestDto userDto)
+    public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userDto)
     {
         if (id != userDto.Id)
         {
@@ -167,7 +167,7 @@ public class UsersController : ControllerBase
 
     // GET: api/Users/{id}/UserType
     [HttpGet("{id}/UserType")]
-    public async Task<ActionResult<UserTypeDto>> GetUserType(int id)
+    public async Task<ActionResult<UserTypeDTO>> GetUserType(int id)
     {
         var user = await this._context.Set<Users>()
             .Include(u => u.IdUserTypeNavigation)
@@ -181,7 +181,7 @@ public class UsersController : ControllerBase
             });
         }
 
-        var userTypeDto = new UserTypeDto
+        var userTypeDto = new UserTypeDTO
         {
             Id = user.IdUserTypeNavigation.Id,
             Title = user.IdUserTypeNavigation.Title
