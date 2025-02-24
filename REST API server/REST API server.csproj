@@ -8,6 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="createScripts.ps1" />
+    <None Remove="DB.Cleanup.sql" />
+    <None Remove="DB.Create.sql" />
+    <None Remove="DB.Create.Stored procedures.sql" />
+    <None Remove="DB.Create.Table.PhoneCodes.sql" />
+    <None Remove="DB.Create.Tables.sql" />
+    <None Remove="DB.Create.Triggers.sql" />
+    <None Remove="DB.Create.Views.sql" />
+    <None Remove="DB.Deployment.sql" />
+    <None Remove="DB.Insert.Tables data.sql" />
+    <None Remove="DB.Select.Tables.sql" />
+    <None Remove="DB.Select.Views.sql" />
+    <None Remove="DB.Update.Tables.sql" />
+    <None Remove="Scheme.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
