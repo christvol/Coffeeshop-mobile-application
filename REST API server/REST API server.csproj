@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DB.CoffeeShop\DB.CoffeeShop.ssmssqlproj" />
+  </ItemGroup>
+
 </Project>
