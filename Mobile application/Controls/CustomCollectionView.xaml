@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mobile_application.Controls.CustomCollectionView">
+    <VerticalStackLayout>
+        <!-- Кастомный CollectionView для универсальных сущностей -->
+        <CollectionView Grid.Row="1"
+                        x:Name="cvItems"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnItemSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5" BackgroundColor="{StaticResource Tertiary}">
+                        <Grid ColumnDefinitions="50, *, Auto" RowDefinitions="Auto, Auto">
+                            <!-- Иконка сущности -->
+                            <Image Source="{Binding EntityImages[0]}"
+                                   WidthRequest="40"
+                                   HeightRequest="40"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="Start"
+                                   Grid.RowSpan="2" />
+
+                            <!-- Название сущности -->
+                            <Label Text="{Binding Title}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   Grid.Column="1"
+                                   VerticalOptions="Start" />
+
+                            <!-- Дополнительная информация -->
+                            <Label Text="{Binding Info, StringFormat='{0}'}"
+                                   FontSize="14"
+                                   Grid.Column="1"
+                                   Grid.Row="1"
+                                   VerticalOptions="Start"
+                                   TextColor="{StaticResource Gray900}" />
+
+                            <!-- Кнопки для действий с сущностью -->
+                            <StackLayout Grid.Column="2" Orientation="Horizontal" Spacing="5" HorizontalOptions="End">
+                                <Button Text="Edit"
+                                        Clicked="OnEditItemClicked"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        Padding="10,5"/>
+                                <Button Text="Delete"
+                                        Clicked="OnDeleteItemClicked"
+                                        BackgroundColor="{StaticResource Danger}"
+                                        TextColor="White"
+                                        CornerRadius="5"
+                                        Padding="10,5"/>
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentView>

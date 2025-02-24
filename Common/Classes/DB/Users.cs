@@ -30,4 +30,9 @@ public partial class Users
     public virtual ICollection<Orders> OrdersIdCustomerNavigation { get; set; } = new List<Orders>();
 
     public virtual ICollection<Orders> OrdersIdEmployeeNavigation { get; set; } = new List<Orders>();
+
+    public static implicit operator Users(Task<Users?> v)
+    {
+        throw new NotImplementedException();
+    }
 }

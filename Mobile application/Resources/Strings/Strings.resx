@@ -198,4 +198,16 @@
   <data name="ButtonAdd" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="ButtonProducts" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="ButtonProductTypes" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="ButtonIngredients" xml:space="preserve">
+    <value>Ingredients</value>
+  </data>
+  <data name="ButtonIngredientTypes" xml:space="preserve">
+    <value>Ingredients types</value>
+  </data>
 </root>

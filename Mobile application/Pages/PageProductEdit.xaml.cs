@@ -13,6 +13,7 @@ namespace Mobile_application.Pages
             get; set;
         }
         public ObservableCollection<ProductTypes> ProductTypes { get; private set; } = new();
+        public ObservableCollection<IngredientsView> Ingredients { get; private set; } = new();
         public ProductTypes SelectedProductType
         {
             get; set;
@@ -35,6 +36,8 @@ namespace Mobile_application.Pages
 
             // Загружаем типы продуктов
             this.LoadProductTypes();
+
+            this.LoadIngredients();
 
             // Блокируем поля, если режим Read
             if (this.Mode == WindowMode.Read)
@@ -66,6 +69,35 @@ namespace Mobile_application.Pages
             catch (Exception ex)
             {
                 await this.DisplayAlert("Ошибка", $"Не удалось загрузить типы продуктов: {ex.Message}", "OK");
+            }
+        }
+        private async void LoadIngredients()
+        {
+            try
+            {
+                var ingredients = await this.ApiClient.GetIngredientsViewAsync();
+                this.Ingredients.Clear();
+
+                foreach (var ingredient in ingredients)
+                {
+                    this.Ingredients.Add(ingredient);
+                }
+
+                //// Привязка коллекции ингредиентов к Product.Ingredients
+                //this.Product.Ingredients = this.Ingredients.Select(ingredient => new IngredientDTO
+                //{
+                //    Id = ingredient.IngredientId,
+                //    Title = ingredient.IngredientTitle,
+                //    Description = ingredient.IngredientDescription,
+                //    Fee = ingredient.IngredientFee
+                //}).ToList();
+
+                // Обновление привязки
+                this.OnPropertyChanged(nameof(this.Ingredients)); // Обновление привязки списка ингредиентов
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayAlert("Ошибка", $"Не удалось загрузить ингредиенты: {ex.Message}", "OK");
             }
         }
         private async void OnAddIngredientClicked(object sender, EventArgs e)

@@ -30,13 +30,13 @@
 
             <!-- Список ингредиентов -->
             <Label Text="Ингредиенты" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <CollectionView ItemsSource="{Binding Product.Ingredients}" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding Ingredients}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5" BackgroundColor="{StaticResource Tertiary}">
                             <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto">
                                 <!-- Название ингредиента -->
-                                <Label Text="{Binding Title}" FontSize="14" VerticalOptions="Center" Grid.Column="0" />
+                                <Label Text="{Binding IngredientTitle}" FontSize="14" VerticalOptions="Center" Grid.Column="0" />
 
                                 <!-- Кнопки управления ингредиентами -->
                                 <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Grid.Column="1">

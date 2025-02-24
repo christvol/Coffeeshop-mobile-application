@@ -680,6 +680,194 @@
 
         #endregion
 
+        #region AllowedIngredients
+
+        /// <summary>
+        /// Получение всех разрешённых ингредиентов.
+        /// </summary>
+        public async Task<List<AllowedIngredientsDTO>> GetAllowedIngredientsAsync()
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync("AllowedIngredients");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<AllowedIngredientsDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<AllowedIngredientsDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении разрешённых ингредиентов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение разрешённого ингредиента по ID.
+        /// </summary>
+        public async Task<AllowedIngredientsDTO?> GetAllowedIngredientByIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"AllowedIngredients/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении разрешённого ингредиента по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Создание нового разрешённого ингредиента.
+        /// </summary>
+        public async Task<AllowedIngredientsDTO?> CreateAllowedIngredientAsync(AllowedIngredientsDTO allowedIngredientsDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PostAsJsonAsync("AllowedIngredients", allowedIngredientsDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании разрешённого ингредиента: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обновление разрешённого ингредиента по ID.
+        /// </summary>
+        public async Task<AllowedIngredientsDTO?> UpdateAllowedIngredientAsync(int id, AllowedIngredientsDTO allowedIngredientsDto)
+        {
+            try
+            {
+                var response = await this._httpClient.PutAsJsonAsync($"AllowedIngredients/{id}", allowedIngredientsDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении разрешённого ингредиента: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Удаление разрешённого ингредиента по ID.
+        /// </summary>
+        public async Task DeleteAllowedIngredientAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.DeleteAsync($"AllowedIngredients/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении разрешённого ингредиента: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region IngredientsView
+
+        /// <summary>
+        /// Получение всех элементов из представления IngredientsView.
+        /// </summary>
+        public async Task<List<IngredientsView>> GetIngredientsViewAsync()
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync("IngredientsView");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<IngredientsView>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<IngredientsView>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении элементов из IngredientsView: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение элемента из представления IngredientsView по ID.
+        /// </summary>
+        public async Task<IngredientsView?> GetIngredientsViewByIdAsync(int id)
+        {
+            try
+            {
+                var response = await this._httpClient.GetAsync($"IngredientsView/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientsView>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении элемента из IngredientsView по ID: {ex.Message}");
+            }
+        }
+
+        #endregion
+
         public async Task<RegistrationResponse?> GetCodeAsync(string phoneNumber)
         {
             try

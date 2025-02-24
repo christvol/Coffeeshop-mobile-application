@@ -1,4 +1,7 @@
-﻿using Mobile_application.Pages;
+﻿using Common.Classes.Session;
+using Mobile_application.Classes;
+using Mobile_application.Classes.API;
+using Mobile_application.Pages;
 
 namespace Mobile_application
 {
@@ -29,7 +32,17 @@ namespace Mobile_application
                 System.Diagnostics.Debug.WriteLine("Приложение запущено в режиме отладки. Флаг снимается при запуске в Release.");
             }
 
-            this.MainPage = new NavigationPage(new PageLogin());
+            //this.MainPage = new NavigationPage(new PageLogin());
+            var apiClient = new ApiClient(CommonLocal.API.entryPoint);
+            var user = apiClient.GetUserByIdAsync(1);
+            // Формируем SessionData
+            var sessionData = new SessionData
+            {
+                CurrentUser = user,
+                Data = null, // Можно передать дополнительные данные, если нужно
+                Mode = WindowMode.Read
+            };
+            this.MainPage = new NavigationPage(new PageEditMenu(sessionData));
         }
     }
 }

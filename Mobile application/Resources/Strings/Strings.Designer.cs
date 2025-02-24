@@ -142,11 +142,47 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Ingredients.
+        /// </summary>
+        internal static string ButtonIngredients {
+            get {
+                return ResourceManager.GetString("ButtonIngredients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ingredients types.
+        /// </summary>
+        internal static string ButtonIngredientTypes {
+            get {
+                return ResourceManager.GetString("ButtonIngredientTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Logout.
         /// </summary>
         internal static string ButtonLogout {
             get {
                 return ResourceManager.GetString("ButtonLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Products.
+        /// </summary>
+        internal static string ButtonProducts {
+            get {
+                return ResourceManager.GetString("ButtonProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Categories.
+        /// </summary>
+        internal static string ButtonProductTypes {
+            get {
+                return ResourceManager.GetString("ButtonProductTypes", resourceCulture);
             }
         }
         

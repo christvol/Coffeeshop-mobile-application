@@ -6,11 +6,15 @@
         {
             get; set;
         }
-        public int IdOrderItem
+        public int? IdOrderProduct
         {
             get; set;
         }
-        public int IdIngredient
+        public int? IdIngredient
+        {
+            get; set;
+        }
+        public int Amount
         {
             get; set;
         }
