@@ -130,7 +130,7 @@ public partial class PageUserProfile : CustomContentPage
                     return;
                 }
                 // Переход на соответствующую страницу в зависимости от типа пользователя
-                await this.Navigation.PushAsync(new PageCategories(this.SessionData));               
+                await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));               
             }
             else
             {

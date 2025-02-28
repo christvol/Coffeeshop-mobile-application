@@ -7,24 +7,47 @@ namespace Mobile_application.Pages
 {
     public partial class PageProducts : CustomContentPage
     {
+        #region Поля
+
+        #endregion
+
+        #region Свойства
+
         public ObservableCollection<ProductDTO> Products { get; set; } = new();
 
-        public ProductTypes Category
+        public ProductTypes? Category
         {
             get; set;
         }
+
+        #endregion
+
+        #region Конструкторы/Деструкторы
 
         public PageProducts(SessionData sessionData)
         {
             this.InitializeComponent();
             this.BindingContext = this;
 
-            this.SessionData = sessionData;
-            this.Category = sessionData.Data as ProductTypes;
+            this.SessionData = sessionData ?? new SessionData(); // Гарантируем, что SessionData не будет null
+
+            if (this.SessionData.Data is ProductTypes productType)
+            {
+                this.Category = productType;
+            }
+            else
+            {
+                this.Category = null;
+            }
 
             // Настраиваем заголовок
             this.Title = $"Продукты категории: {this.Category?.Title ?? "Неизвестно"}";
         }
+
+
+        #endregion
+
+        #region Методы
 
         private async void LoadProducts()
         {
@@ -36,10 +59,10 @@ namespace Mobile_application.Pages
             try
             {
                 // Используем ApiClient для получения продуктов
-                var products = await this.ApiClient.GetProductsByTypeAsync(this.Category.Id);
+                List<ProductDTO> products = await this.ApiClient.GetProductsByTypeAsync(this.Category.Id);
 
                 this.Products.Clear();
-                foreach (var product in products)
+                foreach (ProductDTO product in products)
                 {
                     this.Products.Add(product);
                 }
@@ -49,6 +72,14 @@ namespace Mobile_application.Pages
                 await this.DisplayAlert("Ошибка", $"Не удалось загрузить продукты: {ex.Message}", "OK");
             }
         }
+
+        #endregion
+
+        #region Операторы
+
+        #endregion
+
+        #region Обработчики событий
 
         protected override void OnAppearing()
         {
@@ -64,7 +95,7 @@ namespace Mobile_application.Pages
                 // Создаем объект SessionData для режима Read
                 var readSessionData = new SessionData
                 {
-                    CurrentUser = this.SessionData.CurrentUser,
+                    CurrentUser = this.SessionData?.CurrentUser,
                     Mode = WindowMode.Read, // Режим чтения
                     Data = selectedProduct // Передаем выбранный продукт
                 };
@@ -77,13 +108,12 @@ namespace Mobile_application.Pages
             }
         }
 
-        // Обработчик для кнопки добавления нового товара
         private async void OnAddProductClicked(object sender, EventArgs e)
         {
             // Создаем объект SessionData для режима Create
             var newSessionData = new SessionData
             {
-                CurrentUser = this.SessionData.CurrentUser,
+                CurrentUser = this.SessionData?.CurrentUser,
                 Mode = WindowMode.Create, // Режим создания
                 Data = new ProductDTO // Новый объект продукта
                 {
@@ -98,7 +128,6 @@ namespace Mobile_application.Pages
             await this.Navigation.PushAsync(new PageProductEdit(newSessionData));
         }
 
-        // Обработчик для кнопки редактирования товара
         private async void OnEditProductClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.BindingContext is ProductDTO product)
@@ -106,7 +135,7 @@ namespace Mobile_application.Pages
                 // Создаем объект SessionData для режима Update
                 var editSessionData = new SessionData
                 {
-                    CurrentUser = this.SessionData.CurrentUser,
+                    CurrentUser = this.SessionData?.CurrentUser,
                     Mode = WindowMode.Update, // Режим обновления
                     Data = product // Передаем выбранный продукт для редактирования
                 };
@@ -116,13 +145,12 @@ namespace Mobile_application.Pages
             }
         }
 
-        // Обработчик для кнопки удаления товара
         private async void OnDeleteProductClicked(object sender, EventArgs e)
         {
             // Получаем выбранный продукт
             if (sender is Button button && button.BindingContext is ProductDTO product)
             {
-                var confirm = await this.DisplayAlert("Подтверждение", $"Вы уверены, что хотите удалить продукт \"{product.Title}\"?", "Да", "Нет");
+                bool confirm = await this.DisplayAlert("Подтверждение", $"Вы уверены, что хотите удалить продукт \"{product.Title}\"?", "Да", "Нет");
                 if (!confirm)
                 {
                     return;
@@ -145,6 +173,6 @@ namespace Mobile_application.Pages
             }
         }
 
-
+        #endregion
     }
 }

@@ -1,12 +1,15 @@
-﻿using Common.Classes.Session;
-using Mobile_application.Classes;
-using Mobile_application.Classes.API;
-using Mobile_application.Pages;
+﻿using Mobile_application.Pages;
 
 namespace Mobile_application
 {
     public partial class App : Application
     {
+
+        #region Поля
+
+        #endregion
+
+        #region Свойства
         /// <summary>
         /// Флаг, указывающий, что приложение запущено в режиме отладки.
         /// </summary>
@@ -15,6 +18,22 @@ namespace Mobile_application
             get; private set;
         }
 
+        #endregion
+
+        #region Методы
+        public void OnDebugAction()
+        {
+            // Устанавливаем MainPage с данными пользователя
+            this.MainPage = new NavigationPage(new PageEditMenu(null));
+        }
+
+        public void OnRelease()
+        {
+            this.MainPage = new NavigationPage(new PageLogin());
+        }
+        #endregion
+
+        #region Конструкторы/Деструкторы
         public App()
         {
             this.InitializeComponent();
@@ -30,19 +49,15 @@ namespace Mobile_application
             if (IsDebugMode)
             {
                 System.Diagnostics.Debug.WriteLine("Приложение запущено в режиме отладки. Флаг снимается при запуске в Release.");
+                this.OnDebugAction();
             }
-
-            //this.MainPage = new NavigationPage(new PageLogin());
-            var apiClient = new ApiClient(CommonLocal.API.entryPoint);
-            var user = apiClient.GetUserByIdAsync(1);
-            // Формируем SessionData
-            var sessionData = new SessionData
+            else
             {
-                CurrentUser = user,
-                Data = null, // Можно передать дополнительные данные, если нужно
-                Mode = WindowMode.Read
-            };
-            this.MainPage = new NavigationPage(new PageEditMenu(sessionData));
+                this.OnRelease();
+            }
         }
+
+        #endregion
+
     }
 }

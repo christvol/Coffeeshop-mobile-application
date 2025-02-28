@@ -4,7 +4,7 @@
              xmlns:res="clr-namespace:Mobile_application.Resources.Strings"          
              xmlns:controls="clr-namespace:Mobile_application.Controls"
              xmlns:pages="clr-namespace:Mobile_application.Pages"
-             x:Class="Mobile_application.Pages.PageCategories"
+             x:Class="Mobile_application.Pages.PageProductTypes"
                          
              Title="PageCategories"
              BackgroundColor="{StaticResource MintGreen}">

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages;
 
-public partial class PageCategories : CustomContentPage
+public partial class PageProductTypes : CustomContentPage
 {
 
     #region Поля
@@ -21,7 +21,7 @@ public partial class PageCategories : CustomContentPage
     #region Методы
     private void LoadUserData()
     {
-        if (this.SessionData.CurrentUser != null)
+        if (this.SessionData != null && this.SessionData.CurrentUser != null)
         {
             this.Title = $"Dashboard: {this.SessionData.CurrentUser.FirstName}";
         }
@@ -29,7 +29,7 @@ public partial class PageCategories : CustomContentPage
 
     private void BindSessionDataToHeader()
     {
-        if (this.FindByName("PageHeader") is Controls.PageHeader header)
+        if (this.FindByName("PageHeader") is Controls.PageHeader header && this.SessionData != null)
         {
             header.SessionData = this.SessionData;
         }
@@ -39,9 +39,9 @@ public partial class PageCategories : CustomContentPage
     {
         try
         {
-            var categories = await this.ApiClient.GetAllProductTypesAsync();
+            List<ProductTypes> categories = await this.ApiClient.GetAllProductTypesAsync();
             this.Categories.Clear();
-            foreach (var category in categories)
+            foreach (ProductTypes category in categories)
             {
                 this.Categories.Add(category);
             }
@@ -54,14 +54,11 @@ public partial class PageCategories : CustomContentPage
     #endregion
 
     #region Конструкторы/Деструкторы
-    public PageCategories(SessionData sessionData)
+    public PageProductTypes(SessionData sessionData) : base(sessionData)
     {
         this.InitializeComponent();
         this.Categories = new ObservableCollection<ProductTypes>();
-        this.SessionData = sessionData;
         this.BindingContext = this;
-
-        NavigationPage.SetHasBackButton(this, false);
         this.LoadUserData();
         this.BindSessionDataToHeader();
         this.LoadCategoriesAsync();
@@ -78,11 +75,12 @@ public partial class PageCategories : CustomContentPage
         base.OnAppearing();
         this.LoadCategoriesAsync();
     }
+
     private async void OnAddClicked(object sender, EventArgs e)
     {
         var newSessionData = new SessionData
         {
-            CurrentUser = this.SessionData.CurrentUser,
+            CurrentUser = this.SessionData?.CurrentUser,
             Mode = WindowMode.Create, // Устанавливаем режим Create
             Data = null // Для новой категории данные не нужны
         };
@@ -90,6 +88,7 @@ public partial class PageCategories : CustomContentPage
         // Переход на страницу PageProductTypeEdit
         await this.Navigation.PushAsync(new PageProductTypeEdit(newSessionData));
     }
+
     private async void OnCategorySelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is ProductTypes selectedCategory)
@@ -97,7 +96,7 @@ public partial class PageCategories : CustomContentPage
             // Создание нового SessionData с текущим пользователем и категорией
             var newSessionData = new SessionData
             {
-                CurrentUser = this.SessionData.CurrentUser,
+                CurrentUser = this.SessionData?.CurrentUser,
                 Data = selectedCategory
             };
 
@@ -108,13 +107,14 @@ public partial class PageCategories : CustomContentPage
             ((CollectionView)sender).SelectedItem = null;
         }
     }
+
     private async void OnEditClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is ProductTypes category)
         {
             var editSessionData = new SessionData
             {
-                CurrentUser = this.SessionData.CurrentUser,
+                CurrentUser = this.SessionData?.CurrentUser,
                 Mode = WindowMode.Update, // Устанавливаем режим Update
                 Data = category
             };
@@ -123,11 +123,12 @@ public partial class PageCategories : CustomContentPage
             await this.Navigation.PushAsync(new PageProductTypeEdit(editSessionData));
         }
     }
+
     private async void OnDeleteClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is ProductTypes category)
         {
-            var confirm = await this.DisplayAlert("Delete", $"Вы уверены, что хотите удалить категорию: {category.Title}?", "Yes", "No");
+            bool confirm = await this.DisplayAlert("Delete", $"Вы уверены, что хотите удалить категорию: {category.Title}?", "Yes", "No");
             if (!confirm)
             {
                 return;

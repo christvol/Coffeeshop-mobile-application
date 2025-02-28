@@ -1,10 +1,10 @@
 ﻿using Common.Classes.DB;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Добавьте строку подключения
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("TestingConnection");
 
 // Добавьте контекст базы данных в контейнер служб
 builder.Services.AddDbContext<CoffeeShopContext>(options =>
@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Настройте конвейер обработки HTTP-запросов
 if (app.Environment.IsDevelopment())

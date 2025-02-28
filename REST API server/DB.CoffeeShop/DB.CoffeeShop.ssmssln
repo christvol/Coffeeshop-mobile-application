@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 19.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "DB.CoffeeShop", "DB.CoffeeShop.ssmssqlproj", "{94C57A3D-F817-4581-87CC-C94DA5855835}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94C57A3D-F817-4581-87CC-C94DA5855835}.Default|Default.ActiveCfg = Default
+		{EFA1E37E-E32D-463B-BCB0-E0A5B6E02A1E}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FFC76537-4A6C-40EE-8C95-FAEC55526305}
+	EndGlobalSection
+EndGlobal

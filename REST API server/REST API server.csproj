@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>REST_API_SERVER</RootNamespace>
+    <UserSecretsId>83566fa2-3ad5-4c4c-8519-8c800c3cce44</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

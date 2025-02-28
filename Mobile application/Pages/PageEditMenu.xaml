@@ -15,12 +15,12 @@
         <!-- Кнопка добавления нового товара -->
         <Button          
          Clicked="OnProductTypesClicked"
-         Text="{x:Static res:Strings.ButtonProducts}"
+         Text="{x:Static res:Strings.ButtonProductTypes}"
          Style="{StaticResource ButtonPrimary}"/>
         <!-- Кнопка добавления нового товара -->
         <Button            
-         Clicked="OnAddProductClicked"
-         Text="{x:Static res:Strings.ButtonProductTypes}"
+         Clicked="OnProductClicked"
+         Text="{x:Static res:Strings.ButtonProducts}"
          Style="{StaticResource ButtonPrimary}"/>
         <!-- Кнопка добавления нового товара -->
         <Button           

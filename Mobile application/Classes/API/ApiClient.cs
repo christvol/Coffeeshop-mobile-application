@@ -10,7 +10,7 @@
 
     public class ApiClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// Конструктор для инициализации клиента API.
@@ -18,11 +18,11 @@
         /// <param name="baseAddress">Базовый адрес API.</param>
         public ApiClient(string baseAddress = "http://localhost:5121/api/")
         {
-            this._httpClient = new HttpClient
+            this.httpClient = new HttpClient
             {
                 BaseAddress = new Uri(baseAddress)
             };
-            this._httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            this.httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
 
         #region CountryCodes
@@ -34,14 +34,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("CountryCodes");
+                HttpResponseMessage response = await this.httpClient.GetAsync("CountryCodes");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
 
                 return JsonSerializer.Deserialize<List<CountryCodes>>(json, new JsonSerializerOptions
                 {
@@ -61,7 +61,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"CountryCodes/id/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"CountryCodes/id/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -70,7 +70,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
 
                 return JsonSerializer.Deserialize<CountryCodes>(json, new JsonSerializerOptions
                 {
@@ -94,14 +94,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("ProductTypes");
+                HttpResponseMessage response = await this.httpClient.GetAsync("ProductTypes");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<ProductTypes>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -120,7 +120,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"ProductTypes/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"ProductTypes/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -129,7 +129,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductTypes>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -148,14 +148,14 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("ProductTypes", productType);
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("ProductTypes", productType);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductTypes>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -174,14 +174,14 @@
         {
             try
             {
-                var response = await this._httpClient.PutAsJsonAsync($"ProductTypes/{id}", productType);
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"ProductTypes/{id}", productType);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductTypes>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -200,7 +200,7 @@
         {
             try
             {
-                var response = await this._httpClient.DeleteAsync($"ProductTypes/{id}");
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"ProductTypes/{id}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -227,14 +227,14 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("Users", userDto);
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("Users", userDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -256,7 +256,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Users/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Users/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -265,7 +265,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -287,7 +287,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Users/phone/{phoneNumber}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Users/phone/{phoneNumber}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -296,7 +296,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<Users>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -318,7 +318,7 @@
         {
             try
             {
-                var response = await this._httpClient.PutAsJsonAsync($"Users/{id}", userDto);
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Users/{id}", userDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -347,7 +347,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Users/{id}/UserType");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Users/{id}/UserType");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -356,7 +356,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<UserTypeDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -379,14 +379,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("Products");
+                HttpResponseMessage response = await this.httpClient.GetAsync("Products");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<ProductDTO>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -405,14 +405,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Products/ByType/{typeId}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Products/ByType/{typeId}");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<ProductDTO>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -431,7 +431,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Products/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Products/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -440,7 +440,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -459,14 +459,14 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("Products", productDto);
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("Products", productDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ProductDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -485,7 +485,7 @@
         {
             try
             {
-                var response = await this._httpClient.PutAsJsonAsync($"Products/{id}", productDto);
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Products/{id}", productDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -507,7 +507,7 @@
         {
             try
             {
-                var response = await this._httpClient.DeleteAsync($"Products/{id}");
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"Products/{id}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -531,14 +531,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("Ingredients");
+                HttpResponseMessage response = await this.httpClient.GetAsync("Ingredients");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<IngredientDTO>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -557,7 +557,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Ingredients/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Ingredients/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -566,7 +566,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -585,14 +585,14 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("Ingredients", ingredientDto);
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("Ingredients", ingredientDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -611,14 +611,14 @@
         {
             try
             {
-                var response = await this._httpClient.PutAsJsonAsync($"Ingredients/{id}", ingredientDto);
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Ingredients/{id}", ingredientDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IngredientDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -637,7 +637,7 @@
         {
             try
             {
-                var response = await this._httpClient.DeleteAsync($"Ingredients/{id}");
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"Ingredients/{id}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -657,7 +657,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"Ingredients/{id}/IngredientType");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Ingredients/{id}/IngredientType");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -666,7 +666,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IngredientTypeDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -689,14 +689,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("AllowedIngredients");
+                HttpResponseMessage response = await this.httpClient.GetAsync("AllowedIngredients");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<AllowedIngredientsDTO>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -715,7 +715,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"AllowedIngredients/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"AllowedIngredients/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -724,7 +724,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -743,14 +743,14 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("AllowedIngredients", allowedIngredientsDto);
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("AllowedIngredients", allowedIngredientsDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -769,14 +769,14 @@
         {
             try
             {
-                var response = await this._httpClient.PutAsJsonAsync($"AllowedIngredients/{id}", allowedIngredientsDto);
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"AllowedIngredients/{id}", allowedIngredientsDto);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<AllowedIngredientsDTO>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -795,7 +795,7 @@
         {
             try
             {
-                var response = await this._httpClient.DeleteAsync($"AllowedIngredients/{id}");
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"AllowedIngredients/{id}");
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -819,14 +819,14 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync("IngredientsView");
+                HttpResponseMessage response = await this.httpClient.GetAsync("IngredientsView");
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<IngredientsView>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -845,7 +845,7 @@
         {
             try
             {
-                var response = await this._httpClient.GetAsync($"IngredientsView/{id}");
+                HttpResponseMessage response = await this.httpClient.GetAsync($"IngredientsView/{id}");
 
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
@@ -854,7 +854,7 @@
 
                 _ = response.EnsureSuccessStatusCode();
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<IngredientsView>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -872,7 +872,7 @@
         {
             try
             {
-                var response = await this._httpClient.PostAsJsonAsync("Auth/register", new
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("Auth/register", new
                 {
                     PhoneNumber = phoneNumber
                 });
@@ -882,7 +882,7 @@
                     throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
                 }
 
-                var json = await response.Content.ReadAsStringAsync();
+                string json = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<RegistrationResponse>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

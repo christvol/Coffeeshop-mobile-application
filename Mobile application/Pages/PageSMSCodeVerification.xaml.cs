@@ -55,7 +55,7 @@ public partial class PageSMSCodeVerification : CustomContentPage
         try
         {
 
-            var response = await this.ApiClient.GetCodeAsync(this.PhoneNumber);
+            Classes.API.RegistrationResponse? response = await this.ApiClient.GetCodeAsync(this.PhoneNumber);
             this.code = response.Code;
 
             if (response != null)
@@ -107,7 +107,7 @@ public partial class PageSMSCodeVerification : CustomContentPage
 
 
                 // Получаем пользователя по номеру телефона
-                var user = await this.ApiClient.GetUserByPhoneNumberAsync(this.phoneNumber.Trim());
+                Common.Classes.DB.Users? user = await this.ApiClient.GetUserByPhoneNumberAsync(this.phoneNumber.Trim());
                 if (user == null)
                 {
                     // Если пользователь не найден, создаем его
@@ -131,7 +131,7 @@ public partial class PageSMSCodeVerification : CustomContentPage
                 }
 
                 // Получаем тип пользователя
-                var userType = await this.ApiClient.GetUserTypeByUserIdAsync(user.Id);
+                UserTypeDTO? userType = await this.ApiClient.GetUserTypeByUserIdAsync(user.Id);
                 if (userType == null)
                 {
                     await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserTypeNotFound, "OK");
@@ -147,7 +147,7 @@ public partial class PageSMSCodeVerification : CustomContentPage
                 };
 
                 // Переход на соответствующую страницу в зависимости от типа пользователя
-                await this.Navigation.PushAsync(new PageCategories(this.SessionData));
+                await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
             }
             catch (Exception ex)
             {

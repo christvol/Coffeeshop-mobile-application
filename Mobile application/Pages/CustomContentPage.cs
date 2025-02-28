@@ -8,9 +8,18 @@ namespace Mobile_application.Pages
     {
         #region Свойства
         public ApiClient ApiClient { get; private set; } = new ApiClient(CommonLocal.API.entryPoint);
-        public SessionData SessionData
+        public SessionData? SessionData
         {
             set; get;
+        }
+        #endregion
+
+        #region Конструкторы/Деструкторы
+        public CustomContentPage(SessionData? sessionData = null)
+        {
+            // Гарантируем, что SessionData не будет null
+            this.SessionData = sessionData ?? new SessionData();
+            NavigationPage.SetHasBackButton(this, this.SessionData == null ? true : this.SessionData.HasBackButton);
         }
         #endregion
 
@@ -28,13 +37,13 @@ namespace Mobile_application.Pages
                 throw new InvalidOperationException("The application instance is null.");
             }
 
-            var mainPage = Application.Current.MainPage;
+            Page? mainPage = Application.Current.MainPage;
             if (mainPage == null)
             {
                 throw new InvalidOperationException("The main page is null.");
             }
 
-            var navigation = mainPage.Navigation;
+            INavigation navigation = mainPage.Navigation;
             if (navigation == null)
             {
                 throw new InvalidOperationException("Navigation stack is null.");

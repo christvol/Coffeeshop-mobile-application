@@ -3,14 +3,14 @@
 namespace Common.Classes.Session
 {
     /// <summary>
-    /// Represents session data for transferring information between windows.
+    /// Представляет данные сессии для передачи информации между окнами.
     /// </summary>
     public class SessionData
     {
-        #region Properties
+        #region Свойства
 
         /// <summary>
-        /// Gets the current user.
+        /// Текущий пользователь.
         /// </summary>
         public Users? CurrentUser
         {
@@ -18,7 +18,7 @@ namespace Common.Classes.Session
         }
 
         /// <summary>
-        /// Gets or sets the shared data for window operations.
+        /// Общие данные, передаваемые между окнами.
         /// </summary>
         public object? Data
         {
@@ -26,9 +26,17 @@ namespace Common.Classes.Session
         }
 
         /// <summary>
-        /// Gets or sets the mode of the window (e.g., Create/Read/Update/Delete).
+        /// Режим работы окна (например, Создание/Чтение/Обновление/Удаление).
         /// </summary>
         public WindowMode Mode
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Определяет, содержит ли окно кнопку возврата назад.
+        /// </summary>
+        public bool HasBackButton
         {
             get; set;
         }
@@ -37,27 +45,27 @@ namespace Common.Classes.Session
     }
 
     /// <summary>
-    /// Specifies the mode of a window for CRUD operations.
+    /// Определяет режим работы окна для операций CRUD.
     /// </summary>
     public enum WindowMode
     {
         /// <summary>
-        /// Create mode.
+        /// Режим создания.
         /// </summary>
         Create,
 
         /// <summary>
-        /// Read mode.
+        /// Режим чтения.
         /// </summary>
         Read,
 
         /// <summary>
-        /// Update mode.
+        /// Режим обновления.
         /// </summary>
         Update,
 
         /// <summary>
-        /// Delete mode.
+        /// Режим удаления.
         /// </summary>
         Delete
     }

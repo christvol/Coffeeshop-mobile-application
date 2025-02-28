@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DB.CoffeeShop">
   <Items>
-    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+    <LogicalFolder Name="Соединения" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="KRISTINAVIVO\SQLEXPRESS:KRISTINAVIVO\kmeen">
-          <Created>2024-12-09T15:01:23.1108499+02:00</Created>
+        <ConnectionNode Name="KRISTINAVIVO\SQLEXPRESS:">
+          <Created>2024-12-09T16:01:23.1108499+03:00</Created>
           <Type>SQL</Type>
           <Server>KRISTINAVIVO\SQLEXPRESS</Server>
           <UserName />
-          <Authentication>Windows Authentication</Authentication>
+          <Authentication>SQL</Authentication>
           <InitialDB />
           <LoginTimeout>30</LoginTimeout>
-          <TrustServerCertificate>True</TrustServerCertificate>
-          <HostNameInServerCertificate />
-          <EncryptionOption>True</EncryptionOption>
           <ExecutionTimeout>0</ExecutionTimeout>
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="LAPTOP-BBFM8MMD\SQLEXPRESS:LAPTOP-BBFM8MMD\FossW">
+          <Created>2025-02-26T15:24:29.5184853+03:00</Created>
+          <Type>SQL</Type>
+          <Server>LAPTOP-BBFM8MMD\SQLEXPRESS</Server>
+          <UserName />
+          <Authentication>Проверка подлинности Windows</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Среда Microsoft SQL Server Management Studio - запрос</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
-    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+    <LogicalFolder Name="Запросы" Type="0" Sorted="true">
       <Items>
         <FileNode Name="DB.Cleanup.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KRISTINAVIVO\SQLEXPRESS:True</AssociatedConnectionMoniker>
@@ -65,8 +74,8 @@
           <FullPath>DB.Create.Views.sql</FullPath>
         </FileNode>
         <FileNode Name="DB.Deployment.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:KRISTINAVIVO\SQLEXPRESS:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>KRISTINAVIVO\SQLEXPRESS</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:LAPTOP-BBFM8MMD\SQLEXPRESS:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>LAPTOP-BBFM8MMD\SQLEXPRESS</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>DB.Deployment.sql</FullPath>
         </FileNode>
@@ -96,7 +105,7 @@
         </FileNode>
       </Items>
     </LogicalFolder>
-    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+    <LogicalFolder Name="Разное" Type="3" Sorted="true">
       <Items>
         <FileNode Name="Scheme.xml">
           <AssociatedConnectionMoniker />
