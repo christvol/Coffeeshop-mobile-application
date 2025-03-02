@@ -22,7 +22,7 @@ public partial class PageIngredients : CustomContentPage
         {
             this.observableCollection.Add(item);
         }
-
+        this.ccvItems.DisplayedFields = new List<string>() { "Id", "Title", "Description" };
         this.ccvItems.Items = this.observableCollection;
     }
 }

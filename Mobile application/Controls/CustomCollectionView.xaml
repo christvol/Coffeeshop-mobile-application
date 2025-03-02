@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"   
              x:Class="Mobile_application.Controls.CustomCollectionView">
 
     <ContentView.Content>
@@ -9,36 +8,28 @@
                         SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame 
-                        Padding="10" 
-                        CornerRadius="10" 
-                        HasShadow="True"
-                        BackgroundColor="{StaticResource Tertiary}">
-                        <StackLayout 
-                            Orientation="Horizontal"
-                            VerticalOptions="CenterAndExpand"
-                            Spacing="5">
+                    <Frame Padding="10" 
+                           CornerRadius="10" 
+                           HasShadow="True"
+                           BackgroundColor="{StaticResource Tertiary}">
 
-                            <!--#region Поля объекта-->
-                            <Grid x:Name="gObjectFields">
-                                <Label Text="{Binding Title}" 
-                                    VerticalOptions="Center"/>
-                            </Grid>
-                            <!--#endregion-->
+                        <StackLayout Orientation="Vertical" 
+                                     VerticalOptions="CenterAndExpand"
+                                     Spacing="5">
 
-                            <!--#region Кнопки для редактирования и удаления-->
-                            <StackLayout 
-                                Orientation="Horizontal" 
-                                HorizontalOptions="EndAndExpand" 
-                                Spacing="5">
-                                <Button 
-                                    Text="✎" 
-                                    BackgroundColor="{StaticResource Primary}" 
-                                    TextColor="White" CornerRadius="10" />
-                                <Button 
-                                    Text="🗑" 
-                                    BackgroundColor="{StaticResource Danger}" 
-                                    TextColor="White" CornerRadius="10" />
+                            <!-- Динамически создаваемая Grid(не используется, создается автоматическа в коде) -->
+                            <Grid x:Name="DynamicFieldsGrid"/>
+
+                            <!--#region Кнопки-->
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="EndAndExpand"
+                                         Spacing="5">
+                                <Button Text="✎" 
+                                        BackgroundColor="{StaticResource Primary}" 
+                                        TextColor="White" CornerRadius="10" />
+                                <Button Text="🗑" 
+                                        BackgroundColor="{StaticResource Danger}" 
+                                        TextColor="White" CornerRadius="10" />
                             </StackLayout>
                             <!--#endregion-->
 
