@@ -17,9 +17,10 @@ namespace Mobile_application.Pages
         #region Конструкторы/Деструкторы
         public CustomContentPage(SessionData? sessionData = null)
         {
+
+            NavigationPage.SetHasBackButton(this, this.SessionData == null ? true : this.SessionData.HasBackButton);
             // Гарантируем, что SessionData не будет null
             this.SessionData = sessionData ?? new SessionData();
-            NavigationPage.SetHasBackButton(this, this.SessionData == null ? true : this.SessionData.HasBackButton);
         }
         #endregion
 

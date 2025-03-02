@@ -1,40 +1,19 @@
-﻿namespace Mobile_application.Controls
+﻿using System.Collections.ObjectModel;
+
+namespace Mobile_application.Controls
 {
     public partial class CustomCollectionView : ContentView
     {
         public CustomCollectionView()
         {
             this.InitializeComponent();
+            this.BindingContext = this; // Важно! Без этого привязка не работает.
         }
 
-        // Обработчик выбора элемента
-        private void OnItemSelected(object sender, SelectionChangedEventArgs e)
+        public ObservableCollection<object> Items
         {
-            var selectedItem = e.CurrentSelection.FirstOrDefault();
-            if (selectedItem != null)
-            {
-                // Логика обработки выбранного элемента
-            }
-        }
-
-        // Обработчик клика по кнопке редактирования
-        private void OnEditItemClicked(object sender, EventArgs e)
-        {
-            //var item = button?.BindingContext as YourEntityModel; // Замените на вашу модель
-            //if (item != null)
-            //{
-            //    // Логика редактирования сущности
-            //}
-        }
-
-        // Обработчик клика по кнопке удаления
-        private void OnDeleteItemClicked(object sender, EventArgs e)
-        {
-            //var item = button?.BindingContext as YourEntityModel; // Замените на вашу модель
-            //if (item != null)
-            //{
-            //    // Логика удаления сущности
-            //}
+            get => (ObservableCollection<object>)this.collectionView.ItemsSource;
+            set => this.collectionView.ItemsSource = value;
         }
     }
 }

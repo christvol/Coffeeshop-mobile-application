@@ -38,7 +38,6 @@ namespace Mobile_application.Pages
         {
             // Логика для открытия страницы или выполнения действия для продуктов
             _ = this.DisplayAlert("Продукты", "Открыт список продуктов", "OK");
-            this.SessionData.HasBackButton = false;
             await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
         }
 

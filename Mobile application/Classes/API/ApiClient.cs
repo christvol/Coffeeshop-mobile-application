@@ -527,7 +527,7 @@
         /// <summary>
         /// Получение всех ингредиентов.
         /// </summary>
-        public async Task<List<IngredientDTO>> GetIngredientsAsync()
+        public async Task<List<IngredientDTO>> GetAllIngredientsAsync()
         {
             try
             {

@@ -26,7 +26,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IngredientDTO>>> GetIngredients()
         {
-            var ingredients = await this._context.Set<Ingredients>()
+            List<Ingredients> ingredients = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
                 .ToListAsync();
 
@@ -50,7 +50,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IngredientDTO>> GetIngredientById(int id)
         {
-            var ingredient = await this._context.Set<Ingredients>()
+            Ingredients? ingredient = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
@@ -129,7 +129,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var existingIngredient = await this._context.Ingredients.FindAsync(id);
+            Ingredients? existingIngredient = await this._context.Ingredients.FindAsync(id);
 
             if (existingIngredient == null)
             {
@@ -176,7 +176,7 @@ namespace REST_API_SERVER.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIngredient(int id)
         {
-            var ingredient = await this._context.Ingredients.FindAsync(id);
+            Ingredients? ingredient = await this._context.Ingredients.FindAsync(id);
 
             if (ingredient == null)
             {
@@ -196,7 +196,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet("{id}/IngredientType")]
         public async Task<ActionResult<IngredientTypeDTO>> GetIngredientType(int id)
         {
-            var ingredient = await this._context.Set<Ingredients>()
+            Ingredients? ingredient = await this._context.Set<Ingredients>()
                 .Include(i => i.IdIngredientTypeNavigation)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
