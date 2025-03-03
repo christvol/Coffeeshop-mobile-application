@@ -20,9 +20,9 @@ public partial class PageUserProfile : CustomContentPage
     {
         try
         {
-            this.CheckCurrentUser();
+            //this.CheckCurrentUser();
             // Асинхронный запрос на сервер для получения данных пользователя
-            var user = await this.ApiClient.GetUserByIdAsync(this.SessionData.CurrentUser.Id);
+            Common.Classes.DB.Users? user = await this.ApiClient.GetUserByIdAsync(this.SessionData.CurrentUser.Id);
             if (user != null)
             {
                 this.SessionData.CurrentUser = user;
@@ -87,7 +87,7 @@ public partial class PageUserProfile : CustomContentPage
     {
         try
         {
-            this.CheckCurrentUser();
+            //this.CheckCurrentUser();
             // Проверка на наличие текущего пользователя
             if (this.SessionData.CurrentUser == null)
             {
@@ -110,7 +110,7 @@ public partial class PageUserProfile : CustomContentPage
 
 
             // Отправка обновленных данных на сервер
-            var isUpdated = await this.ApiClient.UpdateUserAsync(updatedUser.Id, updatedUser);
+            bool isUpdated = await this.ApiClient.UpdateUserAsync(updatedUser.Id, updatedUser);
 
             if (isUpdated)
             {
@@ -123,14 +123,14 @@ public partial class PageUserProfile : CustomContentPage
                 await this.DisplayAlert("Успех", "Данные успешно сохранены.", "OK");
 
                 // Получаем тип пользователя
-                var userType = await this.ApiClient.GetUserTypeByUserIdAsync(this.SessionData.CurrentUser.Id);
+                UserTypeDTO? userType = await this.ApiClient.GetUserTypeByUserIdAsync(this.SessionData.CurrentUser.Id);
                 if (userType == null)
                 {
                     await this.DisplayAlert(CommonLocal.DialogTitles.Error, CommonLocal.Strings.ErrorMessages.UserTypeNotFound, "OK");
                     return;
                 }
                 // Переход на соответствующую страницу в зависимости от типа пользователя
-                await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));               
+                await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
             }
             else
             {

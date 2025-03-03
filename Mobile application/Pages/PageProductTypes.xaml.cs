@@ -54,7 +54,7 @@ public partial class PageProductTypes : CustomContentPage
     #endregion
 
     #region Конструкторы/Деструкторы
-    public PageProductTypes(SessionData sessionData) : base(sessionData)
+    public PageProductTypes(SessionData? sessionData) : base(sessionData)
     {
         this.InitializeComponent();
         this.Categories = new ObservableCollection<ProductTypes>();

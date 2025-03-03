@@ -25,7 +25,46 @@ namespace Mobile_application.Pages
         #endregion
 
         #region Методы
-
+        /// <summary>
+        /// Выводит всплывающее уведомление об ошибке.
+        /// </summary>
+        /// <param name="ex">Исключение, текст которого будет отображён.</param>
+        /// <param name="title">Заголовок окна. По умолчанию "Ошибка".</param>
+        protected async Task ShowError(Exception ex, string title = "Ошибка")
+        {
+            await this.DisplayAlert(title, ex.Message, "OK");
+        }
+        /// <summary>
+        /// Выводит всплывающее уведомление с произвольным текстом.
+        /// </summary>
+        /// <param name="title">Заголовок окна.</param>
+        /// <param name="message">Текст сообщения.</param>
+        protected async Task ShowMessage(string title, string message)
+        {
+            await this.DisplayAlert(title, message, "OK");
+        }
+        /// <summary>
+        /// Проверяет, является ли объект SessionData пустым (null).
+        /// </summary>
+        /// <returns>
+        /// Возвращает <c>true</c>, если SessionData равно <c>null</c>, иначе <c>false</c>.
+        /// </returns>
+        public bool IsSessionDataNull()
+        {
+            return this.SessionData == null;
+        }
+        /// <summary>
+        /// Проверяет, задан ли текущий пользователь в объекте SessionData.
+        /// </summary>
+        /// <returns>
+        /// Возвращает <c>true</c>, если SessionData равно <c>null</c> или текущий пользователь (CurrentUser) не задан, иначе <c>false</c>.
+        /// </returns>
+        public bool IsCurrentUserNull()
+        {
+            if (this.SessionData == null)
+                return true;
+            return this.SessionData.CurrentUser == null;
+        }
         public static async Task NavigateToPage(Page page)
         {
             if (page == null)
@@ -60,24 +99,6 @@ namespace Mobile_application.Pages
                 throw new InvalidOperationException("Failed to navigate to the specified page.", ex);
             }
         }
-
-        public void CheckSessionData()
-        {
-            if (this.SessionData == null)
-            {
-                throw new InvalidOperationException("SessionData не может быть null.");
-            }
-        }
-
-        public void CheckCurrentUser()
-        {
-            this.CheckSessionData();
-            if (this.SessionData.CurrentUser == null)
-            {
-                throw new InvalidOperationException("Текущий пользователь не задан в SessionData.");
-            }
-        }
-
         #endregion
     }
 }

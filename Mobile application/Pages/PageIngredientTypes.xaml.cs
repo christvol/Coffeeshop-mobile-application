@@ -7,7 +7,7 @@ public partial class PageIngredientTypes : CustomContentPage
 {
     public ObservableCollection<object> IngredientTypes { get; set; } = new();
 
-    public PageIngredientTypes(SessionData sessionData)
+    public PageIngredientTypes(SessionData? sessionData) : base(sessionData)
     {
         this.InitializeComponent();
         this.BindingContext = this; // Устанавливаем контекст данных

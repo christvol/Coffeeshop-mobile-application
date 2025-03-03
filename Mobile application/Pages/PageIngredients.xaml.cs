@@ -1,5 +1,6 @@
 using Common.Classes.DTO;
 using Common.Classes.Session;
+using Mobile_application.Classes;
 using Mobile_application.Classes.Utils;
 using System.Collections.ObjectModel;
 
@@ -15,7 +16,7 @@ public partial class PageIngredients : CustomContentPage
 
     #region Конструкторы/Деструкторы
 
-    public PageIngredients(SessionData sessionData)
+    public PageIngredients(SessionData? sessionData) : base(sessionData)
     {
         this.InitializeComponent();
         this.BindingContext = this;
@@ -47,7 +48,7 @@ public partial class PageIngredients : CustomContentPage
         this.UpdateItemsCollection();
 
         // Настраиваем CollectionView
-        this.ccvItems.SetDisplayedFields("Id", "Title", "Description");
+        this.ccvItems.SetDisplayedFields("Title", "Description");
         this.ccvItems.SetItems(this.items);
     }
 
@@ -56,15 +57,25 @@ public partial class PageIngredients : CustomContentPage
     /// </summary>
     private async void OnEditIngredient(IngredientDTO ingredient)
     {
-        _ = this.DisplayAlert("OnEditIngredient", "Обработчик редактирования", "OK");
-        var editSessionData = new SessionData
+        try
         {
-            CurrentUser = this.SessionData.CurrentUser,
-            Mode = WindowMode.Update,
-            Data = ingredient
-        };
+            if (this.SessionData == null || this.SessionData.CurrentUser == null)
+            {
+                throw new InvalidOperationException(CommonLocal.Strings.ErrorMessages.SessionDataUserNotSet);
+            }
+            var editSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData.CurrentUser,
+                Mode = WindowMode.Update,
+                Data = ingredient
+            };
+            await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
+        }
+        catch (Exception ex)
+        {
+            _ = this.ShowError(ex);
+        }
 
-        await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
     }
 
     /// <summary>
@@ -75,7 +86,9 @@ public partial class PageIngredients : CustomContentPage
         _ = this.DisplayAlert("OnDeleteIngredient", "Обработчик удаления", "OK");
         bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
         if (!confirm)
+        {
             return;
+        }
 
         try
         {

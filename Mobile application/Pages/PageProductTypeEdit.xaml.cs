@@ -17,7 +17,7 @@ public partial class PageProductTypeEdit : CustomContentPage
         this.SessionData = sessionData;
 
         // Проверка корректности данных
-        this.CheckSessionData();
+        //this.CheckSessionData();
 
         if (this.Mode == WindowMode.Create)
         {
@@ -48,7 +48,7 @@ public partial class PageProductTypeEdit : CustomContentPage
             if (this.Mode == WindowMode.Create)
             {
                 // Вызов API для добавления категории
-                var createdCategory = await this.ApiClient.CreateProductTypeAsync(this.Category);
+                ProductTypes? createdCategory = await this.ApiClient.CreateProductTypeAsync(this.Category);
                 if (createdCategory != null)
                 {
                     await this.DisplayAlert("Success", "Category added successfully!", "OK");

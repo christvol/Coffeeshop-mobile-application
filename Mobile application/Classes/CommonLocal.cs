@@ -20,7 +20,7 @@ namespace Mobile_application.Classes
                     var assembly = Assembly.GetExecutingAssembly();
 
                     // Get the resource stream
-                    using var stream = assembly.GetManifestResourceStream(resourceFileName);
+                    using Stream? stream = assembly.GetManifestResourceStream(resourceFileName);
 
                     if (stream == null)
                     {
@@ -32,7 +32,7 @@ namespace Mobile_application.Classes
                     string destinationPath = Path.Combine(FileSystem.AppDataDirectory, outputFileName);
 
                     // Create the file and copy the contents from the resource stream
-                    using var fileStream = File.Create(destinationPath);
+                    using FileStream fileStream = File.Create(destinationPath);
                     await stream.CopyToAsync(fileStream);
 
                     Console.WriteLine($"File '{outputFileName}' has been saved to '{destinationPath}'.");
@@ -77,7 +77,7 @@ namespace Mobile_application.Classes
             /// <summary>
             /// HttpClient для выполнения сетевых запросов.
             /// </summary>
-            private static readonly HttpClient httpClient = new HttpClient();
+            private static readonly HttpClient httpClient = new();
 
             /// <summary>
             /// Загружает флаг страны по коду и сохраняет в локальную директорию.
@@ -139,7 +139,10 @@ namespace Mobile_application.Classes
                 public const string UnknownUserType = "Неизвестный тип пользователя.";
                 public const string DataProcessingError = "Произошла ошибка при обработке данных: {0}";
                 public const string CodeFetchFailed = "Не удалось получить код: {0}";
+                public const string SessionDataNull = "SessionData не может быть null.";
+                public const string SessionDataUserNotSet = "Текущий пользователь не задан в SessionData.";
             }
+
 
             public static class SuccessMessages
             {
@@ -147,14 +150,12 @@ namespace Mobile_application.Classes
                 public const string CodeFetched = "Код подтверждения: {0}";
             }
         }
-
         public static class DialogTitles
         {
             public const string Information = "Информация";
             public const string Error = "Ошибка";
             public const string Success = "Успех";
         }
-
         public static class DefaultUserData
         {
             public const int IdUserType = 2; // Тип пользователя: Customer
@@ -163,7 +164,6 @@ namespace Mobile_application.Classes
             public const string Email = "your@mail.com";
             public const int BirthYearOffset = -18; // Возраст по умолчанию: 18 лет назад
         }
-
         public static class UserTypes
         {
             public const string Customer = "Customer";

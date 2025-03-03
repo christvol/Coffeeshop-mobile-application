@@ -36,32 +36,24 @@ namespace Mobile_application.Pages
         // Обработчик клика по кнопке "Типы продуктов"
         private async void OnProductTypesClicked(object sender, EventArgs e)
         {
-            // Логика для открытия страницы или выполнения действия для продуктов
-            _ = this.DisplayAlert("Продукты", "Открыт список продуктов", "OK");
             await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
         }
 
         // Обработчик клика по кнопке "Продукты"
         private async void OnProductClicked(object sender, EventArgs e)
         {
-            // Логика для открытия страницы или выполнения действия для типов продуктов
-            _ = this.DisplayAlert("Типы продуктов", "Открыт список типов продуктов", "OK");
             await this.Navigation.PushAsync(new PageProducts(this.SessionData));
         }
 
         // Обработчик клика по кнопке "Типы ингредиентов"
         private async void OnIngredientTypesClicked(object sender, EventArgs e)
         {
-            // Логика для открытия страницы или выполнения действия для типов ингредиентов
-            _ = this.DisplayAlert("Типы ингредиентов", "Открыт список типов ингредиентов", "OK");
             await this.Navigation.PushAsync(new PageIngredientTypes(this.SessionData));
         }
 
         // Обработчик клика по кнопке "Ингредиенты"
         private async void OnIngredientClicked(object sender, EventArgs e)
         {
-            // Логика для открытия страницы или выполнения действия для ингредиентов
-            _ = this.DisplayAlert("Ингредиенты", "Открыт список ингредиентов", "OK");
             await this.Navigation.PushAsync(new PageIngredients(this.SessionData));
         }
 

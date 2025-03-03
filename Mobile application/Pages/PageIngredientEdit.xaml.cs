@@ -33,8 +33,7 @@ namespace Mobile_application.Pages
                 // Обновляем ингредиент
                 this.Ingredient.Title = this.EntryTitle.Text;
                 this.Ingredient.Description = this.EditorDescription.Text;
-                this.Ingredient.Fee = float.TryParse(this.EntryFee.Text, out var fee) ? fee : 0;
-
+                this.Ingredient.Fee = float.TryParse(this.EntryFee.Text, out float fee) ? fee : 0;
                 if (this.SessionData.Mode == WindowMode.Create)
                 {
                     // Добавляем новый ингредиент

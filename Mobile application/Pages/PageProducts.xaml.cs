@@ -24,7 +24,7 @@ namespace Mobile_application.Pages
 
         #region Конструкторы/Деструкторы
 
-        public PageProducts(SessionData sessionData)
+        public PageProducts(SessionData? sessionData) : base(sessionData)
         {
             this.InitializeComponent();
             this.BindingContext = this;
