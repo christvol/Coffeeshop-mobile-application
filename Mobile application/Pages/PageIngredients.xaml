@@ -11,8 +11,6 @@
             Text="Welcome to .NET MAUI!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <controls:CustomCollectionView 
-    x:Name="ccvItems"
-    Items="{Binding IngredientTypes}"/>
+        <controls:CustomCollectionView x:Name="ccvItems"/>
     </VerticalStackLayout>
 </pages:CustomContentPage>

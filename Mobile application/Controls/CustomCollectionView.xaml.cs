@@ -1,9 +1,38 @@
 ﻿using System.Collections;
+using System.Windows.Input;
 
 namespace Mobile_application.Controls
 {
     public partial class CustomCollectionView : ContentView
     {
+
+
+
+        #region Поля
+
+        #endregion
+
+        #region Свойства
+
+        #endregion
+
+        #region Методы
+
+        #endregion
+
+        #region Конструкторы/Деструкторы
+
+        #endregion
+
+        #region Операторы
+
+        #endregion
+
+        #region Обработчики событий
+
+        #endregion
+
+
         public CustomCollectionView()
         {
             this.InitializeComponent();
@@ -30,6 +59,24 @@ namespace Mobile_application.Controls
         {
             get => (List<string>)this.GetValue(DisplayedFieldsProperty);
             set => this.SetValue(DisplayedFieldsProperty, value);
+        }
+
+        public static readonly BindableProperty EditCommandProperty =
+            BindableProperty.Create(nameof(EditCommand), typeof(ICommand), typeof(CustomCollectionView), null);
+
+        public ICommand EditCommand
+        {
+            get => (ICommand)this.GetValue(EditCommandProperty);
+            set => this.SetValue(EditCommandProperty, value);
+        }
+
+        public static readonly BindableProperty DeleteCommandProperty =
+            BindableProperty.Create(nameof(DeleteCommand), typeof(ICommand), typeof(CustomCollectionView), null);
+
+        public ICommand DeleteCommand
+        {
+            get => (ICommand)this.GetValue(DeleteCommandProperty);
+            set => this.SetValue(DeleteCommandProperty, value);
         }
 
         #endregion
@@ -83,6 +130,28 @@ namespace Mobile_application.Controls
                     stackLayout.Children.Add(label);
                 }
 
+                // Кнопка редактирования
+                var editButton = new Button
+                {
+                    Text = "✎",
+                    BackgroundColor = (Color)Application.Current.Resources["Primary"],
+                    TextColor = Colors.White,
+                    CornerRadius = 10
+                };
+                editButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.EditCommand), source: this));
+                editButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
+
+                // Кнопка удаления
+                var deleteButton = new Button
+                {
+                    Text = "🗑",
+                    BackgroundColor = (Color)Application.Current.Resources["Danger"],
+                    TextColor = Colors.White,
+                    CornerRadius = 10
+                };
+                deleteButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.DeleteCommand), source: this));
+                deleteButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
+
                 return new Frame
                 {
                     Padding = 10,
@@ -101,11 +170,7 @@ namespace Mobile_application.Controls
                                 Orientation = StackOrientation.Horizontal,
                                 HorizontalOptions = LayoutOptions.EndAndExpand,
                                 Spacing = 5,
-                                Children =
-                                {
-                                    new Button { Text = "✎", BackgroundColor = (Color)Application.Current.Resources["Primary"], TextColor = Colors.White, CornerRadius = 10 },
-                                    new Button { Text = "🗑", BackgroundColor = (Color)Application.Current.Resources["Danger"], TextColor = Colors.White, CornerRadius = 10 }
-                                }
+                                Children = { editButton, deleteButton }
                             }
                         }
                     }
