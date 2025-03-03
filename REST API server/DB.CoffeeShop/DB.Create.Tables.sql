@@ -165,7 +165,7 @@ ALTER TABLE [Product images]
   ADD FOREIGN KEY (idImage) REFERENCES [Images] ([id])  ON DELETE CASCADE;
 
 ALTER TABLE [Allowed ingredients] 
-  ADD FOREIGN KEY (idIngredient) REFERENCES [Ingredients] ([id]);
+  ADD FOREIGN KEY (idIngredient) REFERENCES [Ingredients] ([id]) ON DELETE CASCADE;
 
 ALTER TABLE [Allowed ingredients] 
   ADD FOREIGN KEY (idProduct) REFERENCES [Products] ([id])  ON DELETE CASCADE;

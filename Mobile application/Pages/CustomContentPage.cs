@@ -6,7 +6,7 @@ namespace Mobile_application.Pages
 {
     public class CustomContentPage : ContentPage
     {
-        #region Свойства
+        #region Свойства       
         public ApiClient ApiClient { get; private set; } = new ApiClient(CommonLocal.API.entryPoint);
         public SessionData? SessionData
         {
@@ -77,6 +77,7 @@ namespace Mobile_application.Pages
                 throw new InvalidOperationException("Текущий пользователь не задан в SessionData.");
             }
         }
+
         #endregion
     }
 }

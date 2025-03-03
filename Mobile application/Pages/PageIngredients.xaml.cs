@@ -1,70 +1,93 @@
 using Common.Classes.DTO;
 using Common.Classes.Session;
+using Mobile_application.Classes.Utils;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace Mobile_application.Pages;
 
 public partial class PageIngredients : CustomContentPage
 {
-    public ICommand EditIngredientCommand
-    {
-        get;
-    }
-    public ICommand DeleteIngredientCommand
-    {
-        get;
-    }
-    public ObservableCollection<object> observableCollection { get; set; } = new();
+    #region Свойства
+
+    public ObservableCollection<IngredientDTO> items { get; set; } = new();
+
+    #endregion
+
+    #region Конструкторы/Деструкторы
+
     public PageIngredients(SessionData sessionData)
     {
         this.InitializeComponent();
-        this.ccvItems.EditCommand = new Command<IngredientDTO>(this.OnEditIngredient);
-        this.ccvItems.DeleteCommand = new Command<IngredientDTO>(this.OnDeleteIngredient);
         this.BindingContext = this;
+
+        // Устанавливаем обработчики событий
+        this.ccvItems.SetEditCommand<IngredientDTO>(this.OnEditIngredient);
+        this.ccvItems.SetDeleteCommand<IngredientDTO>(this.OnDeleteIngredient);
     }
-    protected override async void OnAppearing()
+
+    #endregion
+
+    #region Методы
+
+    /// <summary>
+    /// Обновляет коллекцию ингредиентов.
+    /// </summary>
+    private async void UpdateItemsCollection()
+    {
+        this.items.UpdateObservableCollection(await this.ApiClient.GetAllIngredientsAsync());
+    }
+
+    #endregion
+
+    #region Обработчики событий
+
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        List<IngredientDTO> items = await this.ApiClient.GetAllIngredientsAsync();
+        this.UpdateItemsCollection();
 
-        // Заполняем ObservableCollection, чтобы CollectionView автоматически обновился
-        this.observableCollection.Clear();
-        foreach (IngredientDTO item in items)
-        {
-            this.observableCollection.Add(item);
-        }
-        this.ccvItems.DisplayedFields = new List<string>() { "Id", "Title", "Description" };
-        this.ccvItems.Items = this.observableCollection;
+        // Настраиваем CollectionView
+        this.ccvItems.SetDisplayedFields("Id", "Title", "Description");
+        this.ccvItems.SetItems(this.items);
     }
 
+    /// <summary>
+    /// Обработчик нажатия кнопки редактирования ингредиента.
+    /// </summary>
     private async void OnEditIngredient(IngredientDTO ingredient)
     {
-        //var editSessionData = new SessionData
-        //{
-        //    CurrentUser = this.SessionData.CurrentUser,
-        //    Mode = WindowMode.Update,
-        //    Data = ingredient
-        //};
+        _ = this.DisplayAlert("OnEditIngredient", "Обработчик редактирования", "OK");
+        var editSessionData = new SessionData
+        {
+            CurrentUser = this.SessionData.CurrentUser,
+            Mode = WindowMode.Update,
+            Data = ingredient
+        };
 
-        //await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
+        await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
     }
 
+    /// <summary>
+    /// Обработчик нажатия кнопки удаления ингредиента.
+    /// </summary>
     private async void OnDeleteIngredient(IngredientDTO ingredient)
     {
-        //var confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
-        //if (!confirm)
-        //    return;
+        _ = this.DisplayAlert("OnDeleteIngredient", "Обработчик удаления", "OK");
+        bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
+        if (!confirm)
+            return;
 
-        //try
-        //{
-        //    await this.ApiClient.DeleteIngredientAsync(ingredient.Id);
-        //    this.Product.Ingredients.Remove(ingredient);
-        //    await this.DisplayAlert("Успех", "Ингредиент удалён.", "OK");
-        //}
-        //catch (Exception ex)
-        //{
-        //    await this.DisplayAlert("Ошибка", $"Не удалось удалить ингредиент: {ex.Message}", "OK");
-        //}
+        try
+        {
+            await this.ApiClient.DeleteIngredientAsync(ingredient.Id);
+            await this.DisplayAlert("Успех", "Ингредиент удалён.", "OK");
+            this.UpdateItemsCollection();
+        }
+        catch (Exception ex)
+        {
+            await this.DisplayAlert("Ошибка", $"Не удалось удалить ингредиент: {ex.Message}", "OK");
+        }
     }
+
+    #endregion
 }

@@ -5,39 +5,9 @@ namespace Mobile_application.Controls
 {
     public partial class CustomCollectionView : ContentView
     {
-
-
-
         #region Поля
 
         #endregion
-
-        #region Свойства
-
-        #endregion
-
-        #region Методы
-
-        #endregion
-
-        #region Конструкторы/Деструкторы
-
-        #endregion
-
-        #region Операторы
-
-        #endregion
-
-        #region Обработчики событий
-
-        #endregion
-
-
-        public CustomCollectionView()
-        {
-            this.InitializeComponent();
-            this.BindingContext = this;
-        }
 
         #region Свойства
 
@@ -77,6 +47,52 @@ namespace Mobile_application.Controls
         {
             get => (ICommand)this.GetValue(DeleteCommandProperty);
             set => this.SetValue(DeleteCommandProperty, value);
+        }
+
+        #endregion
+
+        #region Конструкторы/Деструкторы
+
+        public CustomCollectionView()
+        {
+            this.InitializeComponent();
+            this.BindingContext = this;
+        }
+
+        #endregion
+
+        #region Методы
+
+        /// <summary>
+        /// Устанавливает список отображаемых полей.
+        /// </summary>
+        public void SetDisplayedFields(params string[] fields)
+        {
+            this.DisplayedFields = fields.ToList();
+        }
+
+        /// <summary>
+        /// Устанавливает источник данных.
+        /// </summary>
+        public void SetItems(IEnumerable items)
+        {
+            this.Items = items;
+        }
+
+        /// <summary>
+        /// Устанавливает команду редактирования для указанного типа.
+        /// </summary>
+        public void SetEditCommand<T>(Action<T> execute)
+        {
+            this.EditCommand = new Command<T>(execute);
+        }
+
+        /// <summary>
+        /// Устанавливает команду удаления для указанного типа.
+        /// </summary>
+        public void SetDeleteCommand<T>(Action<T> execute)
+        {
+            this.DeleteCommand = new Command<T>(execute);
         }
 
         #endregion
