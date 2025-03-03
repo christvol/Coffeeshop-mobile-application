@@ -62,7 +62,10 @@ namespace Mobile_application.Pages
         public bool IsCurrentUserNull()
         {
             if (this.SessionData == null)
+            {
                 return true;
+            }
+
             return this.SessionData.CurrentUser == null;
         }
         public static async Task NavigateToPage(Page page)

@@ -21,6 +21,8 @@
             <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
             <Entry x:Name="EntryFee" Text="{Binding Ingredient.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
 
+            <Picker x:Name="pIngredientType"></Picker>
+
             <!-- Кнопки -->
             <HorizontalStackLayout Spacing="10">
                 <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />

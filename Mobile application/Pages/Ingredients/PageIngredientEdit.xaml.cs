@@ -1,6 +1,7 @@
 ﻿using Common.Classes.DTO;
 using Common.Classes.Session;
 
+
 namespace Mobile_application.Pages
 {
     public partial class PageIngredientEdit : CustomContentPage
@@ -24,6 +25,14 @@ namespace Mobile_application.Pages
                 this.EditorDescription.IsEnabled = false;
                 this.EntryFee.IsEnabled = false;
             }
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            //TODO: исправить на заполнение типов ингредиентов после создания контроллера под них
+            //List<ProductTypes> types = await this.ApiClient.GetAllProductTypesAsync();
+            //this.pIngredientType.ConfigurePicker<ProductTypes>(types, "Title");
         }
 
         private async void OnSaveClicked(object sender, EventArgs e)
