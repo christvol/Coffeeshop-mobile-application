@@ -6,11 +6,13 @@
              x:Class="Mobile_application.Pages.PageIngredients"
              Title="PageIngredients"
              BackgroundColor="{StaticResource MintGreen}">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-        <controls:CustomCollectionView x:Name="ccvItems"/>
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto, * , Auto" Padding="10">
+        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
+
+        <!-- Кнопка добавления нового ингредиента -->
+        <Button Grid.Row="2"               
+                Clicked="OnAddIngredientClicked"
+                Text="Добавить ингредиент"
+                Style="{StaticResource ButtonPrimary}"/>
+    </Grid>
 </pages:CustomContentPage>

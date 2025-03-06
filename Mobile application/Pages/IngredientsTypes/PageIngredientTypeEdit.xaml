@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             x:Class="Mobile_application.Pages.PageIngredientTypeEdit"
+             Title="Редактирование типа ингредиента"
+             BackgroundColor="{StaticResource MintGreen}">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Название типа ингредиента:" />
+        <Entry x:Name="EntryTitle" Placeholder="Введите название..." />
+
+        <!-- Кнопки -->
+        <VerticalStackLayout Spacing="10">
+            <Button Text="{x:Static res:Strings.ButtonSave}" 
+  Style="{StaticResource ButtonPrimary}"
+  Clicked="OnSaveClicked" />
+            <Button Text="{x:Static res:Strings.ButtonCancel}"
+  Style="{StaticResource ButtonDanger}"
+  Clicked="OnCancelClicked" />
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</pages:CustomContentPage>

@@ -680,6 +680,116 @@
 
         #endregion
 
+        #region IngredientTypes
+        public async Task<List<IngredientTypeDTO>> GetAllIngredientTypesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync("IngredientTypes");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<IngredientTypeDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<IngredientTypeDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении типов ингредиентов: {ex.Message}");
+            }
+        }
+        public async Task<IngredientTypeDTO?> GetIngredientTypeByIdAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync($"IngredientTypes/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientTypeDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении типа ингредиента по ID: {ex.Message}");
+            }
+        }
+        public async Task<IngredientTypeDTO?> CreateIngredientTypeAsync(IngredientTypeDTO ingredientTypeDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("IngredientTypes", ingredientTypeDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientTypeDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании типа ингредиента: {ex.Message}");
+            }
+        }
+        public async Task<IngredientTypeDTO?> UpdateIngredientTypeAsync(int id, IngredientTypeDTO ingredientTypeDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"IngredientTypes/{id}", ingredientTypeDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IngredientTypeDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении типа ингредиента: {ex.Message}");
+            }
+        }
+        public async Task DeleteIngredientTypeAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"IngredientTypes/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении типа ингредиента: {ex.Message}");
+            }
+        }
+
+        #endregion
+
         #region AllowedIngredients
 
         /// <summary>

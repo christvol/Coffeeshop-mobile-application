@@ -6,25 +6,24 @@ using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages
 {
-
-    public partial class PageIngredients : CustomContentPage
+    public partial class PageIngredientTypes : CustomContentPage
     {
         #region Свойства
 
-        public ObservableCollection<IngredientDTO> items { get; set; } = new();
+        public ObservableCollection<IngredientTypeDTO> IngredientTypes { get; set; } = new();
 
         #endregion
 
         #region Конструкторы/Деструкторы
 
-        public PageIngredients(SessionData? sessionData) : base(sessionData)
+        public PageIngredientTypes(SessionData? sessionData) : base(sessionData)
         {
             this.InitializeComponent();
             this.BindingContext = this;
 
             // Устанавливаем обработчики событий
-            this.ccvItems.SetEditCommand<IngredientDTO>(this.OnEditIngredient);
-            this.ccvItems.SetDeleteCommand<IngredientDTO>(this.OnDeleteIngredient);
+            this.ccvItems.SetEditCommand<IngredientTypeDTO>(this.OnEditIngredientType);
+            this.ccvItems.SetDeleteCommand<IngredientTypeDTO>(this.OnDeleteIngredientType);
         }
 
         #endregion
@@ -32,11 +31,11 @@ namespace Mobile_application.Pages
         #region Методы
 
         /// <summary>
-        /// Обновляет коллекцию ингредиентов.
+        /// Обновляет коллекцию типов ингредиентов.
         /// </summary>
         private async void UpdateItemsCollection()
         {
-            this.items.UpdateObservableCollection(await this.ApiClient.GetAllIngredientsAsync());
+            this.IngredientTypes.UpdateObservableCollection(await this.ApiClient.GetAllIngredientTypesAsync());
         }
 
         #endregion
@@ -49,14 +48,14 @@ namespace Mobile_application.Pages
             this.UpdateItemsCollection();
 
             // Настраиваем CollectionView
-            this.ccvItems.SetDisplayedFields("Title", "Description", "Fee");
-            this.ccvItems.SetItems(this.items);
+            this.ccvItems.SetDisplayedFields("Title");
+            this.ccvItems.SetItems(this.IngredientTypes);
         }
 
         /// <summary>
-        /// Обработчик нажатия кнопки редактирования ингредиента.
+        /// Обработчик нажатия кнопки редактирования типа ингредиента.
         /// </summary>
-        private async void OnEditIngredient(IngredientDTO ingredient)
+        private async void OnEditIngredientType(IngredientTypeDTO ingredientType)
         {
             try
             {
@@ -68,24 +67,22 @@ namespace Mobile_application.Pages
                 {
                     CurrentUser = this.SessionData.CurrentUser,
                     Mode = WindowMode.Update,
-                    Data = ingredient
+                    Data = ingredientType
                 };
-                await this.Navigation.PushAsync(new PageIngredientEdit(editSessionData));
+                await this.Navigation.PushAsync(new PageIngredientTypeEdit(editSessionData));
             }
             catch (Exception ex)
             {
                 _ = this.ShowError(ex);
             }
-
         }
 
         /// <summary>
-        /// Обработчик нажатия кнопки удаления ингредиента.
+        /// Обработчик нажатия кнопки удаления типа ингредиента.
         /// </summary>
-        private async void OnDeleteIngredient(IngredientDTO ingredient)
+        private async void OnDeleteIngredientType(IngredientTypeDTO ingredientType)
         {
-            _ = this.DisplayAlert("OnDeleteIngredient", "Обработчик удаления", "OK");
-            bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
+            bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить тип ингредиента \"{ingredientType.Title}\"?", "Да", "Нет");
             if (!confirm)
             {
                 return;
@@ -93,20 +90,20 @@ namespace Mobile_application.Pages
 
             try
             {
-                await this.ApiClient.DeleteIngredientAsync(ingredient.Id);
-                await this.DisplayAlert("Успех", "Ингредиент удалён.", "OK");
+                await this.ApiClient.DeleteIngredientTypeAsync(ingredientType.Id);
+                await this.DisplayAlert("Успех", "Тип ингредиента удалён.", "OK");
                 this.UpdateItemsCollection();
             }
             catch (Exception ex)
             {
-                await this.DisplayAlert("Ошибка", $"Не удалось удалить ингредиент: {ex.Message}", "OK");
+                await this.DisplayAlert("Ошибка", $"Не удалось удалить тип ингредиента: {ex.Message}", "OK");
             }
         }
 
         /// <summary>
-        /// Обработчик нажатия кнопки добавления нового ингредиента.
+        /// Обработчик нажатия кнопки добавления нового типа ингредиента.
         /// </summary>
-        private async void OnAddIngredientClicked(object sender, EventArgs e)
+        private async void OnAddIngredientTypeClicked(object sender, EventArgs e)
         {
             try
             {
@@ -119,7 +116,7 @@ namespace Mobile_application.Pages
                     CurrentUser = this.SessionData.CurrentUser,
                     Mode = WindowMode.Create
                 };
-                await this.Navigation.PushAsync(new PageIngredientEdit(newSessionData));
+                await this.Navigation.PushAsync(new PageIngredientTypeEdit(newSessionData));
             }
             catch (Exception ex)
             {

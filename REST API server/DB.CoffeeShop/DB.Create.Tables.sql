@@ -149,11 +149,10 @@ ALTER TABLE [Products]
   ADD FOREIGN KEY (idProductType) REFERENCES [Product types] ([id]) ON DELETE CASCADE;
 
 ALTER TABLE [Ingredients] 
-  ADD FOREIGN KEY (idIngredientType) REFERENCES [Ingredient types] ([id]);
+  ADD FOREIGN KEY (idIngredientType) REFERENCES [Ingredient types] ([id])  ON DELETE CASCADE;
 
 ALTER TABLE [Ingredient images] 
-  ADD FOREIGN KEY (idIngredient) REFERENCES [Ingredients] ([id])
-  ON DELETE CASCADE;
+  ADD FOREIGN KEY (idIngredient) REFERENCES [Ingredients] ([id]) ON DELETE CASCADE;
 
 ALTER TABLE [Ingredient images] 
   ADD FOREIGN KEY (idImage) REFERENCES [Images] ([id]);
@@ -180,7 +179,7 @@ ALTER TABLE [Order products]
   ADD FOREIGN KEY (idProduct) REFERENCES [Products] ([id])  ON DELETE CASCADE;
 
 ALTER TABLE [Order item ingredients] 
-  ADD FOREIGN KEY (idOrderProduct) REFERENCES [Order products] ([id]);
+  ADD FOREIGN KEY (idOrderProduct) REFERENCES [Order products] ([id])  ON DELETE CASCADE;
 
 ALTER TABLE [Order item ingredients] 
   ADD FOREIGN KEY (idIngredient) REFERENCES [Allowed ingredients] ([id])  ON DELETE CASCADE;

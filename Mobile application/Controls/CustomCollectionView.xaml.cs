@@ -49,6 +49,24 @@ namespace Mobile_application.Controls
             set => this.SetValue(DeleteCommandProperty, value);
         }
 
+        public static readonly BindableProperty ItemSelectedCommandProperty =
+            BindableProperty.Create(nameof(ItemSelectedCommand), typeof(ICommand), typeof(CustomCollectionView), null);
+
+        public ICommand ItemSelectedCommand
+        {
+            get => (ICommand)this.GetValue(ItemSelectedCommandProperty);
+            set => this.SetValue(ItemSelectedCommandProperty, value);
+        }
+
+        #endregion
+
+        #region События
+
+        /// <summary>
+        /// Событие, вызываемое при выборе элемента списка.
+        /// </summary>
+        public event EventHandler<object> ItemSelected;
+
         #endregion
 
         #region Конструкторы/Деструкторы
@@ -57,6 +75,7 @@ namespace Mobile_application.Controls
         {
             this.InitializeComponent();
             this.BindingContext = this;
+            this.collectionView.SelectionChanged += this.OnItemSelectedInternal;
         }
 
         #endregion
@@ -95,9 +114,17 @@ namespace Mobile_application.Controls
             this.DeleteCommand = new Command<T>(execute);
         }
 
+        /// <summary>
+        /// Устанавливает команду выбора элемента списка.
+        /// </summary>
+        public void SetItemSelectedCommand<T>(Action<T> execute)
+        {
+            this.ItemSelectedCommand = new Command<T>(execute);
+        }
+
         #endregion
 
-        #region Обработчики изменений свойств
+        #region Обработчики событий
 
         private static void OnItemsChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -112,6 +139,18 @@ namespace Mobile_application.Controls
             if (bindable is CustomCollectionView collectionView)
             {
                 collectionView.UpdateItemTemplate();
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события выбора элемента списка.
+        /// </summary>
+        private void OnItemSelectedInternal(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.FirstOrDefault() is object selectedItem)
+            {
+                this.ItemSelected?.Invoke(this, selectedItem);
+                this.ItemSelectedCommand?.Execute(selectedItem);
             }
         }
 
@@ -168,7 +207,7 @@ namespace Mobile_application.Controls
                 deleteButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.DeleteCommand), source: this));
                 deleteButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
 
-                return new Frame
+                var frame = new Frame
                 {
                     Padding = 10,
                     CornerRadius = 10,
@@ -191,6 +230,14 @@ namespace Mobile_application.Controls
                         }
                     }
                 };
+
+                // Добавляем жест нажатия для выбора элемента
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, new Binding(nameof(this.ItemSelectedCommand), source: this));
+                tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, new Binding("."));
+                frame.GestureRecognizers.Add(tapGestureRecognizer);
+
+                return frame;
             });
         }
 

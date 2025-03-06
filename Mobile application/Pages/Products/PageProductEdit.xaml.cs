@@ -54,10 +54,10 @@ namespace Mobile_application.Pages
         {
             try
             {
-                var types = await this.ApiClient.GetAllProductTypesAsync();
+                List<ProductTypes> types = await this.ApiClient.GetAllProductTypesAsync();
                 this.ProductTypes.Clear();
 
-                foreach (var type in types)
+                foreach (ProductTypes type in types)
                 {
                     this.ProductTypes.Add(type);
                 }
@@ -75,10 +75,10 @@ namespace Mobile_application.Pages
         {
             try
             {
-                var ingredients = await this.ApiClient.GetIngredientsViewAsync();
+                List<IngredientsView> ingredients = await this.ApiClient.GetIngredientsViewAsync();
                 this.Ingredients.Clear();
 
-                foreach (var ingredient in ingredients)
+                foreach (IngredientsView ingredient in ingredients)
                 {
                     this.Ingredients.Add(ingredient);
                 }
@@ -171,7 +171,7 @@ namespace Mobile_application.Pages
                 string feeText = this.EntryFee.Text?.Replace("₽", "").Trim().Replace(",", ".") ?? "0";
 
                 // Пробуем преобразовать строку в decimal
-                if (!decimal.TryParse(feeText, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out var fee))
+                if (!decimal.TryParse(feeText, System.Globalization.NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture, out decimal fee))
                 {
                     await this.DisplayAlert("Ошибка", "Некорректный формат цены. Используйте число с точкой или запятой.", "OK");
                     return;

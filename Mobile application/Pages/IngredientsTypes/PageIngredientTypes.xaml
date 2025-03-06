@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         Title="PageIngredientTypes"
+                         x:Class="Mobile_application.Pages.PageIngredientTypes"
+                         BackgroundColor="{StaticResource MintGreen}">
+
+    <Grid RowDefinitions="Auto, * , Auto" Padding="10">
+        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
+
+        <!-- Кнопка добавления нового типа ингредиента -->
+        <Button Grid.Row="2"               
+                Clicked="OnAddIngredientTypeClicked"
+                Text="Добавить тип ингредиента"
+                Style="{StaticResource ButtonPrimary}"/>
+    </Grid>
+</pages:CustomContentPage>

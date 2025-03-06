@@ -24,10 +24,14 @@
             <Picker x:Name="pIngredientType"></Picker>
 
             <!-- Кнопки -->
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />
-                <Button Text="Отмена" Clicked="OnCancelClicked" BackgroundColor="#F44336" TextColor="White" />
-            </HorizontalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Button Text="{x:Static res:Strings.ButtonSave}" 
+             Style="{StaticResource ButtonPrimary}"
+             Clicked="OnSaveClicked" />
+                <Button Text="{x:Static res:Strings.ButtonCancel}"
+             Style="{StaticResource ButtonDanger}"
+             Clicked="OnCancelClicked" />
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </pages:CustomContentPage>

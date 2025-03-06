@@ -78,7 +78,7 @@ if (Test-Path -Path $serverDbPath) {
 # Scaffold DbContext
 Write-Output "Выполняем scaffold DbContext..."
 try {
-    $output = dotnet ef dbcontext scaffold "Server=KRISTINAVIVO\SQLEXPRESS;Database=CoffeeShop;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer `
+    $output = dotnet ef dbcontext scaffold "Server=LAPTOP-BBFM8MMD\SQLEXPRESS;Database=CoffeeShop;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer `
         --output-dir Classes\DB --no-pluralize --project "$projectFilePath" 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Output "Scaffold DbContext успешно выполнен."
