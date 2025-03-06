@@ -231,11 +231,11 @@ namespace Mobile_application.Controls
                     }
                 };
 
-                // Добавляем жест нажатия для выбора элемента
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, new Binding(nameof(this.ItemSelectedCommand), source: this));
-                tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, new Binding("."));
-                frame.GestureRecognizers.Add(tapGestureRecognizer);
+                //// Добавляем жест нажатия для выбора элемента
+                //var tapGestureRecognizer = new TapGestureRecognizer();
+                //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, new Binding(nameof(this.ItemSelectedCommand), source: this));
+                //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, new Binding("."));
+                //frame.GestureRecognizers.Add(tapGestureRecognizer);
 
                 return frame;
             });

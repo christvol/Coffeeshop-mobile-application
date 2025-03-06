@@ -79,6 +79,24 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add ingredient.
+        /// </summary>
+        internal static string ButtonAddIngredient {
+            get {
+                return ResourceManager.GetString("ButtonAddIngredient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add ingredient type.
+        /// </summary>
+        internal static string ButtonAddIngredientType {
+            get {
+                return ResourceManager.GetString("ButtonAddIngredientType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Add product.
         /// </summary>
         internal static string ButtonAddProduct {
@@ -88,7 +106,7 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Add category.
+        ///   Ищет локализованную строку, похожую на Add product type.
         /// </summary>
         internal static string ButtonAddProductType {
             get {
@@ -327,6 +345,42 @@ namespace Mobile_application.Resources.Strings {
         internal static string TitleLogin {
             get {
                 return ResourceManager.GetString("TitleLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ingredients.
+        /// </summary>
+        internal static string TitlePageIngredients {
+            get {
+                return ResourceManager.GetString("TitlePageIngredients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ingredients types.
+        /// </summary>
+        internal static string TitlePageIngredientTypes {
+            get {
+                return ResourceManager.GetString("TitlePageIngredientTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Products.
+        /// </summary>
+        internal static string TitlePageProducts {
+            get {
+                return ResourceManager.GetString("TitlePageProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Product types.
+        /// </summary>
+        internal static string TitlePageProductTypes {
+            get {
+                return ResourceManager.GetString("TitlePageProductTypes", resourceCulture);
             }
         }
         

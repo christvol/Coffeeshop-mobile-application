@@ -172,7 +172,7 @@
     <value>Logout</value>
   </data>
   <data name="ButtonAddProductType" xml:space="preserve">
-    <value>Add category</value>
+    <value>Add product type</value>
   </data>
   <data name="lblPoductTypes" xml:space="preserve">
     <value>Categories list:</value>
@@ -209,5 +209,23 @@
   </data>
   <data name="ButtonIngredientTypes" xml:space="preserve">
     <value>Ingredients types</value>
+  </data>
+  <data name="ButtonAddIngredient" xml:space="preserve">
+    <value>Add ingredient</value>
+  </data>
+  <data name="ButtonAddIngredientType" xml:space="preserve">
+    <value>Add ingredient type</value>
+  </data>
+  <data name="TitlePageIngredients" xml:space="preserve">
+    <value>Ingredients</value>
+  </data>
+  <data name="TitlePageIngredientTypes" xml:space="preserve">
+    <value>Ingredients types</value>
+  </data>
+  <data name="TitlePageProducts" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="TitlePageProductTypes" xml:space="preserve">
+    <value>Product types</value>
   </data>
 </root>

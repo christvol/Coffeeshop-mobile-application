@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:pages="clr-namespace:Mobile_application.Pages"
              xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
              xmlns:controls="clr-namespace:Mobile_application.Controls"
-             x:Class="Mobile_application.Pages.PageIngredients"
-             Title="{x:Static res:Strings.TitlePageIngredients}"
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             x:Class="Mobile_application.Pages.PageProductTypes"
+             Title="{x:Static res:Strings.TitlePageProductTypes}"
              BackgroundColor="{StaticResource MintGreen}">
+    
     <Grid RowDefinitions="Auto, * , Auto" Padding="10">
+        <!-- Список категорий -->
         <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
         <!-- Кнопка добавления нового ингредиента -->
         <Button Grid.Row="2"               
-                Clicked="OnAddIngredientClicked"
-                Text="{x:Static res:Strings.ButtonAddIngredient}"
-                Style="{StaticResource ButtonPrimary}"/>
+            Clicked="OnAddClicked"
+            Text="{x:Static res:Strings.ButtonAddProductType}"
+            Style="{StaticResource ButtonPrimary}"/>
     </Grid>
+
 </pages:CustomContentPage>

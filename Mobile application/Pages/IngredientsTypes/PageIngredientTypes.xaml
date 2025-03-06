@@ -4,7 +4,7 @@
                          xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
                          xmlns:pages="clr-namespace:Mobile_application.Pages"
                          xmlns:controls="clr-namespace:Mobile_application.Controls"
-                         Title="PageIngredientTypes"
+                         Title="{x:Static res:Strings.TitlePageIngredientTypes}"
                          x:Class="Mobile_application.Pages.PageIngredientTypes"
                          BackgroundColor="{StaticResource MintGreen}">
 
@@ -14,7 +14,7 @@
         <!-- Кнопка добавления нового типа ингредиента -->
         <Button Grid.Row="2"               
                 Clicked="OnAddIngredientTypeClicked"
-                Text="Добавить тип ингредиента"
+                Text="{x:Static res:Strings.ButtonAddIngredientType}"
                 Style="{StaticResource ButtonPrimary}"/>
     </Grid>
 </pages:CustomContentPage>

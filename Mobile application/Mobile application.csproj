@@ -122,13 +122,13 @@
 	  <MauiXaml Update="Pages\Products\PageProducts.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\PageProductTypeEdit.xaml">
+	  <MauiXaml Update="Pages\ProductType\PageProductTypeEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\PageProductTypes.xaml.cs">
+	  <Compile Update="Pages\ProductType\PageProductTypes.xaml.cs">
 	    <DependentUpon>PageProductTypes.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\Strings.Designer.cs">

@@ -1,77 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
-             xmlns:pages="clr-namespace:Mobile_application.Pages"
-             x:Class="Mobile_application.Pages.PageProducts"
-             Title="PageProducts"
-             BackgroundColor="{StaticResource MintGreen}">
-    <Grid RowDefinitions="Auto,*,Auto" Padding="10">
-        <!-- Заголовок -->
-        <Label Grid.Row="0"
-               Text="{Binding Title}"
-               TextColor="Black"
-               FontSize="18"
-               FontAttributes="Bold"
-               HorizontalOptions="Center" />
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageProducts"
+                         Title="{x:Static res:Strings.TitlePageProducts}"
+                         BackgroundColor="{StaticResource MintGreen}">
 
-        <!-- Список товаров -->
-        <CollectionView Grid.Row="1"
-                x:Name="ProductsCollectionView"
-                ItemsSource="{Binding Products}"
-                SelectionMode="Single"
-                SelectionChanged="OnProductSelected">
+    <Grid RowDefinitions="Auto, *, Auto" Padding="10">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5" BackgroundColor="{StaticResource Tertiary}">
-                        <Grid ColumnDefinitions="50, *, Auto" RowDefinitions="Auto, Auto">
-                            <!-- Иконка товара -->
-                            <Image Source="{Binding ProductImages[0]}"
-                                   WidthRequest="40"
-                                   HeightRequest="40"
-                                   VerticalOptions="Start"
-                                   HorizontalOptions="Start"
-                                   Grid.RowSpan="2" />
+        <!-- Список продуктов -->
+        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
-                            <!-- Название товара -->
-                            <Label Text="{Binding Title}"
-                                   FontSize="16"
-                                   FontAttributes="Bold"
-                                   Grid.Column="1"
-                                   VerticalOptions="Start" />
-
-                            <!-- Цена товара -->
-                            <Label Text="{Binding Fee, StringFormat='₽ {0:F2}'}"
-                                   FontSize="14"
-                                   Grid.Column="1"
-                                   Grid.Row="1"
-                                   VerticalOptions="Start"
-                                   TextColor="{StaticResource Gray900}" />
-
-                            <!-- Кнопки редактирования и удаления -->
-                            <StackLayout Grid.Column="2" Orientation="Horizontal" Spacing="5">
-                                <Button Text="{x:Static res:Strings.ButtonEdit}"
-                                        Clicked="OnEditProductClicked"
-                                       BackgroundColor="{StaticResource Primary}"
-                                        TextColor="White"
-                                        CornerRadius="5" />
-                                <Button Text="{x:Static res:Strings.ButtonDelete}"
-                                        Clicked="OnDeleteProductClicked"
-                                       BackgroundColor="{StaticResource Danger}"
-                                        TextColor="White"
-                                        CornerRadius="5" />
-                            </StackLayout>
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <!-- Кнопка добавления нового товара -->
-        <Button Grid.Row="2"              
+        <!-- Кнопка добавления нового продукта -->
+        <Button Grid.Row="2"               
                 Clicked="OnAddProductClicked"
                 Text="{x:Static res:Strings.ButtonAddProduct}"
                 Style="{StaticResource ButtonPrimary}"/>
     </Grid>
+
 </pages:CustomContentPage>
