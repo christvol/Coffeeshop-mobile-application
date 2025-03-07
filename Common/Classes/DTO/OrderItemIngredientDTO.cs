@@ -1,15 +1,7 @@
-﻿namespace Common.Classes.DTO
+﻿namespace REST_API_SERVER.Controllers
 {
     public class OrderItemIngredientDTO
     {
-        public int Id
-        {
-            get; set;
-        }
-        public int? IdOrderProduct
-        {
-            get; set;
-        }
         public int? IdIngredient
         {
             get; set;
