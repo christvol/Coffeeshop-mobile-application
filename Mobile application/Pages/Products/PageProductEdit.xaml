@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
-             xmlns:pages="clr-namespace:Mobile_application.Pages"
-             x:Class="Mobile_application.Pages.PageProductEdit"
-             Title="Редактирование продукта"
-             BackgroundColor="{StaticResource MintGreen}">
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageProductEdit"
+                         Title="Редактирование продукта"
+                         BackgroundColor="{StaticResource MintGreen}">
+
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
             <!-- Название продукта -->
             <Label Text="Название продукта" FontSize="16" TextColor="{StaticResource Gray900}" />
             <Entry x:Name="EntryTitle" Text="{Binding Product.Title}" 
-               TextColor="{StaticResource Gray900}" 
-               Placeholder="Введите название" />
+                   TextColor="{StaticResource Gray900}" 
+                   Placeholder="Введите название" />
 
             <!-- Описание продукта -->
             <Label Text="Описание" FontSize="16" TextColor="{StaticResource Gray900}" />
@@ -22,38 +24,30 @@
             <!-- Цена продукта -->
             <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
             <Entry x:Name="EntryFee" Text="{Binding Product.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" 
-               TextColor="{StaticResource Gray900}"/>
+                   TextColor="{StaticResource Gray900}"/>
 
             <!-- Тип продукта -->
             <Label Text="Тип продукта" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <Picker x:Name="PickerProductType" ItemsSource="{Binding ProductTypes}" ItemDisplayBinding="{Binding Title}" SelectedItem="{Binding SelectedProductType}" />
+            <Picker x:Name="pProductType" ItemsSource="{Binding ProductTypes}" ItemDisplayBinding="{Binding Title}" SelectedItem="{Binding SelectedProductType}" />
 
             <!-- Список ингредиентов -->
-            <Label Text="Ингредиенты" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <CollectionView ItemsSource="{Binding Ingredients}" SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame CornerRadius="10" Padding="10" HasShadow="False" Margin="0,5" BackgroundColor="{StaticResource Tertiary}">
-                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto">
-                                <!-- Название ингредиента -->
-                                <Label Text="{Binding IngredientTitle}" FontSize="14" VerticalOptions="Center" Grid.Column="0" />
+            <Label Text="Совместимые ингредиенты" FontSize="16" TextColor="{StaticResource Gray900}" />
+            <controls:CustomCollectionView x:Name="ccvItems"/>
 
-                                <!-- Кнопки управления ингредиентами -->
-                                <StackLayout Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Grid.Column="1">
-                                    <Button Text="Редактировать" Clicked="OnEditIngredientClicked" BackgroundColor="{StaticResource Primary}" TextColor="White" CornerRadius="5" />
-                                    <Button Text="Удалить" Clicked="OnDeleteIngredientClicked" BackgroundColor="{StaticResource Danger}" TextColor="White" CornerRadius="5" />
-                                </StackLayout>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <!-- Кнопка добавления ингредиента -->
+            <Button Text="{x:Static res:Strings.ButtonAddIngredient}"
+                    Style="{StaticResource ButtonPrimary}"
+                    Clicked="OnAddIngredientClicked"/>
 
             <!-- Кнопки -->
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Сохранить" Clicked="OnSaveClicked" BackgroundColor="#4CAF50" TextColor="White" />
-                <Button Text="Отмена" Clicked="OnCancelClicked" BackgroundColor="#F44336" TextColor="White" />
-            </HorizontalStackLayout>
+            <VerticalStackLayout Spacing="10">
+                <Button Text="{x:Static res:Strings.ButtonSave}" 
+                        Style="{StaticResource ButtonPrimary}"
+                        Clicked="OnSaveClicked" />
+                <Button Text="{x:Static res:Strings.ButtonCancel}"
+                        Style="{StaticResource ButtonDanger}"
+                        Clicked="OnCancelClicked" />
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 
