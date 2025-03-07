@@ -1,4 +1,4 @@
-﻿namespace REST_API_SERVER.Controllers
+﻿namespace REST_API_SERVER.DTO
 {
     public class OrderDTO
     {

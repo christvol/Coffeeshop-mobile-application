@@ -1,4 +1,4 @@
-﻿namespace REST_API_SERVER.DTOs;
+﻿namespace REST_API_SERVER.DTO;
 
 public class ProductDTO
 {
