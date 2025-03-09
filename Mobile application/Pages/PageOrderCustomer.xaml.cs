@@ -32,6 +32,11 @@ public partial class PageOrderCustomer : CustomContentPage
         {
             this._currentOrder = order;
         }
+        else if (this.SessionData?.Data is { } dataObject &&
+                 dataObject.GetType().GetProperty("Order") != null)
+        {
+            this._currentOrder = dataObject.GetType().GetProperty("Order")?.GetValue(dataObject) as OrderDTO;
+        }
 
         if (this._currentOrder == null)
         {
@@ -46,6 +51,7 @@ public partial class PageOrderCustomer : CustomContentPage
 
         await this.LoadOrderProducts();
     }
+
 
     /// <summary>
     /// «агружает уникальные продукты текущего заказа.

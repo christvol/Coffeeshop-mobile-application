@@ -55,6 +55,9 @@ namespace Mobile_application.Pages
 
             this.ccvOrderItems.SetDisplayedFields("ProductTitle", "Total");
             this.ccvOrderItems.SetItems(this._orderDetails);
+
+            // Устанавливаем обработчик выбора элемента
+            this.ccvOrderItems.SetItemSelectedCommand<OrderDetailsView>(this.OnOrderItemSelected);
         }
 
         /// <summary>
@@ -94,6 +97,29 @@ namespace Mobile_application.Pages
             base.OnAppearing();
             this._orderStatuses = await this.ApiClient.GetAllOrderStatusesAsync();
             this.pStatus.ConfigurePicker<OrderStatusDTO>(this._orderStatuses, "Title", "Id", this.Order?.IdStatus);
+        }
+
+        /// <summary>
+        /// Обработчик выбора элемента списка.
+        /// </summary>
+        private async void OnOrderItemSelected(OrderDetailsView selectedItem)
+        {
+            if (selectedItem == null || this.Order == null)
+            {
+                return;
+            }
+
+            Users? customer = await this.ApiClient.GetUserByIdAsync((int)this.Order.IdCustomer);
+            OrderDTO? order = await this.ApiClient.GetOrderByIdAsync(this.Order.Id);
+
+            ProductDTO? product = await this.ApiClient.GetProductByIdAsync((int)selectedItem.ProductId);
+            var newSessionData = new SessionData
+            {
+                CurrentUser = customer, //this.SessionData?.CurrentUser,
+                Data = new { Order = order, Product = product }
+            };
+
+            await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
         }
 
         private async void OnSaveClicked(object sender, EventArgs e)
