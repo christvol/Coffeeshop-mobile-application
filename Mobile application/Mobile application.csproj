@@ -116,6 +116,15 @@
 	  <MauiXaml Update="Pages\IngredientsTypes\PageIngredientTypeEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\Orders\PageOrders.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Orders\PageOrderEdit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\PageProductCustomer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\Products\PageProductEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

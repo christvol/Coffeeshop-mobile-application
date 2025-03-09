@@ -24,7 +24,8 @@ namespace Mobile_application
         public void OnDebugAction()
         {
             // Устанавливаем MainPage с данными пользователя
-            this.MainPage = new NavigationPage(new PageEditMenu(null));
+            //this.MainPage = new NavigationPage(new PageEditMenu(null));
+            this.MainPage = new NavigationPage(new PageProductTypes(null));
         }
 
         public void OnRelease()

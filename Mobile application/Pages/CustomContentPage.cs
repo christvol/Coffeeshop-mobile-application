@@ -102,6 +102,13 @@ namespace Mobile_application.Pages
                 throw new InvalidOperationException("Failed to navigate to the specified page.", ex);
             }
         }
+
+        public async Task<bool> IsUserAdminAsync(int userId)
+        {
+            Common.Classes.DB.Users? user = await this.ApiClient.GetUserByIdAsync(userId);
+            return user?.IdUserTypeNavigation?.Title == "Admin";
+        }
+
         #endregion
     }
 }

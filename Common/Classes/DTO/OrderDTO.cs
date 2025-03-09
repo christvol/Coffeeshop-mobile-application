@@ -1,4 +1,4 @@
-﻿namespace REST_API_SERVER.DTO
+﻿namespace Common.Classes.DTO
 {
     public class OrderDTO
     {
@@ -15,6 +15,10 @@
             get; set;
         }
         public int IdStatus
+        {
+            get; set;
+        }
+        public DateTime? CreationDate
         {
             get; set;
         }

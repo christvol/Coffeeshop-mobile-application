@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageOrderEdit"
+                         Title="{x:Static res:Strings.TitlePageOrderEdit}"
+                         BackgroundColor="{StaticResource MintGreen}">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="10">
+
+        <!-- Заголовок -->
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
+
+        <VerticalStackLayout Grid.Row="1" Spacing="10">
+
+            <!-- Дата создания (только для отображения) -->
+            <Label Text="{x:Static res:Strings.LabelCreationDate}" />
+            <Entry x:Name="EntryCreationDate" IsReadOnly="True"/>
+
+            <!-- Клиент -->
+            <Label Text="{x:Static res:Strings.LabelCustomer}" />
+            <Entry x:Name="EntryCustomer"/>
+
+            <!-- Сотрудник -->
+            <Label Text="{x:Static res:Strings.LabelEmployee}" />
+            <Entry x:Name="EntryEmployee"/>
+
+            <!-- Статус заказа -->
+            <Label Text="{x:Static res:Strings.LabelOrderStatus}" />
+            <Picker x:Name="pStatus"/>
+
+            <!-- Список товаров в заказе -->
+            <Label Text="{x:Static res:Strings.LabelOrderItems}" />
+            <controls:CustomCollectionView x:Name="ccvOrderItems"/>
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*, *" ColumnSpacing="10">
+            <Button Text="{x:Static res:Strings.ButtonSave}" Clicked="OnSaveClicked" Grid.Column="0"/>
+            <Button Text="{x:Static res:Strings.ButtonCancel}" Clicked="OnCancelClicked" Grid.Column="1"/>
+        </Grid>
+
+    </Grid>
+</pages:CustomContentPage>

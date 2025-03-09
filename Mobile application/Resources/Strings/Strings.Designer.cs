@@ -97,6 +97,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add order.
+        /// </summary>
+        internal static string ButtonAddOrder {
+            get {
+                return ResourceManager.GetString("ButtonAddOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Add product.
         /// </summary>
         internal static string ButtonAddProduct {
@@ -111,6 +120,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string ButtonAddProductType {
             get {
                 return ResourceManager.GetString("ButtonAddProductType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add to cart.
+        /// </summary>
+        internal static string ButtonAddToCart {
+            get {
+                return ResourceManager.GetString("ButtonAddToCart", resourceCulture);
             }
         }
         
@@ -187,6 +205,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Orders.
+        /// </summary>
+        internal static string ButtonOrders {
+            get {
+                return ResourceManager.GetString("ButtonOrders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Products.
         /// </summary>
         internal static string ButtonProducts {
@@ -223,6 +250,33 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Select ingredient.
+        /// </summary>
+        internal static string ButtonSelectIngredient {
+            get {
+                return ResourceManager.GetString("ButtonSelectIngredient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на CreationDate.
+        /// </summary>
+        internal static string LabelCreationDate {
+            get {
+                return ResourceManager.GetString("LabelCreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Customer.
+        /// </summary>
+        internal static string LabelCustomer {
+            get {
+                return ResourceManager.GetString("LabelCustomer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Docs and terms.
         /// </summary>
         internal static string LabelDocsAndTerms {
@@ -241,11 +295,38 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Employee.
+        /// </summary>
+        internal static string LabelEmployee {
+            get {
+                return ResourceManager.GetString("LabelEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Notifications.
         /// </summary>
         internal static string LabelNotifications {
             get {
                 return ResourceManager.GetString("LabelNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Order items.
+        /// </summary>
+        internal static string LabelOrderItems {
+            get {
+                return ResourceManager.GetString("LabelOrderItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Order status.
+        /// </summary>
+        internal static string LabelOrderStatus {
+            get {
+                return ResourceManager.GetString("LabelOrderStatus", resourceCulture);
             }
         }
         
@@ -264,6 +345,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string LabelProductTypeEditWindow {
             get {
                 return ResourceManager.GetString("LabelProductTypeEditWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Selelected ingredients.
+        /// </summary>
+        internal static string LabelSelectedIngredients {
+            get {
+                return ResourceManager.GetString("LabelSelectedIngredients", resourceCulture);
             }
         }
         
@@ -291,6 +381,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string lblPoductTypes {
             get {
                 return ResourceManager.GetString("lblPoductTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Page customer product.
+        /// </summary>
+        internal static string PageCustomerProductTitle {
+            get {
+                return ResourceManager.GetString("PageCustomerProductTitle", resourceCulture);
             }
         }
         
@@ -363,6 +462,24 @@ namespace Mobile_application.Resources.Strings {
         internal static string TitlePageIngredientTypes {
             get {
                 return ResourceManager.GetString("TitlePageIngredientTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Edit order.
+        /// </summary>
+        internal static string TitlePageOrderEdit {
+            get {
+                return ResourceManager.GetString("TitlePageOrderEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Orders.
+        /// </summary>
+        internal static string TitlePageOrders {
+            get {
+                return ResourceManager.GetString("TitlePageOrders", resourceCulture);
             }
         }
         

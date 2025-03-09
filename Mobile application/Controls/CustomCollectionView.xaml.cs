@@ -11,6 +11,25 @@ namespace Mobile_application.Controls
 
         #region Свойства
 
+        public static readonly BindableProperty IsListItemEditButtonsVisibleProperty =
+            BindableProperty.Create(nameof(IsListItemEditButtonsVisible), typeof(bool), typeof(CustomCollectionView), true, propertyChanged: OnButtonsVisibilityChanged);
+
+        public bool IsListItemEditButtonsVisible
+        {
+            get => (bool)this.GetValue(IsListItemEditButtonsVisibleProperty);
+            set => this.SetValue(IsListItemEditButtonsVisibleProperty, value);
+        }
+
+        private static void OnButtonsVisibilityChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is CustomCollectionView collectionView)
+            {
+                collectionView.UpdateItemTemplate();
+            }
+        }
+
+
+
         public static readonly BindableProperty ItemsProperty =
             BindableProperty.Create(nameof(Items), typeof(IEnumerable), typeof(CustomCollectionView),
                 default(IEnumerable), propertyChanged: OnItemsChanged);
@@ -157,7 +176,6 @@ namespace Mobile_application.Controls
         #endregion
 
         #region Генерация разметки
-
         private void UpdateItemTemplate()
         {
             if (this.DisplayedFields == null || !this.DisplayedFields.Any())
@@ -179,33 +197,45 @@ namespace Mobile_application.Controls
                     {
                         FontSize = 14,
                         VerticalOptions = LayoutOptions.Center,
-                        Margin = new Thickness(5, 0) // Отступ сверху и снизу
+                        Margin = new Thickness(5, 0)
                     };
                     label.SetBinding(Label.TextProperty, field);
                     stackLayout.Children.Add(label);
                 }
 
-                // Кнопка редактирования
-                var editButton = new Button
+                var buttonsStack = new StackLayout
                 {
-                    Text = "✎",
-                    BackgroundColor = (Color)Application.Current.Resources["Primary"],
-                    TextColor = Colors.White,
-                    CornerRadius = 10
+                    Orientation = StackOrientation.Horizontal,
+                    HorizontalOptions = LayoutOptions.EndAndExpand,
+                    Spacing = 5
                 };
-                editButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.EditCommand), source: this));
-                editButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
 
-                // Кнопка удаления
-                var deleteButton = new Button
+                if (this.IsListItemEditButtonsVisible)
                 {
-                    Text = "🗑",
-                    BackgroundColor = (Color)Application.Current.Resources["Danger"],
-                    TextColor = Colors.White,
-                    CornerRadius = 10
-                };
-                deleteButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.DeleteCommand), source: this));
-                deleteButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
+                    // Кнопка редактирования
+                    var editButton = new Button
+                    {
+                        Text = "✎",
+                        BackgroundColor = (Color)Application.Current.Resources["Primary"],
+                        TextColor = Colors.White,
+                        CornerRadius = 10
+                    };
+                    editButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.EditCommand), source: this));
+                    editButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
+                    buttonsStack.Children.Add(editButton);
+
+                    // Кнопка удаления
+                    var deleteButton = new Button
+                    {
+                        Text = "🗑",
+                        BackgroundColor = (Color)Application.Current.Resources["Danger"],
+                        TextColor = Colors.White,
+                        CornerRadius = 10
+                    };
+                    deleteButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.DeleteCommand), source: this));
+                    deleteButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
+                    buttonsStack.Children.Add(deleteButton);
+                }
 
                 var frame = new Frame
                 {
@@ -218,24 +248,12 @@ namespace Mobile_application.Controls
                         Orientation = StackOrientation.Horizontal,
                         Spacing = 5,
                         Children =
-                        {
-                            stackLayout, // Вывод полей вертикально
-                            new StackLayout
-                            {
-                                Orientation = StackOrientation.Horizontal,
-                                HorizontalOptions = LayoutOptions.EndAndExpand,
-                                Spacing = 5,
-                                Children = { editButton, deleteButton }
-                            }
-                        }
+                {
+                    stackLayout,
+                    buttonsStack
+                }
                     }
                 };
-
-                //// Добавляем жест нажатия для выбора элемента
-                //var tapGestureRecognizer = new TapGestureRecognizer();
-                //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandProperty, new Binding(nameof(this.ItemSelectedCommand), source: this));
-                //tapGestureRecognizer.SetBinding(TapGestureRecognizer.CommandParameterProperty, new Binding("."));
-                //frame.GestureRecognizers.Add(tapGestureRecognizer);
 
                 return frame;
             });

@@ -49,7 +49,7 @@ namespace Mobile_application.Pages
 
         #region Обработчики событий
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             this.LoadCategoriesAsync();
@@ -57,6 +57,13 @@ namespace Mobile_application.Pages
             // Настраиваем CollectionView
             this.ccvItems.SetDisplayedFields("Title");
             this.ccvItems.SetItems(this.Categories);
+
+            //TODO: убрать авторизацию
+            this.SessionData.CurrentUser = await this.ApiClient.GetUserByIdAsync(2);
+
+            // Проверяем, является ли пользователь администратором
+            this.ccvItems.IsListItemEditButtonsVisible = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+
         }
 
         /// <summary>

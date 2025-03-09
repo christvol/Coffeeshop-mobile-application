@@ -1,7 +1,7 @@
 ﻿using Common.Classes.DB;
+using Common.Classes.DTO;
 using Common.Classes.Session;
 using Mobile_application.Classes.Utils;
-using REST_API_SERVER.DTOs;
 using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages
@@ -31,6 +31,8 @@ namespace Mobile_application.Pages
             // Устанавливаем обработчики событий
             this.ccvItems.SetEditCommand<ProductDTO>(this.OnEditProductClicked);
             this.ccvItems.SetDeleteCommand<ProductDTO>(this.OnDeleteProductClicked);
+            // Устанавливаем обработчик нажатия на элемент списка
+            this.ccvItems.SetItemSelectedCommand<ProductDTO>(this.OnProductSelected);
         }
 
         #endregion
@@ -70,7 +72,9 @@ namespace Mobile_application.Pages
 
         #region Обработчики событий
 
-        protected override void OnAppearing()
+        #region Обработчики событий
+
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             this.LoadProducts();
@@ -78,7 +82,35 @@ namespace Mobile_application.Pages
             // Настраиваем CollectionView
             this.ccvItems.SetDisplayedFields("Title", "Description", "Fee");
             this.ccvItems.SetItems(this.Products);
+
+            // Проверяем, является ли пользователь администратором
+            this.ccvItems.IsListItemEditButtonsVisible = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+
+
         }
+
+        /// <summary>
+        /// Обработчик выбора продукта в списке.
+        /// </summary>
+        private async void OnProductSelected(ProductDTO selectedProduct)
+        {
+            if (selectedProduct == null)
+            {
+                return;
+            }
+
+            var newSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData?.CurrentUser,
+                Data = selectedProduct,
+                Mode = WindowMode.Read
+            };
+
+            await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Обработчик кнопки "Добавить".

@@ -1,4 +1,4 @@
-﻿namespace REST_API_SERVER.DTO
+﻿namespace Common.Classes.DTO
 {
     public class OrderItemIngredientDTO
     {
@@ -9,6 +9,16 @@
         public int Amount
         {
             get; set;
+        }
+        public int Id
+        {
+            get;
+            set;
+        }
+        public int IdOrderProduct
+        {
+            get;
+            set;
         }
     }
 }

@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"          
-             xmlns:controls="clr-namespace:Mobile_application.Controls"
-             xmlns:pages="clr-namespace:Mobile_application.Pages"
-             
-             x:Class="Mobile_application.Pages.PageEditMenu"
-             Title="PageEditMenu"
-             BackgroundColor="{StaticResource MintGreen}">
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"          
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageEditMenu"
+                         Title="PageEditMenu"
+                         BackgroundColor="{StaticResource MintGreen}">
     <Grid RowDefinitions="Auto,*" Padding="10">
         <!-- Page Header -->
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0" />
         <VerticalStackLayout Grid.Row="1" Spacing="10" VerticalOptions="CenterAndExpand">
-        <!-- Кнопка добавления нового товара -->
-        <Button          
-         Clicked="OnProductTypesClicked"
-         Text="{x:Static res:Strings.ButtonProductTypes}"
-         Style="{StaticResource ButtonPrimary}"/>
-        <!-- Кнопка добавления нового товара -->
-        <Button            
-         Clicked="OnProductClicked"
-         Text="{x:Static res:Strings.ButtonProducts}"
-         Style="{StaticResource ButtonPrimary}"/>
-        <!-- Кнопка добавления нового товара -->
-        <Button           
-         Clicked="OnIngredientTypesClicked"
-         Text="{x:Static res:Strings.ButtonIngredientTypes}"
-         Style="{StaticResource ButtonPrimary}"/>
-        <!-- Кнопка добавления нового товара -->
-        <Button             
-         Clicked="OnIngredientClicked"
-         Text="{x:Static res:Strings.ButtonIngredients}"
-         Style="{StaticResource ButtonPrimary}"/>
-    </VerticalStackLayout>
+
+            <!-- Кнопка Типы продуктов -->
+            <Button Clicked="OnProductTypesClicked"
+                    Text="{x:Static res:Strings.ButtonProductTypes}"
+                    Style="{StaticResource ButtonPrimary}"/>
+
+            <!-- Кнопка Продукты -->
+            <Button Clicked="OnProductClicked"
+                    Text="{x:Static res:Strings.ButtonProducts}"
+                    Style="{StaticResource ButtonPrimary}"/>
+
+            <!-- Кнопка Типы ингредиентов -->
+            <Button Clicked="OnIngredientTypesClicked"
+                    Text="{x:Static res:Strings.ButtonIngredientTypes}"
+                    Style="{StaticResource ButtonPrimary}"/>
+
+            <!-- Кнопка Ингредиенты -->
+            <Button Clicked="OnIngredientClicked"
+                    Text="{x:Static res:Strings.ButtonIngredients}"
+                    Style="{StaticResource ButtonPrimary}"/>
+
+            <!-- Кнопка Заказы -->
+            <Button Clicked="OnOrdersClicked"
+                    Text="{x:Static res:Strings.ButtonOrders}"
+                    Style="{StaticResource ButtonPrimary}"/>
+
+        </VerticalStackLayout>
     </Grid>
 </pages:CustomContentPage>

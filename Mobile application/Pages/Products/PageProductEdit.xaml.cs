@@ -2,7 +2,6 @@
 using Common.Classes.DTO;
 using Common.Classes.Session;
 using Mobile_application.Classes.Utils;
-using REST_API_SERVER.DTOs;
 using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages

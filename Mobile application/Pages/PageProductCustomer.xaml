@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         x:Class="Mobile_application.Pages.PageProductCustomer"
+                         Title="{x:Static res:Strings.PageCustomerProductTitle}"
+                         BackgroundColor="{StaticResource MintGreen}">
+    <VerticalStackLayout Padding="10">
+        <Image Source="{Binding ProductImage}" 
+               HeightRequest="256" 
+               Aspect="AspectFill" />
+
+        <Label Text="{Binding ProductTitle}" 
+               Style="{StaticResource LabelPrimary}" />
+
+        <Label Text="{Binding ProductDescription}" 
+               Style="{StaticResource LabelPrimary}" />
+
+        <Label Text="{Binding ProductFee}" 
+               FontSize="Medium" />
+
+        <Label Text="{x:Static res:Strings.LabelSelectedIngredients}" 
+               Style="{StaticResource LabelPrimary}" />
+
+        <!-- Используем Items для передачи списка -->
+        <controls:CustomCollectionView Items="{Binding ProductIngredients}"/>
+
+        <!-- Кнопки -->
+        <VerticalStackLayout Spacing="10">
+            <Button Text="{x:Static res:Strings.ButtonSelectIngredient}" 
+                    Style="{StaticResource ButtonPrimary}"
+                    Command="{Binding SelectIngredientCommand}" />
+
+            <Button Text="{x:Static res:Strings.ButtonAddToCart}" 
+                    Style="{StaticResource ButtonPrimary}"
+                    Command="{Binding AddToCartCommand}" />
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</pages:CustomContentPage>

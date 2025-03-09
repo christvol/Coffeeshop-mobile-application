@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                         xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+                         xmlns:controls="clr-namespace:Mobile_application.Controls"
+                         xmlns:pages="clr-namespace:Mobile_application.Pages"
+                         x:Class="Mobile_application.Pages.PageOrders"
+                         Title="{x:Static res:Strings.TitlePageOrders}"
+                         BackgroundColor="{StaticResource MintGreen}">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="10">
+
+        <!-- Список заказов -->
+        <controls:CustomCollectionView x:Name="ccvOrders" Grid.Row="1"/>
+
+        <!-- Кнопка добавления нового заказа -->
+        <Button Grid.Row="2"               
+                Clicked="OnAddOrderClicked"
+                Text="{x:Static res:Strings.ButtonAddOrder}"
+                Style="{StaticResource ButtonPrimary}"/>
+    </Grid>
+
+</pages:CustomContentPage>

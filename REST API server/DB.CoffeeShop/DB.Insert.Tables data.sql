@@ -80,8 +80,8 @@ GO
 -- Insert into Orders
 -- Добавляем статус заказа (например, статус "Pending")
 INSERT INTO [Orders] (creationDate, idCustomer, idEmployee, idStatus) VALUES
-(GETDATE(), 1, 2, 1), -- idCustomer: John Doe, idEmployee: Jane Smith, статус: Pending
-(GETDATE(), 2, 3, 1); -- idCustomer: Jane Smith, idEmployee: Michael Brown, статус: Pending
+(GETDATE(), 1, 2, 3), -- idCustomer: John Doe, idEmployee: Jane Smith, статус: Completed
+(GETDATE(), 2, 3, 3); -- idCustomer: Jane Smith, idEmployee: Michael Brown, статус: Completed
 GO
 
 -- Insert into Order products (бывшая таблица OrderProducts)

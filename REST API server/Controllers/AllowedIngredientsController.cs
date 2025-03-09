@@ -44,7 +44,7 @@ namespace CoffeeShopAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<AllowedIngredientsDTO> GetAllowedIngredientsById(int id)
         {
-            var allowedIngredient = this._context.AllowedIngredients
+            AllowedIngredients? allowedIngredient = this._context.AllowedIngredients
                 .Include(ai => ai.OrderItemIngredients)
                 .FirstOrDefault(ai => ai.Id == id);
 
@@ -102,7 +102,7 @@ namespace CoffeeShopAPI.Controllers
                 return this.BadRequest();
             }
 
-            var allowedIngredient = this._context.AllowedIngredients.Find(id);
+            AllowedIngredients? allowedIngredient = this._context.AllowedIngredients.Find(id);
 
             if (allowedIngredient == null)
             {
@@ -134,7 +134,7 @@ namespace CoffeeShopAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteAllowedIngredient(int id)
         {
-            var allowedIngredient = this._context.AllowedIngredients.Find(id);
+            AllowedIngredients? allowedIngredient = this._context.AllowedIngredients.Find(id);
 
             if (allowedIngredient == null)
             {

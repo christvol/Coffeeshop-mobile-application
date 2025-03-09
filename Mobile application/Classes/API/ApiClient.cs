@@ -2,7 +2,6 @@
 {
     using global::Common.Classes.DB;
     using global::Common.Classes.DTO;
-    using REST_API_SERVER.DTOs;
     using System.Net.Http;
     using System.Net.Http.Json;
     using System.Text.Json;
@@ -978,6 +977,263 @@
 
         #endregion
 
+        #region Orders
+
+        /// <summary>
+        /// Получение списка всех заказов.
+        /// </summary>
+        public async Task<List<OrderDTO>> GetOrdersAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync("Orders");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<OrderDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<OrderDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении списка заказов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение заказа по ID.
+        /// </summary>
+        public async Task<OrderDTO?> GetOrderByIdAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Orders/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<OrderDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении заказа по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Создание нового заказа.
+        /// </summary>
+        public async Task<OrderDTO?> CreateOrderAsync(OrderDTO orderDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync("Orders", orderDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<OrderDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при создании заказа: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обновление статуса заказа.
+        /// </summary>
+        public async Task<bool> UpdateOrderStatusAsync(int id, int newStatus)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Orders/{id}/status", newStatus);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении статуса заказа: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Обновление заказа целиком.
+        /// </summary>
+        public async Task<bool> UpdateOrderAsync(int id, OrderDTO orderDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Orders/{id}", orderDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при обновлении заказа: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Удаление заказа по ID.
+        /// </summary>
+        public async Task DeleteOrderAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"Orders/{id}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении заказа: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получает список заказов клиента по его ID.
+        /// </summary>
+        public async Task<List<OrderDTO>> GetOrdersByCustomerIdAsync(int customerId)
+        {
+            try
+            {
+                List<OrderDTO> orders = await this.httpClient.GetFromJsonAsync<List<OrderDTO>>("Orders");
+
+                return orders?.Where(o => o.IdCustomer == customerId).ToList() ?? new List<OrderDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении заказов клиента ID {customerId}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Добавляет продукт в существующий заказ.
+        /// </summary>
+        public async Task<bool> AddProductToOrderAsync(int orderId, OrderProductDTO orderProductDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync($"Orders/{orderId}/add-product", orderProductDto);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при добавлении продукта в заказ ID {orderId}: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region OrderStatuses
+
+        /// <summary>
+        /// Получение списка всех статусов заказов.
+        /// </summary>
+        public async Task<List<OrderStatusDTO>> GetAllOrderStatusesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync("OrderStatuses");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<OrderStatusDTO>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }) ?? new List<OrderStatusDTO>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении списка статусов заказов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение статуса заказа по ID.
+        /// </summary>
+        public async Task<OrderStatusDTO?> GetOrderStatusByIdAsync(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync($"OrderStatuses/{id}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<OrderStatusDTO>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении статуса заказа по ID: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получает статус заказа по названию.
+        /// </summary>
+        public async Task<OrderStatusDTO?> GetOrderStatusByTitleAsync(string title)
+        {
+            try
+            {
+                List<OrderStatusDTO> statuses = await this.httpClient.GetFromJsonAsync<List<OrderStatusDTO>>("OrderStatuses");
+
+                return statuses?.FirstOrDefault(s => s.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении статуса заказа по названию '{title}': {ex.Message}");
+            }
+        }
+
+        #endregion
+
         public async Task<RegistrationResponse?> GetCodeAsync(string phoneNumber)
         {
             try
@@ -1003,5 +1259,6 @@
                 throw new Exception($"Ошибка при отправке кода: {ex.Message}");
             }
         }
+
     }
 }

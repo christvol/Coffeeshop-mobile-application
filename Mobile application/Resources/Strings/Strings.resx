@@ -228,4 +228,43 @@
   <data name="TitlePageProductTypes" xml:space="preserve">
     <value>Product types</value>
   </data>
+  <data name="TitlePageOrders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="ButtonOrders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="ButtonAddOrder" xml:space="preserve">
+    <value>Add order</value>
+  </data>
+  <data name="TitlePageOrderEdit" xml:space="preserve">
+    <value>Edit order</value>
+  </data>
+  <data name="LabelCreationDate" xml:space="preserve">
+    <value>CreationDate</value>
+  </data>
+  <data name="LabelCustomer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="LabelEmployee" xml:space="preserve">
+    <value>Employee</value>
+  </data>
+  <data name="LabelOrderStatus" xml:space="preserve">
+    <value>Order status</value>
+  </data>
+  <data name="LabelOrderItems" xml:space="preserve">
+    <value>Order items</value>
+  </data>
+  <data name="PageCustomerProductTitle" xml:space="preserve">
+    <value>Page customer product</value>
+  </data>
+  <data name="ButtonSelectIngredient" xml:space="preserve">
+    <value>Select ingredient</value>
+  </data>
+  <data name="ButtonAddToCart" xml:space="preserve">
+    <value>Add to cart</value>
+  </data>
+  <data name="LabelSelectedIngredients" xml:space="preserve">
+    <value>Selelected ingredients</value>
+  </data>
 </root>

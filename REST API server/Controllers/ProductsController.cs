@@ -1,7 +1,7 @@
 ﻿using Common.Classes.DB;
+using Common.Classes.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using REST_API_SERVER.DTOs;
 
 namespace REST_API_SERVER.Controllers
 {
@@ -20,7 +20,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
         {
-            var products = await this._context.Products
+            List<ProductDTO> products = await this._context.Products
                 .Include(p => p.IdProductTypeNavigation)
                 .Include(p => p.ProductImages)
                     .ThenInclude(pi => pi.IdImageNavigation)
@@ -41,7 +41,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
-            var product = await this._context.Products
+            ProductDTO? product = await this._context.Products
                 .Include(p => p.IdProductTypeNavigation)
                 .Include(p => p.ProductImages)
                     .ThenInclude(pi => pi.IdImageNavigation)
@@ -70,7 +70,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet("ByType/{typeId}")]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductsByType(int typeId)
         {
-            var products = await this._context.Products
+            List<ProductDTO> products = await this._context.Products
                 .Where(p => p.IdProductType == typeId)
                 .Include(p => p.IdProductTypeNavigation)
                 .Include(p => p.ProductImages)
@@ -102,7 +102,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var productType = await this._context.ProductTypes.FindAsync(productDTO.IdProductType);
+            ProductTypes? productType = await this._context.ProductTypes.FindAsync(productDTO.IdProductType);
             if (productType == null)
             {
                 return this.BadRequest(new
@@ -159,7 +159,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var product = await this._context.Products.FindAsync(id);
+            Products? product = await this._context.Products.FindAsync(id);
             if (product == null)
             {
                 return this.NotFound(new
@@ -184,7 +184,7 @@ namespace REST_API_SERVER.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await this._context.Products.FindAsync(id);
+            Products? product = await this._context.Products.FindAsync(id);
             if (product == null)
             {
                 return this.NotFound(new
