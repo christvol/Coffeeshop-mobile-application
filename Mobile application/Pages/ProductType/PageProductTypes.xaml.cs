@@ -59,10 +59,14 @@ namespace Mobile_application.Pages
             this.ccvItems.SetItems(this.Categories);
 
             //TODO: убрать авторизацию
-            this.SessionData.CurrentUser = await this.ApiClient.GetUserByIdAsync(2);
+            //this.SessionData.CurrentUser = await this.ApiClient.GetUserByIdAsync(2);
 
             // Проверяем, является ли пользователь администратором
-            this.ccvItems.IsListItemEditButtonsVisible = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+            bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+            this.ccvItems.IsListItemEditButtonsVisible = isAdmin;
+            this.btnAdd.IsVisible = isAdmin;
+
+
 
         }
 

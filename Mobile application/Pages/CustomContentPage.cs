@@ -103,11 +103,40 @@ namespace Mobile_application.Pages
             }
         }
 
+        /// <summary>
+        /// Проверяет, является ли пользователь администратором.
+        /// </summary>
         public async Task<bool> IsUserAdminAsync(int userId)
         {
+            // Получаем данные о пользователе
             Common.Classes.DB.Users? user = await this.ApiClient.GetUserByIdAsync(userId);
-            return user?.IdUserTypeNavigation?.Title == "Admin";
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Если навигационное свойство уже загружено, используем его
+            if (user.IdUserTypeNavigation != null)
+            {
+                return user.IdUserTypeNavigation.Title == "Admin";
+            }
+
+            // Загружаем все типы пользователей и ищем "Admin"
+            List<Common.Classes.DB.UserTypes> userTypes = await this.ApiClient.GetAllUserTypesAsync();
+
+            // Ищем тип "Admin" в отсортированном списке
+            Common.Classes.DB.UserTypes? adminType = userTypes
+                .OrderBy(t => t.Title)
+                .FirstOrDefault(t => t.Title == "Admin");
+
+            if (adminType == null)
+            {
+                return false;
+            }
+
+            return user.IdUserType == adminType.Id;
         }
+
 
         #endregion
     }

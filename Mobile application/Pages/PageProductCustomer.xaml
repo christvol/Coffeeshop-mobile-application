@@ -25,17 +25,19 @@
                Style="{StaticResource LabelPrimary}" />
 
         <!-- Используем Items для передачи списка -->
-        <controls:CustomCollectionView Items="{Binding ProductIngredients}"/>
+        <controls:CustomCollectionView x:Name="ccvProductIngredients"/>
 
         <!-- Кнопки -->
         <VerticalStackLayout Spacing="10">
-            <Button Text="{x:Static res:Strings.ButtonSelectIngredient}" 
+            <Button x:Name="btnSelectIngredient"
+                    Text="{x:Static res:Strings.ButtonSelectIngredient}" 
                     Style="{StaticResource ButtonPrimary}"
-                    Command="{Binding SelectIngredientCommand}" />
+                    Clicked="btnSelectIngredient_Clicked"/>
 
-            <Button Text="{x:Static res:Strings.ButtonAddToCart}" 
+            <Button x:Name="btnAddToCart"
+                    Text="{x:Static res:Strings.ButtonAddToCart}" 
                     Style="{StaticResource ButtonPrimary}"
-                    Command="{Binding AddToCartCommand}" />
+                    Clicked="btnAddToCart_Clicked"/>
         </VerticalStackLayout>
     </VerticalStackLayout>
 </pages:CustomContentPage>

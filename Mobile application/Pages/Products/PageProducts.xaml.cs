@@ -72,8 +72,6 @@ namespace Mobile_application.Pages
 
         #region Обработчики событий
 
-        #region Обработчики событий
-
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -84,7 +82,9 @@ namespace Mobile_application.Pages
             this.ccvItems.SetItems(this.Products);
 
             // Проверяем, является ли пользователь администратором
-            this.ccvItems.IsListItemEditButtonsVisible = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+            bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+            this.ccvItems.IsListItemEditButtonsVisible = isAdmin;
+            this.btnAdd.IsVisible = isAdmin;
 
 
         }
@@ -99,17 +99,23 @@ namespace Mobile_application.Pages
                 return;
             }
 
+            // Проверяем, есть ли уже заказ в `SessionData`
+            OrderDTO? currentOrder = null;
+            if (this.SessionData?.Data is { } dataObject &&
+                dataObject.GetType().GetProperty("Order") != null)
+            {
+                currentOrder = dataObject.GetType().GetProperty("Order")?.GetValue(dataObject) as OrderDTO;
+            }
+
             var newSessionData = new SessionData
             {
                 CurrentUser = this.SessionData?.CurrentUser,
-                Data = selectedProduct,
+                Data = new { Order = currentOrder, Product = selectedProduct },
                 Mode = WindowMode.Read
             };
 
             await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
         }
-
-        #endregion
 
 
         /// <summary>

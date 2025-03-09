@@ -337,6 +337,29 @@
         #region UserTypes
 
         /// <summary>
+        /// Получает список всех типов пользователей.
+        /// </summary>
+        public async Task<List<Common.Classes.DB.UserTypes>> GetAllUserTypesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync("UserTypes");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return await response.Content.ReadFromJsonAsync<List<Common.Classes.DB.UserTypes>>() ?? new List<Common.Classes.DB.UserTypes>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении списка типов пользователей: {ex.Message}");
+            }
+        }
+
+
+        /// <summary>
         /// Получение типа пользователя по ID.
         /// </summary>
         /// <param name="id">ID пользователя.</param>
@@ -977,7 +1000,78 @@
 
         #endregion
 
+        #region OrderDetails
+
+        /// <summary>
+        /// Получение всех заказов с деталями.
+        /// </summary>
+        public async Task<List<OrderDetailsView>> GetAllOrderDetailsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync("Orders/details");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException($"Ошибка: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+
+                return await response.Content.ReadFromJsonAsync<List<OrderDetailsView>>() ?? new List<OrderDetailsView>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении всех деталей заказов: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Получение деталей конкретного заказа.
+        /// </summary>
+        public async Task<List<OrderDetailsView>> GetOrderDetailsByIdAsync(int orderId)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.GetAsync($"Orders/details/{orderId}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return new List<OrderDetailsView>();
+                }
+
+                _ = response.EnsureSuccessStatusCode();
+
+                return await response.Content.ReadFromJsonAsync<List<OrderDetailsView>>() ?? new List<OrderDetailsView>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении деталей заказа ID {orderId}: {ex.Message}");
+            }
+        }
+
+        #endregion
+
         #region Orders
+
+        /// <summary>
+        /// Добавляет ингредиент в продукт заказа.
+        /// </summary>
+        public async Task<bool> AddIngredientToOrderAsync(int orderId, int productId, OrderItemIngredientDTO ingredientDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.PostAsJsonAsync(
+                    $"Orders/{orderId}/product/{productId}/add-ingredient",
+                    ingredientDto
+                );
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при добавлении ингредиента в заказ ID {orderId}, продукт ID {productId}: {ex.Message}");
+            }
+        }
+
 
         /// <summary>
         /// Получение списка всех заказов.
@@ -1259,6 +1353,42 @@
                 throw new Exception($"Ошибка при отправке кода: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Удаляет ингредиент из продукта в заказе.
+        /// </summary>
+        public async Task<bool> RemoveIngredientFromOrderAsync(int orderId, int productId, int ingredientId)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.DeleteAsync(
+                    $"Orders/{orderId}/product/{productId}/ingredient/{ingredientId}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении ингредиента ID {ingredientId} из заказа ID {orderId}, продукт ID {productId}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Удаляет продукт из заказа.
+        /// </summary>
+        public async Task<bool> DeleteProductFromOrderAsync(int orderId, int productId)
+        {
+            try
+            {
+                HttpResponseMessage response = await this.httpClient.DeleteAsync($"Orders/{orderId}/product/{productId}");
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при удалении продукта ID {productId} из заказа {orderId}: {ex.Message}");
+            }
+        }
+
 
     }
 }

@@ -6,12 +6,14 @@ using System.Collections.ObjectModel;
 
 namespace Mobile_application.Pages
 {
-
     public partial class PageIngredients : CustomContentPage
     {
         #region Свойства
 
-        public ObservableCollection<IngredientDTO> items { get; set; } = new();
+        public ObservableCollection<IngredientDTO> Items { get; set; } = new();
+        private OrderDTO? _currentOrder;
+        private ProductDTO? _currentProduct;
+        private IngredientTypeDTO? _selectedType;
 
         #endregion
 
@@ -25,6 +27,18 @@ namespace Mobile_application.Pages
             // Устанавливаем обработчики событий
             this.ccvItems.SetEditCommand<IngredientDTO>(this.OnEditIngredient);
             this.ccvItems.SetDeleteCommand<IngredientDTO>(this.OnDeleteIngredient);
+            this.ccvItems.SetItemSelectedCommand<IngredientDTO>(this.OnIngredientSelected);
+
+            // Проверяем, получили ли массив данных с заказом и категорией
+            if (this.SessionData?.Data is { } dataObject &&
+                dataObject.GetType().GetProperty("Order") != null &&
+                dataObject.GetType().GetProperty("Product") != null &&
+                dataObject.GetType().GetProperty("SelectedType") != null)
+            {
+                this._currentOrder = dataObject.GetType().GetProperty("Order")?.GetValue(dataObject) as OrderDTO;
+                this._currentProduct = dataObject.GetType().GetProperty("Product")?.GetValue(dataObject) as ProductDTO;
+                this._selectedType = dataObject.GetType().GetProperty("SelectedType")?.GetValue(dataObject) as IngredientTypeDTO;
+            }
         }
 
         #endregion
@@ -32,25 +46,84 @@ namespace Mobile_application.Pages
         #region Методы
 
         /// <summary>
-        /// Обновляет коллекцию ингредиентов.
+        /// Обновляет коллекцию ингредиентов, фильтруя по категории.
         /// </summary>
         private async void UpdateItemsCollection()
         {
-            this.items.UpdateObservableCollection(await this.ApiClient.GetAllIngredientsAsync());
+            // Загружаем все ингредиенты и фильтруем по выбранной категории
+            List<IngredientDTO> allIngredients = await this.ApiClient.GetAllIngredientsAsync();
+            foreach (IngredientDTO item in allIngredients)
+            {
+                item.IdIngredientType = item.IngredientType == null ? null : item.IngredientType.Id;
+            }
+            List<IngredientDTO> filteredIngredients = this._selectedType != null
+                ? allIngredients.Where(i => i.IdIngredientType == this._selectedType.Id).OrderBy(i => i.Title).ToList()
+                : allIngredients.OrderBy(i => i.Title).ToList();
+
+            this.Items.UpdateObservableCollection(filteredIngredients);
         }
 
         #endregion
 
         #region Обработчики событий
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             this.UpdateItemsCollection();
 
             // Настраиваем CollectionView
             this.ccvItems.SetDisplayedFields("Title", "Description", "Fee");
-            this.ccvItems.SetItems(this.items);
+            this.ccvItems.SetItems(this.Items);
+
+            bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+            this.ccvItems.IsListItemEditButtonsVisible = isAdmin;
+            this.btnAdd.IsVisible = isAdmin;
+        }
+
+        /// <summary>
+        /// Обработчик выбора ингредиента.
+        /// </summary>
+        private async void OnIngredientSelected(IngredientDTO selectedIngredient)
+        {
+            try
+            {
+                if (this._currentOrder == null || this._currentProduct == null)
+                {
+                    await this.DisplayAlert("Ошибка", "Заказ или продукт не найден", "OK");
+                    return;
+                }
+
+                // Добавляем ингредиент в заказ
+                var orderIngredient = new OrderItemIngredientDTO
+                {
+                    IdOrderProduct = this._currentProduct.Id,
+                    IdIngredient = selectedIngredient.Id,
+                    Amount = 1 // По умолчанию 1
+                };
+
+                bool success = await this.ApiClient.AddIngredientToOrderAsync(this._currentOrder.Id, this._currentProduct.Id, orderIngredient);
+                if (!success)
+                {
+                    await this.DisplayAlert("Ошибка", "Не удалось добавить ингредиент", "OK");
+                    return;
+                }
+
+                await this.DisplayAlert("Успех", "Ингредиент добавлен в заказ", "OK");
+
+                // Возвращаемся в `PageProductCustomer`
+                var newSessionData = new SessionData
+                {
+                    CurrentUser = this.SessionData?.CurrentUser,
+                    Data = new { Order = this._currentOrder, Product = this._currentProduct }
+                };
+
+                await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayAlert("Ошибка", $"Не удалось обработать ингредиент: {ex.Message}", "OK");
+            }
         }
 
         /// <summary>
@@ -76,7 +149,6 @@ namespace Mobile_application.Pages
             {
                 _ = this.ShowError(ex);
             }
-
         }
 
         /// <summary>
@@ -84,7 +156,6 @@ namespace Mobile_application.Pages
         /// </summary>
         private async void OnDeleteIngredient(IngredientDTO ingredient)
         {
-            _ = this.DisplayAlert("OnDeleteIngredient", "Обработчик удаления", "OK");
             bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.Title}\"?", "Да", "Нет");
             if (!confirm)
             {
@@ -114,6 +185,10 @@ namespace Mobile_application.Pages
                 {
                     throw new InvalidOperationException(CommonLocal.Strings.ErrorMessages.SessionDataUserNotSet);
                 }
+                if (this._currentOrder != null)
+                {
+                    throw new InvalidOperationException("No order selected");
+                }
                 var newSessionData = new SessionData
                 {
                     CurrentUser = this.SessionData.CurrentUser,
@@ -126,7 +201,6 @@ namespace Mobile_application.Pages
                 _ = this.ShowError(ex);
             }
         }
-
 
         #endregion
     }

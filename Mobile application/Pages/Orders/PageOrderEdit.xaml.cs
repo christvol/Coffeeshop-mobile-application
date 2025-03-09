@@ -1,3 +1,4 @@
+using Common.Classes.DB;
 using Common.Classes.DTO;
 using Common.Classes.Session;
 
@@ -7,6 +8,7 @@ namespace Mobile_application.Pages
     {
         #region Поля
         private List<OrderStatusDTO> _orderStatuses = new();
+        private List<OrderDetailsView> _orderDetails = new();
         #endregion
 
         #region Свойства
@@ -37,7 +39,11 @@ namespace Mobile_application.Pages
         #endregion
 
         #region Методы
-        private void FillFields()
+
+        /// <summary>
+        /// Заполняет поля формы.
+        /// </summary>
+        private async void FillFields()
         {
             this.EntryCreationDate.Text = this.Order?.CreationDate?.ToString("dd.MM.yyyy HH:mm") ?? "";
             this.EntryCustomer.Text = this.Order?.IdCustomer?.ToString() ?? "";
@@ -45,10 +51,28 @@ namespace Mobile_application.Pages
 
             this.pStatus.ConfigurePicker<OrderStatusDTO>(this._orderStatuses, "Title", "Id", this.Order?.IdStatus);
 
-            this.ccvOrderItems.SetDisplayedFields("IdProduct", "Total");
-            this.ccvOrderItems.SetItems(this.Order.OrderItems);
+            await this.LoadOrderDetails();
+
+            this.ccvOrderItems.SetDisplayedFields("ProductTitle", "Total");
+            this.ccvOrderItems.SetItems(this._orderDetails);
         }
 
+        /// <summary>
+        /// Загружает детали заказа из `OrderDetailsView`.
+        /// </summary>
+        private async Task LoadOrderDetails()
+        {
+            if (this.Order == null)
+            {
+                return;
+            }
+
+            this._orderDetails = await this.ApiClient.GetOrderDetailsByIdAsync(this.Order.Id);
+        }
+
+        /// <summary>
+        /// Устанавливает доступность полей.
+        /// </summary>
         private void SetFieldAccessibility()
         {
             if (this.SessionData.Mode == WindowMode.Read)
@@ -64,6 +88,7 @@ namespace Mobile_application.Pages
         #endregion
 
         #region Обработчики событий
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -108,6 +133,7 @@ namespace Mobile_application.Pages
         {
             _ = await this.Navigation.PopAsync();
         }
+
         #endregion
     }
 }

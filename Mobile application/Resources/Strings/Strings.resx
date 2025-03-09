@@ -267,4 +267,10 @@
   <data name="LabelSelectedIngredients" xml:space="preserve">
     <value>Selelected ingredients</value>
   </data>
+  <data name="PageOrderCustomerTitle" xml:space="preserve">
+    <value>Page order customer</value>
+  </data>
+  <data name="ButtonPay" xml:space="preserve">
+    <value>Pay</value>
+  </data>
 </root>

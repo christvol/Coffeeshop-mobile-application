@@ -13,6 +13,7 @@
 
         <!-- Кнопка добавления нового типа ингредиента -->
         <Button Grid.Row="2"               
+                x:Name="btnAdd"
                 Clicked="OnAddIngredientTypeClicked"
                 Text="{x:Static res:Strings.ButtonAddIngredientType}"
                 Style="{StaticResource ButtonPrimary}"/>

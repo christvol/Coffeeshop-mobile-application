@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Mobile_application.Pages"
+             xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
+             xmlns:controls="clr-namespace:Mobile_application.Controls"
+             x:Class="Mobile_application.Pages.PageOrderCustomer"
+             Title="{x:Static res:Strings.PageOrderCustomerTitle}"
+BackgroundColor="{StaticResource MintGreen}">
+    <VerticalStackLayout>
+        <Label 
+            Text="Products in order"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <!-- Используем Items для передачи списка -->
+        <controls:CustomCollectionView x:Name="ccvProducts"/>
+        <!-- Кнопки -->
+        <VerticalStackLayout Spacing="10">
+            <Button x:Name="btnAddToCart"
+                 Text="{x:Static res:Strings.ButtonAddToCart}" 
+                 Style="{StaticResource ButtonPrimary}"
+                 Clicked="btnAddToCart_Clicked"/>
+            <Button x:Name="btnPay"
+                Text="{x:Static res:Strings.ButtonPay}" 
+                Style="{StaticResource ButtonPrimary}"
+                Clicked="btnPay_Clicked"/>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</pages:CustomContentPage>

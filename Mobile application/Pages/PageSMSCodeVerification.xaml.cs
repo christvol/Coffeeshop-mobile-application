@@ -145,9 +145,16 @@ public partial class PageSMSCodeVerification : CustomContentPage
                     Data = null, // Можно передать дополнительные данные, если нужно
                     Mode = WindowMode.Read
                 };
-
-                // Переход на соответствующую страницу в зависимости от типа пользователя
-                await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
+                bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
+                if (isAdmin)
+                {
+                    await this.Navigation.PushAsync(new PageEditMenu(this.SessionData));
+                }
+                else
+                {
+                    // Переход на соответствующую страницу в зависимости от типа пользователя
+                    await this.Navigation.PushAsync(new PageProductTypes(this.SessionData));
+                }
             }
             catch (Exception ex)
             {

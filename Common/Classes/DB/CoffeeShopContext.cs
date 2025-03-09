@@ -29,6 +29,8 @@ public partial class CoffeeShopContext : DbContext
 
     public virtual DbSet<IngredientsView> IngredientsView { get; set; }
 
+    public virtual DbSet<OrderDetailsView> OrderDetailsView { get; set; }
+
     public virtual DbSet<OrderItemIngredients> OrderItemIngredients { get; set; }
 
     public virtual DbSet<OrderItems> OrderItems { get; set; }
@@ -57,7 +59,7 @@ public partial class CoffeeShopContext : DbContext
     {
         modelBuilder.Entity<AllowedIngredients>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Allowed __3213E83F1FAFE019");
+            entity.HasKey(e => e.Id).HasName("PK__Allowed __3213E83F4065D9BE");
 
             entity.ToTable("Allowed ingredients");
 
@@ -69,17 +71,17 @@ public partial class CoffeeShopContext : DbContext
             entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.AllowedIngredients)
                 .HasForeignKey(d => d.IdIngredient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Allowed i__idIng__3631FF56");
+                .HasConstraintName("FK__Allowed i__idIng__6EEB59C5");
 
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.AllowedIngredients)
                 .HasForeignKey(d => d.IdProduct)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Allowed i__idPro__3726238F");
+                .HasConstraintName("FK__Allowed i__idPro__6FDF7DFE");
         });
 
         modelBuilder.Entity<CountryCodes>(entity =>
         {
-            entity.HasKey(e => e.CountryTicker).HasName("PK__CountryC__A0F54A7F58DFA02D");
+            entity.HasKey(e => e.CountryTicker).HasName("PK__CountryC__A0F54A7F8F3A8E58");
 
             entity.Property(e => e.CountryTicker)
                 .HasMaxLength(2)
@@ -100,7 +102,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<Images>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Images__3213E83F4BDE181B");
+            entity.HasKey(e => e.Id).HasName("PK__Images__3213E83F2B015DD9");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Data).HasColumnName("data");
@@ -117,7 +119,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<IngredientImages>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83FB2F9CA49");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F52CF09B6");
 
             entity.ToTable("Ingredient images");
 
@@ -130,16 +132,16 @@ public partial class CoffeeShopContext : DbContext
             entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.IngredientImages)
                 .HasForeignKey(d => d.IdImage)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Ingredien__idIma__335592AB");
+                .HasConstraintName("FK__Ingredien__idIma__6C0EED1A");
 
             entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.IngredientImages)
                 .HasForeignKey(d => d.IdIngredient)
-                .HasConstraintName("FK__Ingredien__idIng__32616E72");
+                .HasConstraintName("FK__Ingredien__idIng__6B1AC8E1");
         });
 
         modelBuilder.Entity<IngredientTypes>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F1E593267");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F71A1D0F5");
 
             entity.ToTable("Ingredient types");
 
@@ -151,7 +153,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<Ingredients>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F20C8C416");
+            entity.HasKey(e => e.Id).HasName("PK__Ingredie__3213E83F6333CABF");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description)
@@ -166,7 +168,7 @@ public partial class CoffeeShopContext : DbContext
             entity.HasOne(d => d.IdIngredientTypeNavigation).WithMany(p => p.Ingredients)
                 .HasForeignKey(d => d.IdIngredientType)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Ingredien__idIng__316D4A39");
+                .HasConstraintName("FK__Ingredien__idIng__6A26A4A8");
         });
 
         modelBuilder.Entity<IngredientsView>(entity =>
@@ -180,9 +182,25 @@ public partial class CoffeeShopContext : DbContext
             entity.Property(e => e.IngredientTypeTitle).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<OrderDetailsView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("OrderDetailsView");
+
+            entity.Property(e => e.CustomerFirstName).HasMaxLength(255);
+            entity.Property(e => e.CustomerLastName).HasMaxLength(255);
+            entity.Property(e => e.IngredientTitle).HasMaxLength(255);
+            entity.Property(e => e.OrderDate).HasColumnType("datetime");
+            entity.Property(e => e.OrderStatus)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.ProductTitle).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<OrderItemIngredients>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83F2005D273");
+            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83F32F29F9C");
 
             entity.ToTable("Order item ingredients");
 
@@ -193,17 +211,17 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdIngredientNavigation).WithMany(p => p.OrderItemIngredients)
                 .HasForeignKey(d => d.IdIngredient)
-                .HasConstraintName("FK__Order ite__idIng__3BEAD8AC");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__Order ite__idIng__74A4331B");
 
             entity.HasOne(d => d.IdOrderProductNavigation).WithMany(p => p.OrderItemIngredients)
                 .HasForeignKey(d => d.IdOrderProduct)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order ite__idOrd__3AF6B473");
+                .HasConstraintName("FK__Order ite__idOrd__73B00EE2");
         });
 
         modelBuilder.Entity<OrderItems>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83F8C0B06EC");
+            entity.HasKey(e => e.Id).HasName("PK__Order it__3213E83F9FE502E2");
 
             entity.ToTable("Order items");
 
@@ -213,17 +231,16 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdOrderNavigation).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.IdOrder)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order ite__idOrd__381A47C8");
+                .HasConstraintName("FK__Order ite__idOrd__70D3A237");
 
             entity.HasOne(d => d.IdOrderProductNavigation).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.IdOrderProduct)
-                .HasConstraintName("FK__Order ite__idOrd__390E6C01");
+                .HasConstraintName("FK__Order ite__idOrd__71C7C670");
         });
 
         modelBuilder.Entity<OrderProducts>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order pr__3213E83F850D3432");
+            entity.HasKey(e => e.Id).HasName("PK__Order pr__3213E83F747CF20B");
 
             entity.ToTable("Order products");
 
@@ -234,12 +251,12 @@ public partial class CoffeeShopContext : DbContext
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.OrderProducts)
                 .HasForeignKey(d => d.IdProduct)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Order pro__idPro__3A02903A");
+                .HasConstraintName("FK__Order pro__idPro__72BBEAA9");
         });
 
         modelBuilder.Entity<OrderStatuses>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__OrderSta__3213E83FC1680B44");
+            entity.HasKey(e => e.Id).HasName("PK__OrderSta__3213E83FEEE2E8E9");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Title)
@@ -250,7 +267,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<Orders>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Orders__3213E83FC1008CDD");
+            entity.HasKey(e => e.Id).HasName("PK__Orders__3213E83FA0078E90");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreationDate)
@@ -263,21 +280,21 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdCustomerNavigation).WithMany(p => p.OrdersIdCustomerNavigation)
                 .HasForeignKey(d => d.IdCustomer)
-                .HasConstraintName("FK__Orders__idCustom__2D9CB955");
+                .HasConstraintName("FK__Orders__idCustom__665613C4");
 
             entity.HasOne(d => d.IdEmployeeNavigation).WithMany(p => p.OrdersIdEmployeeNavigation)
                 .HasForeignKey(d => d.IdEmployee)
-                .HasConstraintName("FK__Orders__idEmploy__2E90DD8E");
+                .HasConstraintName("FK__Orders__idEmploy__674A37FD");
 
             entity.HasOne(d => d.IdStatusNavigation).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.IdStatus)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Orders__idStatus__2F8501C7");
+                .HasConstraintName("FK__Orders__idStatus__683E5C36");
         });
 
         modelBuilder.Entity<ProductImages>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83FA7F44F5A");
+            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F6F016143");
 
             entity.ToTable("Product images");
 
@@ -287,16 +304,16 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.IdImage)
-                .HasConstraintName("FK__Product i__idIma__353DDB1D");
+                .HasConstraintName("FK__Product i__idIma__6DF7358C");
 
             entity.HasOne(d => d.IdProductNavigation).WithMany(p => p.ProductImages)
                 .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK__Product i__idPro__3449B6E4");
+                .HasConstraintName("FK__Product i__idPro__6D031153");
         });
 
         modelBuilder.Entity<ProductTypes>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83F5CFD4E7D");
+            entity.HasKey(e => e.Id).HasName("PK__Product __3213E83FF965A203");
 
             entity.ToTable("Product types");
 
@@ -308,7 +325,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<Products>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83F201F85E5");
+            entity.HasKey(e => e.Id).HasName("PK__Products__3213E83F16433383");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description)
@@ -322,12 +339,12 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdProductTypeNavigation).WithMany(p => p.Products)
                 .HasForeignKey(d => d.IdProductType)
-                .HasConstraintName("FK__Products__idProd__30792600");
+                .HasConstraintName("FK__Products__idProd__6932806F");
         });
 
         modelBuilder.Entity<UserTypes>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User typ__3213E83F8A7799BF");
+            entity.HasKey(e => e.Id).HasName("PK__User typ__3213E83F6F33AAAD");
 
             entity.ToTable("User types");
 
@@ -339,7 +356,7 @@ public partial class CoffeeShopContext : DbContext
 
         modelBuilder.Entity<Users>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3213E83FF9310861");
+            entity.HasKey(e => e.Id).HasName("PK__Users__3213E83F50695660");
 
             entity.ToTable(tb => tb.HasTrigger("trg_ValidatePhoneNumber"));
 
@@ -368,12 +385,12 @@ public partial class CoffeeShopContext : DbContext
 
             entity.HasOne(d => d.IdImageNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdImage)
-                .HasConstraintName("FK__Users__idImage__2CA8951C");
+                .HasConstraintName("FK__Users__idImage__6561EF8B");
 
             entity.HasOne(d => d.IdUserTypeNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdUserType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Users__idUserTyp__2BB470E3");
+                .HasConstraintName("FK__Users__idUserTyp__646DCB52");
         });
 
         OnModelCreatingPartial(modelBuilder);

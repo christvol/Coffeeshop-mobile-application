@@ -214,6 +214,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Pay.
+        /// </summary>
+        internal static string ButtonPay {
+            get {
+                return ResourceManager.GetString("ButtonPay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Products.
         /// </summary>
         internal static string ButtonProducts {
@@ -390,6 +399,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string PageCustomerProductTitle {
             get {
                 return ResourceManager.GetString("PageCustomerProductTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Page order customer.
+        /// </summary>
+        internal static string PageOrderCustomerTitle {
+            get {
+                return ResourceManager.GetString("PageOrderCustomerTitle", resourceCulture);
             }
         }
         

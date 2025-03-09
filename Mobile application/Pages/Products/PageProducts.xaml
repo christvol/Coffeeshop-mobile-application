@@ -14,7 +14,8 @@
         <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
         <!-- Кнопка добавления нового продукта -->
-        <Button Grid.Row="2"               
+        <Button Grid.Row="2"   
+                x:Name="btnAdd"
                 Clicked="OnAddProductClicked"
                 Text="{x:Static res:Strings.ButtonAddProduct}"
                 Style="{StaticResource ButtonPrimary}"/>

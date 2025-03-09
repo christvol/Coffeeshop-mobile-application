@@ -122,6 +122,9 @@
 	  <MauiXaml Update="Pages\Orders\PageOrderEdit.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\PageOrderCustomer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\PageProductCustomer.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

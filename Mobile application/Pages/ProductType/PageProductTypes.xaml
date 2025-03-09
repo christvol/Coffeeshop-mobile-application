@@ -7,13 +7,14 @@
              x:Class="Mobile_application.Pages.PageProductTypes"
              Title="{x:Static res:Strings.TitlePageProductTypes}"
              BackgroundColor="{StaticResource MintGreen}">
-    
+
     <Grid RowDefinitions="Auto, * , Auto" Padding="10">
         <!-- Список категорий -->
         <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
         <!-- Кнопка добавления нового ингредиента -->
-        <Button Grid.Row="2"               
+        <Button Grid.Row="2"    
+            x:Name="btnAdd"
             Clicked="OnAddClicked"
             Text="{x:Static res:Strings.ButtonAddProductType}"
             Style="{StaticResource ButtonPrimary}"/>
