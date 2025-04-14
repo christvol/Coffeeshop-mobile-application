@@ -23,10 +23,12 @@
 
         <Label Text="{x:Static res:Strings.LabelSelectedIngredients}" 
                Style="{StaticResource LabelPrimary}" />
-
+        
+        
+        
         <!-- Используем Items для передачи списка -->
         <controls:CustomCollectionView x:Name="ccvProductIngredients"/>
-
+        
         <!-- Кнопки -->
         <VerticalStackLayout Spacing="10">
             <Button x:Name="btnSelectIngredient"

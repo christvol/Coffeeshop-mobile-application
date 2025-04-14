@@ -79,17 +79,11 @@ namespace Mobile_application.Pages
                     throw new InvalidOperationException(CommonLocal.Strings.ErrorMessages.SessionDataUserNotSet);
                 }
 
-                bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
-                if (isAdmin)
-                {
-                    return; // Админы не должны переходить
-                }
-
-                if (this._currentOrder == null || this._currentProduct == null)
-                {
-                    await this.DisplayAlert("Ошибка", "Заказ или продукт не найден", "OK");
-                    return;
-                }
+                //if (this._currentOrder == null || this._currentProduct == null)
+                //{
+                //    await this.DisplayAlert("Ошибка", "Заказ или продукт не найден", "OK");
+                //    return;
+                //}
 
                 // Получаем все ингредиенты и сортируем по Title
                 List<IngredientDTO> allIngredients = await this.ApiClient.GetAllIngredientsAsync();

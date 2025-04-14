@@ -42,7 +42,7 @@ public partial class PageLogin : CustomContentPage
             return;
         }
 
-        var selectedCountry = this._countries.FirstOrDefault(c =>
+        CountryCodes? selectedCountry = this._countries.FirstOrDefault(c =>
             c.CountryName.Equals(countryName, StringComparison.OrdinalIgnoreCase));
 
         if (selectedCountry != null)
@@ -234,7 +234,7 @@ public partial class PageLogin : CustomContentPage
             if (App.IsDebugMode)
             {
                 //his.entryPhone.Text = "9111789930";
-                this.entryPhone.Text = "2345678930";
+                this.entryPhone.Text = "0987654321";
             }
             this.btnLogin.IsEnabled = this.ValidatePhone(this.entryPhone.Text);
         }
