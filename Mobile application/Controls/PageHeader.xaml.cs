@@ -9,9 +9,8 @@ namespace Mobile_application.Controls
         {
             this.InitializeComponent();
 
-            // Устанавливаем значения по умолчанию
+            // Устанавливаем логотип (если потребуется)
             this.CafeLogoSource = "logo.png";
-            this.UserAvatarSource = "avatarDefault.png";
 
             // Привязываем контекст данных
             this.BindingContext = this;
@@ -19,7 +18,6 @@ namespace Mobile_application.Controls
 
         #region Bindable Properties
 
-        // Свойство для источника логотипа
         public static readonly BindableProperty CafeLogoSourceProperty =
             BindableProperty.Create(
                 nameof(CafeLogoSource),
@@ -33,21 +31,6 @@ namespace Mobile_application.Controls
             set => this.SetValue(CafeLogoSourceProperty, value);
         }
 
-        // Свойство для источника аватара пользователя
-        public static readonly BindableProperty UserAvatarSourceProperty =
-            BindableProperty.Create(
-                nameof(UserAvatarSource),
-                typeof(string),
-                typeof(PageHeader),
-                "avatarDefault.png");
-
-        public string UserAvatarSource
-        {
-            get => (string)this.GetValue(UserAvatarSourceProperty);
-            set => this.SetValue(UserAvatarSourceProperty, value);
-        }
-
-        // Свойство для передачи SessionData
         public static readonly BindableProperty SessionDataProperty =
             BindableProperty.Create(
                 nameof(SessionData),
@@ -65,13 +48,16 @@ namespace Mobile_application.Controls
 
         private void btnAvatar_Clicked(object sender, EventArgs e)
         {
-            // Проверяем наличие SessionData
             if (this.SessionData != null)
             {
-                // Переход на страницу профиля с передачей SessionData
                 this.SessionData.Mode = WindowMode.Update;
                 _ = Application.Current.MainPage.Navigation.PushAsync(new PageUserProfile(this.SessionData));
             }
+        }
+
+        private void btnCart_Clicked(object sender, EventArgs e)
+        {
+            // TODO: перейти на страницу корзины
         }
     }
 }

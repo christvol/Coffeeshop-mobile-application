@@ -3,34 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mobile_application.Controls.PageHeader"
              BackgroundColor="#FFF8E1">
-    <Grid Padding="10" ColumnDefinitions="Auto,*,Auto"
+
+    <Grid Padding="10" ColumnDefinitions="Auto,*,Auto,Auto"
           BackgroundColor="{StaticResource Primary}">
+
         <!-- Логотип кафе -->
-        <Image Source="{Binding CafeLogoSource}" HeightRequest="40" WidthRequest="120" VerticalOptions="Center" />
+        <Image Source="{Binding CafeLogoSource}"
+               HeightRequest="40"
+               WidthRequest="120"
+               VerticalOptions="Center" />
 
-        <!-- Пустой прямоугольник -->
-        <BoxView BackgroundColor="Transparent" Grid.Column="1" />
+        <!-- Пустое пространство -->
+        <BoxView BackgroundColor="Transparent"
+                 Grid.Column="1" />
 
-        <!-- Аватар пользователя -->
-        <Frame HeightRequest="40"
-               WidthRequest="40"
-               CornerRadius="20"
-               BorderColor="{StaticResource PrimaryDark}"          
-               Padding="0"
-               IsClippedToBounds="True"
-               VerticalOptions="Center"              
-               Grid.Column="2">
-            <!--<Image Source="{Binding UserAvatarSource}"/>-->
+        <!-- Кнопка корзины -->
+        <Button Grid.Column="2"
+                x:Name="btnCart"
+                Style="{StaticResource IconButtonStyle}"
+                ImageSource="shopping_cart.png"
+                Clicked="btnCart_Clicked" />
 
-          
-            <Button 
+        <!-- Кнопка аватара -->
+        <Button Grid.Column="3"
                 x:Name="btnAvatar"
-                HeightRequest="40"
-                WidthRequest="40"
-                BackgroundColor="Transparent"
-                    BorderWidth="0"
-                    ImageSource="{Binding UserAvatarSource}"              
-                    Clicked="btnAvatar_Clicked"/>
-        </Frame>
+                Style="{StaticResource IconButtonStyle}"
+                ImageSource="person.png"
+                Clicked="btnAvatar_Clicked" />
+
     </Grid>
 </ContentView>

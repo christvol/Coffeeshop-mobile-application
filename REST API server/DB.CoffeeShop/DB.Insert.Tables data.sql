@@ -69,55 +69,58 @@ INSERT INTO [Allowed ingredients] (idIngredient, idProduct, allowedNumber) VALUE
 (3, 3, 1); -- Vanilla Syrup, Croissant
 GO
 
--- Insert into OrderStatuses (добавление статусов для заказов)
+-- Insert into OrderStatuses
 INSERT INTO [OrderStatuses] (title) VALUES
-('Pending'), -- заказ в ожидании
-('In Progress'), -- заказ в процессе
-('Completed'), -- заказ завершен
-('Cancelled'); -- заказ отменен
+('Pending'),
+('In Progress'),
+('Completed'),
+('Cancelled');
 GO
 
--- Insert into Orders
--- Добавляем статус заказа (например, статус "Pending")
-INSERT INTO [Orders] (creationDate, idCustomer, idEmployee, idStatus) VALUES
-(GETDATE(), 1, 2, 3), -- idCustomer: John Doe, idEmployee: Jane Smith, статус: Completed
-(GETDATE(), 2, 3, 3); -- idCustomer: Jane Smith, idEmployee: Michael Brown, статус: Completed
+-- Insert into PaymentStatuses
+INSERT INTO [PaymentStatuses] (title) VALUES
+('Not Paid'),
+('Paid'),
+('Refunded');
 GO
 
--- Insert into Order products (бывшая таблица OrderProducts)
--- Указываем, какие товары входят в заказ
+-- Insert into Orders — теперь обязательно указывать idStatusPayment
+INSERT INTO [Orders] (creationDate, idCustomer, idEmployee, idStatus, idStatusPayment) VALUES
+(GETDATE(), 1, 2, 3, 2), -- Completed, Paid
+(GETDATE(), 2, 3, 3, 2); -- Completed, Paid
+GO
+
+-- Insert into Order products
 INSERT INTO [Order products] (idProduct, total) VALUES
-(1, 5.00), -- OrderProduct 1: Espresso (2шт)
-(3, 3.00), -- OrderProduct 2: Croissant (1шт)
-(2, 1.50); -- OrderProduct 3: Green Tea (1шт)
+(1, 5.00), -- 2 × Espresso
+(3, 3.00), -- 1 × Croissant
+(2, 1.50); -- 1 × Green Tea
 GO
 
--- Insert into Order items (бывшая таблица OrderItems)
--- Связываем заказ с элементами заказа
+-- Insert into Order items
 INSERT INTO [Order items] (idOrder, idOrderProduct) VALUES
 (1, 1),
 (1, 2),
 (2, 3);
 GO
 
--- Insert into Order item ingredients (бывшая таблица OrderItemIngredients)
--- Указываем, какие ингредиенты входят в состав товаров заказа
+-- Insert into Order item ingredients
 INSERT INTO [Order item ingredients] (idOrderProduct, idIngredient, amount) VALUES
-(1, 1, 1), -- OrderProduct 1: Whole Milk
-(1, 2, 2), -- OrderProduct 1: Brown Sugar
-(3, 3, 1); -- OrderProduct 3: Vanilla Syrup
+(1, 1, 1), -- Whole Milk
+(1, 2, 2), -- Brown Sugar
+(3, 3, 1); -- Vanilla Syrup
 GO
 
 -- Insert into Product images
 INSERT INTO [Product images] (idProduct, idImage) VALUES
-(1, 1), -- Espresso, Espresso Image
-(2, 2), -- Green Tea, Green Tea Image
-(3, 3); -- Croissant, Croissant Image
+(1, 1),
+(2, 2),
+(3, 3);
 GO
 
 -- Insert into Ingredient images
 INSERT INTO [Ingredient images] (idIngredient, idImage) VALUES
-(1, 1), -- Whole Milk, Espresso Image
-(2, 2), -- Brown Sugar, Green Tea Image
-(3, 3); -- Vanilla Syrup, Croissant Image
+(1, 1),
+(2, 2),
+(3, 3);
 GO

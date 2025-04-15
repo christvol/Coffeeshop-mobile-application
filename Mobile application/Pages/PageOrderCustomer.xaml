@@ -8,6 +8,7 @@
              Title="{x:Static res:Strings.PageOrderCustomerTitle}"
 BackgroundColor="{StaticResource MintGreen}">
     <VerticalStackLayout>
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
         <Label 
             Text="Products in order"
             VerticalOptions="Center" 

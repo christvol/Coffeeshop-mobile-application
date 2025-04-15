@@ -1,0 +1,35 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mobile_application.Views.IngredientSelectorView">
+
+    <VerticalStackLayout x:Name="LayoutRoot" Padding="10">
+        <!-- Выбор типа -->
+        <VerticalStackLayout x:Name="TypeSection">
+            <Label Text="Выберите тип ингредиента:" FontAttributes="Bold" Margin="0,0,0,5"/>
+            <CollectionView x:Name="cvTypes" SelectionMode="Single"
+                            SelectionChanged="cvTypes_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Title}" Padding="5"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <!-- Выбор ингредиента -->
+        <VerticalStackLayout x:Name="IngredientSection" IsVisible="False">
+            <Label Text="Выберите ингредиент:" FontAttributes="Bold" Margin="20,20,0,5"/>
+            <CollectionView x:Name="cvIngredients" SelectionMode="Single"
+                            SelectionChanged="cvIngredients_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="5">
+                            <Label Text="{Binding Title}"/>
+                            <Label Text="{Binding Description}" FontSize="Small" TextColor="Gray"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

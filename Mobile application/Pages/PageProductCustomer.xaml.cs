@@ -1,19 +1,23 @@
-using Common.Classes.DTO;
+п»їusing Common.Classes.DTO;
 using Common.Classes.Session;
 using Mobile_application.Classes.Utils;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Mobile_application.Pages;
 
-public partial class PageProductCustomer : CustomContentPage
+public partial class PageProductCustomer : CustomContentPage, INotifyPropertyChanged
 {
-    #region Поля
-    private ProductDTO? _product;
+    #region РџРѕР»СЏ
+    private ProductDTO? _currentProduct;
     private OrderDTO? _currentOrder;
     public ObservableCollection<Common.Classes.DB.OrderDetailsView> ProductIngredients { get; set; } = new();
+
+    private ObservableCollection<IngredientTypeDTO> IngredientTypes { get; set; } = new();
+
     #endregion
 
-    #region Конструкторы/Деструкторы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/Р”РµСЃС‚СЂСѓРєС‚РѕСЂС‹
     public PageProductCustomer(SessionData sessionData) : base(sessionData)
     {
         this.InitializeComponent();
@@ -21,16 +25,16 @@ public partial class PageProductCustomer : CustomContentPage
     }
     #endregion
 
-    #region Методы
+    #region РњРµС‚РѕРґС‹
 
     /// <summary>
-    /// Проверка существующего заказа и добавление продукта
+    /// РџСЂРѕРІРµСЂРєР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ Р·Р°РєР°Р·Р° Рё РґРѕР±Р°РІР»РµРЅРёРµ РїСЂРѕРґСѓРєС‚Р°
     /// </summary>
     private async Task HandleOrder()
     {
         if (this.SessionData?.CurrentUser == null)
         {
-            await this.DisplayAlert("Ошибка", "Не удалось определить пользователя", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ", "OK");
             return;
         }
 
@@ -39,7 +43,7 @@ public partial class PageProductCustomer : CustomContentPage
 
         if (pendingStatus == null)
         {
-            await this.DisplayAlert("Ошибка", "Не удалось получить статус 'Pending'", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ СЃС‚Р°С‚СѓСЃ 'Pending'", "OK");
             return;
         }
 
@@ -59,13 +63,13 @@ public partial class PageProductCustomer : CustomContentPage
     }
 
     /// <summary>
-    /// Создание нового заказа с продуктом
+    /// РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ Р·Р°РєР°Р·Р° СЃ РїСЂРѕРґСѓРєС‚РѕРј
     /// </summary>
     private async Task CreateNewOrder(int userId, int statusId)
     {
-        if (this._product == null)
+        if (this._currentProduct == null)
         {
-            await this.DisplayAlert("Ошибка", "Выбранный продукт не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р’С‹Р±СЂР°РЅРЅС‹Р№ РїСЂРѕРґСѓРєС‚ РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
@@ -78,8 +82,8 @@ public partial class PageProductCustomer : CustomContentPage
             {
                 new()
                 {
-                    IdProduct = this._product.Id,
-                    Total = this._product.Fee,
+                    IdProduct = this._currentProduct.Id,
+                    Total = this._currentProduct.Fee,
                     Ingredients = new List<OrderItemIngredientDTO>()
                 }
             }
@@ -89,28 +93,28 @@ public partial class PageProductCustomer : CustomContentPage
 
         if (this._currentOrder != null)
         {
-            await this.DisplayAlert("Успех", "Заказ успешно создан и продукт добавлен", "OK");
+            await this.DisplayAlert("РЈСЃРїРµС…", "Р—Р°РєР°Р· СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ Рё РїСЂРѕРґСѓРєС‚ РґРѕР±Р°РІР»РµРЅ", "OK");
         }
         else
         {
-            await this.DisplayAlert("Ошибка", "Не удалось создать заказ", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ Р·Р°РєР°Р·", "OK");
         }
     }
 
     /// <summary>
-    /// Добавление продукта в существующий заказ
+    /// Р”РѕР±Р°РІР»РµРЅРёРµ РїСЂРѕРґСѓРєС‚Р° РІ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ Р·Р°РєР°Р·
     /// </summary>
     private async Task AddProductToExistingOrder(int orderId)
     {
-        if (this._product == null)
+        if (this._currentProduct == null)
         {
-            await this.DisplayAlert("Ошибка", "Выбранный продукт не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р’С‹Р±СЂР°РЅРЅС‹Р№ РїСЂРѕРґСѓРєС‚ РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
         var newProduct = new OrderProductDTO
         {
-            IdProduct = this._product.Id,
+            IdProduct = this._currentProduct.Id,
             Quantity = 1
         };
 
@@ -118,16 +122,16 @@ public partial class PageProductCustomer : CustomContentPage
 
         if (success)
         {
-            await this.DisplayAlert("Успех", "Продукт добавлен в заказ", "OK");
+            await this.DisplayAlert("РЈСЃРїРµС…", "РџСЂРѕРґСѓРєС‚ РґРѕР±Р°РІР»РµРЅ РІ Р·Р°РєР°Р·", "OK");
         }
         else
         {
-            await this.DisplayAlert("Ошибка", "Не удалось добавить продукт в заказ", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ РїСЂРѕРґСѓРєС‚ РІ Р·Р°РєР°Р·", "OK");
         }
     }
 
     /// <summary>
-    /// Инициализация данных страницы
+    /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґР°РЅРЅС‹С… СЃС‚СЂР°РЅРёС†С‹
     /// </summary>
     private async void InitializeData()
     {
@@ -136,16 +140,19 @@ public partial class PageProductCustomer : CustomContentPage
             dataObject.GetType().GetProperty("Product") != null)
         {
             this._currentOrder = dataObject.GetType().GetProperty("Order")?.GetValue(dataObject) as OrderDTO;
-            this._product = dataObject.GetType().GetProperty("Product")?.GetValue(dataObject) as ProductDTO;
+            this._currentProduct = dataObject.GetType().GetProperty("Product")?.GetValue(dataObject) as ProductDTO;
         }
 
-        if (this._product == null)
+        if (this._currentProduct == null)
         {
-            await this.DisplayAlert("Ошибка", "Продукт не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РџСЂРѕРґСѓРєС‚ РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
         this.BindingContext = this;
+
+        await this.LoadIngredientTypes();
+
 
         if (this._currentOrder == null)
         {
@@ -156,99 +163,113 @@ public partial class PageProductCustomer : CustomContentPage
     }
 
     /// <summary>
-    /// Загружает ингредиенты для текущего продукта в заказе.
+    /// Р—Р°РіСЂСѓР¶Р°РµС‚ РёРЅРіСЂРµРґРёРµРЅС‚С‹ РґР»СЏ С‚РµРєСѓС‰РµРіРѕ РїСЂРѕРґСѓРєС‚Р° РІ Р·Р°РєР°Р·Рµ.
     /// </summary>
     private async Task LoadProductIngredients()
     {
-        if (this._currentOrder == null || this._product == null)
+        if (this._currentOrder == null || this._currentProduct == null)
         {
             return;
         }
 
-        // Получаем детали заказа
+        // РџРѕР»СѓС‡Р°РµРј РґРµС‚Р°Р»Рё Р·Р°РєР°Р·Р°
         List<Common.Classes.DB.OrderDetailsView> orderDetails = await this.ApiClient.GetOrderDetailsByIdAsync(this._currentOrder.Id);
 
-        // Фильтруем только ингредиенты, относящиеся к текущему продукту
+        // Р¤РёР»СЊС‚СЂСѓРµРј С‚РѕР»СЊРєРѕ РёРЅРіСЂРµРґРёРµРЅС‚С‹, РѕС‚РЅРѕСЃСЏС‰РёРµСЃСЏ Рє С‚РµРєСѓС‰РµРјСѓ РїСЂРѕРґСѓРєС‚Сѓ
         var productIngredients = orderDetails
-            .Where(d => d.ProductId == this._product.Id && d.IngredientId != null)
+            .Where(d => d.ProductId == this._currentProduct.Id && d.IngredientId != null)
             .ToList();
 
         this.ProductIngredients.UpdateObservableCollection(productIngredients);
+        // в¬‡пёЏ РЈРІРµРґРѕРјР»СЏРµРј UI, С‡С‚Рѕ СЃСѓРјРјР° РёР·РјРµРЅРёР»Р°СЃСЊ
+        this.OnPropertyChanged(nameof(this.OrderTotal));
 
-        // Настраиваем CustomCollectionView
-        this.ccvProductIngredients.SetDisplayedFields("IngredientTitle", "IngredientQuantity");
+        // РќР°СЃС‚СЂР°РёРІР°РµРј CustomCollectionView
+        this.ccvProductIngredients.SetDisplayedFields("IngredientTitle", "IngredientFee");
         this.ccvProductIngredients.SetItems(this.ProductIngredients);
         this.ccvProductIngredients.SetDeleteCommand<Common.Classes.DB.OrderDetailsView>(this.OnIngredientDelete);
+
+        this.OnPropertyChanged(nameof(this.OrderTotal)); // в¬…пёЏ Р·РґРµСЃСЊ РїРµСЂРµСЃС‡РёС‚С‹РІР°РµРј!
     }
 
+    private async Task LoadIngredientTypes()
+    {
+        List<IngredientTypeDTO> types = await this.ApiClient.GetAllIngredientTypesAsync();
+        this.IngredientTypes.UpdateObservableCollection(types);
+        this.cvIngredientTypes.SetItems(this.IngredientTypes);
+        this.cvIngredientTypes.SetDisplayedFields("Title");
+        this.cvIngredientTypes.SetItemSelectedCommand<IngredientTypeDTO>(this.OnIngredientTypeSelected);
+    }
+
+
     /// <summary>
-    /// Удаляет ингредиент из заказа
+    /// РЈРґР°Р»СЏРµС‚ РёРЅРіСЂРµРґРёРµРЅС‚ РёР· Р·Р°РєР°Р·Р°
     /// </summary>
     private async void OnIngredientDelete(Common.Classes.DB.OrderDetailsView ingredient)
     {
-        if (this._currentOrder == null || this._product == null)
+        if (this._currentOrder == null || this._currentProduct == null)
         {
-            await this.DisplayAlert("Ошибка", "Нет данных для удаления", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµС‚ РґР°РЅРЅС‹С… РґР»СЏ СѓРґР°Р»РµРЅРёСЏ", "OK");
             return;
         }
 
-        bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить ингредиент \"{ingredient.IngredientTitle}\" из заказа?", "Да", "Нет");
+        bool confirm = await this.DisplayAlert("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", $"РЈРґР°Р»РёС‚СЊ РёРЅРіСЂРµРґРёРµРЅС‚ \"{ingredient.IngredientTitle}\" РёР· Р·Р°РєР°Р·Р°?", "Р”Р°", "РќРµС‚");
         if (!confirm)
         {
             return;
         }
 
-        bool success = await this.ApiClient.RemoveIngredientFromOrderAsync(this._currentOrder.Id, this._product.Id, ingredient.IngredientId.Value);
+        bool success = await this.ApiClient.RemoveIngredientFromOrderAsync(this._currentOrder.Id, this._currentProduct.Id, ingredient.IngredientId.Value);
 
         if (success)
         {
-            await this.DisplayAlert("Успех", "Ингредиент удален из заказа", "OK");
+            await this.DisplayAlert("РЈСЃРїРµС…", "РРЅРіСЂРµРґРёРµРЅС‚ СѓРґР°Р»РµРЅ РёР· Р·Р°РєР°Р·Р°", "OK");
             await this.LoadProductIngredients();
         }
         else
         {
-            await this.DisplayAlert("Ошибка", "Не удалось удалить ингредиент", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ РёРЅРіСЂРµРґРёРµРЅС‚", "OK");
         }
     }
 
     #endregion
 
-    #region Обработчики событий
+    #region РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
 
     /// <summary>
-    /// Обработчик нажатия кнопки "Выбрать ингредиент"
+    /// РћР±СЂР°Р±РѕС‚С‡РёРє РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё "Р’С‹Р±СЂР°С‚СЊ РёРЅРіСЂРµРґРёРµРЅС‚"
     /// </summary>
     private async void btnSelectIngredient_Clicked(object sender, EventArgs e)
     {
         if (this._currentOrder == null)
         {
-            await this.DisplayAlert("Ошибка", "Заказ не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
-        if (this._product == null)
+        if (this._currentProduct == null)
         {
-            await this.DisplayAlert("Ошибка", "Продукт не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РџСЂРѕРґСѓРєС‚ РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
         var newSessionData = new SessionData
         {
             CurrentUser = this.SessionData?.CurrentUser,
-            Data = new { Order = this._currentOrder, Product = this._product }
+            Data = new { Order = this._currentOrder, Product = this._currentProduct }
         };
 
         await this.Navigation.PushAsync(new PageIngredientTypes(newSessionData));
     }
 
     /// <summary>
-    /// Обработчик нажатия кнопки "Добавить в корзину"
+    /// РћР±СЂР°Р±РѕС‚С‡РёРє РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё "Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕСЂР·РёРЅСѓ"
     /// </summary>
     private async void btnAddToCart_Clicked(object sender, EventArgs e)
     {
         if (this._currentOrder == null)
         {
-            await this.DisplayAlert("Ошибка", "Заказ не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
@@ -261,15 +282,86 @@ public partial class PageProductCustomer : CustomContentPage
         await this.Navigation.PushAsync(new PageOrderCustomer(newSessionData));
     }
 
+    private async void OnIngredientTypeSelected(IngredientTypeDTO selectedType)
+    {
+        if (this._currentOrder == null)
+        {
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ", "OK");
+            return;
+        }
+
+        List<IngredientDTO> allIngredients = await this.ApiClient.GetAllIngredientsAsync();
+        var filtered = allIngredients
+            .Where(i => i.IdIngredientType == selectedType.Id)
+            .OrderBy(i => i.Title)
+            .ToList();
+
+        var newSessionData = new SessionData
+        {
+            CurrentUser = this.SessionData?.CurrentUser,
+            Data = new
+            {
+                Order = this._currentOrder,
+                Product = this._currentProduct,
+                Ingredients = filtered,
+                SelectedType = selectedType
+            }
+        };
+
+        await this.Navigation.PushAsync(new PageIngredients(newSessionData));
+    }
 
     #endregion
 
-    #region Свойства
-
-    public string ProductTitle => this._product?.Title ?? "Без названия";
-    public string ProductDescription => this._product?.Description ?? "Описание отсутствует";
+    #region РЎРІРѕР№СЃС‚РІР°
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string propertyName)
+    {
+        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    public string ProductTitle => this._currentProduct?.Title ?? "Р‘РµР· РЅР°Р·РІР°РЅРёСЏ";
+    public string ProductDescription => this._currentProduct?.Description ?? "РћРїРёСЃР°РЅРёРµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚";
     public string ProductImage => "coffedefaultpreview.png";
-    public string ProductFee => this._product != null ? $"{this._product.Fee:C}" : "Цена не указана";
+    public string OrderTotal
+    {
+        get
+        {
+            if (this._currentOrder == null)
+            {
+                return "РЎСѓРјРјР° РЅРµ РѕРїСЂРµРґРµР»РµРЅР°";
+            }
+
+            float total = 0;
+
+            // Р“СЂСѓРїРїРёСЂСѓРµРј РїСЂРѕРґСѓРєС‚С‹ вЂ” РѕРґРёРЅ СЂР°Р· СѓС‡РёС‚С‹РІР°РµРј РєР°Р¶РґС‹Р№
+            IEnumerable<int> productIds = this.ProductIngredients
+                .Where(i => i.ProductId != null)
+                .Select(i => i.ProductId.Value)
+                .Distinct();
+
+            foreach (int productId in productIds)
+            {
+                Common.Classes.DB.OrderDetailsView? product = this.ProductIngredients.FirstOrDefault(i => i.ProductId == productId);
+                if (product != null)
+                {
+                    total += product.ProductPrice;
+                }
+            }
+
+            // Р”РѕР±Р°РІР»СЏРµРј СЃС‚РѕРёРјРѕСЃС‚СЊ РёРЅРіСЂРµРґРёРµРЅС‚РѕРІ
+            foreach (Common.Classes.DB.OrderDetailsView ing in this.ProductIngredients)
+            {
+                if (ing.IngredientFee != null && ing.IngredientQuantity != null)
+                {
+                    total += ing.IngredientFee.Value * ing.IngredientQuantity.Value;
+                }
+            }
+
+            return $"{total:C}";
+        }
+    }
+
+
 
     #endregion
 }

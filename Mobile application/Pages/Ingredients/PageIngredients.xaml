@@ -7,7 +7,10 @@
              x:Class="Mobile_application.Pages.PageIngredients"
              Title="{x:Static res:Strings.TitlePageIngredients}"
              BackgroundColor="{StaticResource MintGreen}">
-    <Grid RowDefinitions="Auto, * , Auto" Padding="10">
+    <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
+        <!-- Заголовок -->
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
+
         <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
         <!-- Кнопка добавления нового ингредиента -->
@@ -16,5 +19,5 @@
                 Clicked="OnAddIngredientClicked"
                 Text="{x:Static res:Strings.ButtonAddIngredient}"
                 Style="{StaticResource ButtonPrimary}"/>
-    </Grid>
+    </VerticalStackLayout>
 </pages:CustomContentPage>

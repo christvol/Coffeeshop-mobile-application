@@ -17,6 +17,8 @@ public partial class OrderDetailsView
 
     public string? OrderStatus { get; set; }
 
+    public string PaymentStatus { get; set; } = null!;
+
     public int OrderItemId { get; set; }
 
     public int OrderProductId { get; set; }
@@ -32,6 +34,10 @@ public partial class OrderDetailsView
     public int? IngredientId { get; set; }
 
     public string? IngredientTitle { get; set; }
+
+    public int? IngredientTypeId { get; set; }
+
+    public float? IngredientFee { get; set; }
 
     public int? IngredientQuantity { get; set; }
 }

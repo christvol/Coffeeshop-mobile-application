@@ -7,35 +7,45 @@
                          x:Class="Mobile_application.Pages.PageProductCustomer"
                          Title="{x:Static res:Strings.PageCustomerProductTitle}"
                          BackgroundColor="{StaticResource MintGreen}">
-    <VerticalStackLayout Padding="10">
+
+    <!-- Заголовок -->
+
+
+    <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
         <Image Source="{Binding ProductImage}" 
                HeightRequest="256" 
                Aspect="AspectFill" />
 
         <Label Text="{Binding ProductTitle}" 
-               Style="{StaticResource LabelPrimary}" />
+               Style="{StaticResource LabelPrimary}"
+               FontSize="20"
+               FontAttributes="Bold"/>
 
         <Label Text="{Binding ProductDescription}" 
-               Style="{StaticResource LabelPrimary}" />
+               Style="{StaticResource LabelPrimary}"
+               FontSize="12"/>
 
-        <Label Text="{Binding ProductFee}" 
-               FontSize="Medium" />
+        <Label Text="{x:Static res:Strings.LabelSelectIngedientToAdd}" 
+        Style="{StaticResource LabelListHeader}"/>
+        <controls:CustomCollectionView x:Name="cvIngredientTypes"  IsListItemEditButtonsVisible="False"/>
 
         <Label Text="{x:Static res:Strings.LabelSelectedIngredients}" 
-               Style="{StaticResource LabelPrimary}" />
-        
-        
-        
+               Style="{StaticResource LabelListHeader}" />
         <!-- Используем Items для передачи списка -->
-        <controls:CustomCollectionView x:Name="ccvProductIngredients"/>
-        
+        <controls:CustomCollectionView x:Name="ccvProductIngredients" IsListItemEditButtonsVisible="False"/>
+
+        <Label Text="{x:Static res:Strings.LabelOrderTotal}" 
+               FontSize="20"
+               FontAttributes="Bold"
+        Style="{StaticResource LabelPrimary}"/>
+
+        <Label Text="{Binding OrderTotal}"
+               Style="{StaticResource LabelPrimary}"
+               FontSize="20"/>
         <!-- Кнопки -->
         <VerticalStackLayout Spacing="10">
-            <Button x:Name="btnSelectIngredient"
-                    Text="{x:Static res:Strings.ButtonSelectIngredient}" 
-                    Style="{StaticResource ButtonPrimary}"
-                    Clicked="btnSelectIngredient_Clicked"/>
-
+           
             <Button x:Name="btnAddToCart"
                     Text="{x:Static res:Strings.ButtonAddToCart}" 
                     Style="{StaticResource ButtonPrimary}"

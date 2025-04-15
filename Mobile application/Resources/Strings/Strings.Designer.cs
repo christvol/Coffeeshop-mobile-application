@@ -340,6 +340,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Total:.
+        /// </summary>
+        internal static string LabelOrderTotal {
+            get {
+                return ResourceManager.GetString("LabelOrderTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Your phone number.
         /// </summary>
         internal static string LabelPhoneNumber {
@@ -363,6 +372,15 @@ namespace Mobile_application.Resources.Strings {
         internal static string LabelSelectedIngredients {
             get {
                 return ResourceManager.GetString("LabelSelectedIngredients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Select ingredient.
+        /// </summary>
+        internal static string LabelSelectIngedientToAdd {
+            get {
+                return ResourceManager.GetString("LabelSelectIngedientToAdd", resourceCulture);
             }
         }
         

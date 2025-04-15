@@ -139,5 +139,18 @@ namespace Mobile_application.Pages
 
 
         #endregion
+
+        #region Обработчики событий
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Попробуем найти PageHeader и установить ему SessionData
+            if (this.FindByName("PageHeader") is Controls.PageHeader header)
+            {
+                header.SessionData = this.SessionData;
+            }
+        }
+        #endregion
     }
 }

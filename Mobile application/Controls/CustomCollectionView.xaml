@@ -8,10 +8,7 @@
                         SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="10" 
-                           CornerRadius="10" 
-                           HasShadow="True"
-                           BackgroundColor="{StaticResource Tertiary}">
+                    <Frame Style="{StaticResource CollectionItemFrameStyle}">
 
                         <StackLayout Orientation="Vertical" 
                                      VerticalOptions="CenterAndExpand"

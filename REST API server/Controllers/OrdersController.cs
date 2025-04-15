@@ -142,6 +142,7 @@ namespace REST_API_SERVER.Controllers
                 IdCustomer = orderDto.IdCustomer,
                 IdEmployee = orderDto.IdEmployee,
                 IdStatus = orderDto.IdStatus,
+                IdStatusPayment = orderDto.IdStatusPayment,
                 OrderItems = orderDto.OrderItems.Select(oi => new OrderItems
                 {
                     IdOrderProductNavigation = new OrderProducts
@@ -166,6 +167,7 @@ namespace REST_API_SERVER.Controllers
                 IdCustomer = order.IdCustomer,
                 IdEmployee = order.IdEmployee,
                 IdStatus = order.IdStatus,
+                IdStatusPayment = order.IdStatusPayment,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemsDTO
                 {
                     IdProduct = oi.IdOrderProductNavigation.IdProduct,

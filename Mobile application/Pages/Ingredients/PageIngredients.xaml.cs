@@ -94,15 +94,41 @@ namespace Mobile_application.Pages
                     return;
                 }
 
-                // Добавляем ингредиент в заказ
+                if (selectedIngredient.IdIngredientType == null)
+                {
+                    await this.DisplayAlert("Ошибка", "Тип выбранного ингредиента не определён", "OK");
+                    return;
+                }
+
+                // Загружаем детали заказа
+                List<Common.Classes.DB.OrderDetailsView> orderDetails =
+                    await this.ApiClient.GetOrderDetailsByIdAsync(this._currentOrder.Id);
+
+                // Проверяем, не был ли уже добавлен ингредиент такого типа
+                bool sameTypeExists = orderDetails.Any(i =>
+                    i.ProductId == this._currentProduct.Id &&
+                    i.IngredientTypeId == selectedIngredient.IdIngredientType);
+
+                if (sameTypeExists)
+                {
+                    string typeTitle = selectedIngredient.IngredientType?.Title ?? "этого типа";
+                    await this.DisplayAlert("Ошибка", $"Вы уже добавили ингредиент типа \"{typeTitle}\"", "OK");
+                    return;
+                }
+
+                // Добавляем ингредиент
                 var orderIngredient = new OrderItemIngredientDTO
                 {
                     IdOrderProduct = this._currentProduct.Id,
                     IdIngredient = selectedIngredient.Id,
-                    Amount = 1 // По умолчанию 1
+                    Amount = 1
                 };
 
-                bool success = await this.ApiClient.AddIngredientToOrderAsync(this._currentOrder.Id, this._currentProduct.Id, orderIngredient);
+                bool success = await this.ApiClient.AddIngredientToOrderAsync(
+                    this._currentOrder.Id,
+                    this._currentProduct.Id,
+                    orderIngredient);
+
                 if (!success)
                 {
                     await this.DisplayAlert("Ошибка", "Не удалось добавить ингредиент", "OK");
@@ -111,7 +137,6 @@ namespace Mobile_application.Pages
 
                 await this.DisplayAlert("Успех", "Ингредиент добавлен в заказ", "OK");
 
-                // Возвращаемся в `PageProductCustomer`
                 var newSessionData = new SessionData
                 {
                     CurrentUser = this.SessionData?.CurrentUser,
@@ -125,6 +150,7 @@ namespace Mobile_application.Pages
                 await this.DisplayAlert("Ошибка", $"Не удалось обработать ингредиент: {ex.Message}", "OK");
             }
         }
+
 
         /// <summary>
         /// Обработчик нажатия кнопки редактирования ингредиента.
