@@ -279,4 +279,7 @@
   <data name="LabelOrderTotal" xml:space="preserve">
     <value>Total:</value>
   </data>
+  <data name="LabelShoppngCartList" xml:space="preserve">
+    <value>Shopping cart items</value>
+  </data>
 </root>

@@ -267,15 +267,81 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     /// </summary>
     private async void btnAddToCart_Clicked(object sender, EventArgs e)
     {
+        if (this.SessionData?.CurrentUser == null)
+        {
+            await this.DisplayAlert("Ошибка", "Не удалось определить пользователя", "OK");
+            return;
+        }
+
+        int userId = this.SessionData.CurrentUser.Id;
+        OrderStatusDTO? createdStatus = await this.ApiClient.GetOrderStatusByTitleAsync("Created");
+
+        if (createdStatus == null)
+        {
+            await this.DisplayAlert("Ошибка", "Не удалось получить статус 'Created'", "OK");
+            return;
+        }
+
+        // Пытаемся найти уже созданный черновик-заказ
+        List<OrderDTO> orders = await this.ApiClient.GetOrdersByCustomerIdAsync(userId);
+        this._currentOrder = orders.FirstOrDefault(o => o.IdStatus == createdStatus.Id);
+
         if (this._currentOrder == null)
         {
-            await this.DisplayAlert("Ошибка", "Заказ не найден", "OK");
-            return;
+            // Если продукта нет — ошибка
+            if (this._currentProduct == null)
+            {
+                await this.DisplayAlert("Ошибка", "Продукт не выбран", "OK");
+                return;
+            }
+
+            // Создаём черновик-заказ
+            var newOrder = new OrderDTO
+            {
+                IdCustomer = userId,
+                IdStatus = createdStatus.Id,
+                IdStatusPayment = 1, // Not Paid
+                CreationDate = DateTime.UtcNow,
+                OrderItems = new List<OrderItemsDTO>
+            {
+                new()
+                {
+                    IdProduct = this._currentProduct.Id,
+                    Total = this._currentProduct.Fee,
+                    Ingredients = new List<OrderItemIngredientDTO>()
+                }
+            }
+            };
+
+            this._currentOrder = await this.ApiClient.CreateOrderAsync(newOrder);
+
+            if (this._currentOrder == null)
+            {
+                await this.DisplayAlert("Ошибка", "Не удалось создать заказ", "OK");
+                return;
+            }
+        }
+        else
+        {
+            // Добавляем товар в уже существующий черновик-заказ
+            //var newProduct = new OrderProductDTO
+            //{
+            //    IdProduct = this._currentProduct?.Id ?? 0,
+            //    Quantity = 1
+            //};
+
+            //bool success = await this.ApiClient.AddProductToOrderAsync(this._currentOrder.Id, newProduct);
+
+            //if (!success)
+            //{
+            //    await this.DisplayAlert("Ошибка", "Не удалось добавить продукт в заказ", "OK");
+            //    return;
+            //}
         }
 
         var newSessionData = new SessionData
         {
-            CurrentUser = this.SessionData?.CurrentUser,
+            CurrentUser = this.SessionData.CurrentUser,
             Data = this._currentOrder
         };
 

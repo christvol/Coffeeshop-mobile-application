@@ -50,7 +50,7 @@
     </Style>
 
     <Style x:Key="ButtonTertiary" TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Tertiary}}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
@@ -648,7 +648,7 @@
     </Style>
 
     <Style x:Key="CollectionItemFrameStyle" TargetType="Frame">
-        <Setter Property="Margin" Value="2" />
+        <!--<Setter Property="Margin" Value="2" />-->
         <!--<Setter Property="CornerRadius" Value="10" />-->
         <!--<Setter Property="HasShadow" Value="True" />-->
         <Setter Property="BackgroundColor" Value="{StaticResource Tertiary}" />

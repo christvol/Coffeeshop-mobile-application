@@ -78,7 +78,7 @@ namespace Mobile_application.Pages
             this.LoadProducts();
 
             // Настраиваем CollectionView
-            this.ccvItems.SetDisplayedFields("Title", "Description", "Fee");
+            this.ccvItems.SetDisplayedFields("Title", "Description");
             this.ccvItems.SetItems(this.Products);
 
             // Проверяем, является ли пользователь администратором
@@ -94,28 +94,83 @@ namespace Mobile_application.Pages
         /// </summary>
         private async void OnProductSelected(ProductDTO selectedProduct)
         {
-            if (selectedProduct == null)
+            if (selectedProduct == null || this.SessionData?.CurrentUser == null)
             {
+                await this.DisplayAlert("Ошибка", "Не удалось определить пользователя или продукт", "OK");
                 return;
             }
 
-            // Проверяем, есть ли уже заказ в `SessionData`
+            int userId = this.SessionData.CurrentUser.Id;
             OrderDTO? currentOrder = null;
-            if (this.SessionData?.Data is { } dataObject &&
-                dataObject.GetType().GetProperty("Order") != null)
+
+            // Получаем статус "Created"
+            OrderStatusDTO? createdStatus = await this.ApiClient.GetOrderStatusByTitleAsync("Created");
+            if (createdStatus == null)
             {
-                currentOrder = dataObject.GetType().GetProperty("Order")?.GetValue(dataObject) as OrderDTO;
+                await this.DisplayAlert("Ошибка", "Не удалось получить статус 'Created'", "OK");
+                return;
+            }
+
+            // Проверяем существующий черновик заказа
+            List<OrderDTO> orders = await this.ApiClient.GetOrdersByCustomerIdAsync(userId);
+            currentOrder = orders.FirstOrDefault(o => o.IdStatus == createdStatus.Id);
+
+            if (currentOrder == null)
+            {
+                // Создаём новый заказ
+                var newOrder = new OrderDTO
+                {
+                    IdCustomer = userId,
+                    IdStatus = createdStatus.Id,
+                    IdStatusPayment = 1, // Not Paid
+                    CreationDate = DateTime.UtcNow,
+                    OrderItems = new List<OrderItemsDTO>
+            {
+                new()
+                {
+                    IdProduct = selectedProduct.Id,
+                    Total = selectedProduct.Fee,
+                    Ingredients = new List<OrderItemIngredientDTO>()
+                }
+            }
+                };
+
+                currentOrder = await this.ApiClient.CreateOrderAsync(newOrder);
+
+                if (currentOrder == null)
+                {
+                    await this.DisplayAlert("Ошибка", "Не удалось создать заказ", "OK");
+                    return;
+                }
+            }
+            else
+            {
+                // Добавляем выбранный продукт в существующий заказ
+                var newProduct = new OrderProductDTO
+                {
+                    IdProduct = selectedProduct.Id,
+                    Quantity = 1
+                };
+
+                bool success = await this.ApiClient.AddProductToOrderAsync(currentOrder.Id, newProduct);
+
+                if (!success)
+                {
+                    await this.DisplayAlert("Ошибка", "Не удалось добавить продукт в заказ", "OK");
+                    return;
+                }
             }
 
             var newSessionData = new SessionData
             {
-                CurrentUser = this.SessionData?.CurrentUser,
+                CurrentUser = this.SessionData.CurrentUser,
                 Data = new { Order = currentOrder, Product = selectedProduct },
                 Mode = WindowMode.Read
             };
 
             await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
         }
+
 
 
         /// <summary>

@@ -386,17 +386,16 @@ namespace REST_API_SERVER.Controllers
                 return this.NotFound("Заказ не найден");
             }
 
-            // Создаем новый продукт для заказа
+            // Всегда создаём новую позицию — это может быть капучино с ванилью, потом с шоколадом
             var orderProduct = new OrderProducts
             {
                 IdProduct = orderProductDto.IdProduct,
-                Total = 0, // Цена будет рассчитана позже
+                Total = 0 // Цена может пересчитываться позже
             };
 
             _ = this._context.OrderProducts.Add(orderProduct);
             _ = await this._context.SaveChangesAsync();
 
-            // Добавляем позицию в заказ
             var orderItem = new OrderItems
             {
                 IdOrder = orderId,
@@ -413,6 +412,7 @@ namespace REST_API_SERVER.Controllers
                 orderProduct.IdProduct
             });
         }
+
 
 
 

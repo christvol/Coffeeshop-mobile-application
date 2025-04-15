@@ -10,13 +10,12 @@ BackgroundColor="{StaticResource MintGreen}">
     <VerticalStackLayout>
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
         <Label 
-            Text="Products in order"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            Text="{x:Static res:Strings.LabelShoppngCartList}"
+             Style="{StaticResource LabelPrimary}" />
         <!-- Используем Items для передачи списка -->
         <controls:CustomCollectionView x:Name="ccvProducts"/>
         <!-- Кнопки -->
-        <VerticalStackLayout Spacing="10">
+        <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
             <Button x:Name="btnAddToCart"
                  Text="{x:Static res:Strings.ButtonAddToCart}" 
                  Style="{StaticResource ButtonPrimary}"

@@ -1,4 +1,4 @@
-using Common.Classes.DB;
+п»їusing Common.Classes.DB;
 using Common.Classes.DTO;
 using Common.Classes.Session;
 using Mobile_application.Classes.Utils;
@@ -8,12 +8,12 @@ namespace Mobile_application.Pages;
 
 public partial class PageOrderCustomer : CustomContentPage
 {
-    #region Поля
+    #region РџРѕР»СЏ
     private OrderDTO? _currentOrder;
     public ObservableCollection<OrderDetailsView> OrderProducts { get; set; } = new();
     #endregion
 
-    #region Конструкторы/Деструкторы
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/Р”РµСЃС‚СЂСѓРєС‚РѕСЂС‹
     public PageOrderCustomer(SessionData sessionData) : base(sessionData)
     {
         this.InitializeComponent();
@@ -21,10 +21,10 @@ public partial class PageOrderCustomer : CustomContentPage
     }
     #endregion
 
-    #region Методы
+    #region РњРµС‚РѕРґС‹
 
     /// <summary>
-    /// Инициализация данных страницы.
+    /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РґР°РЅРЅС‹С… СЃС‚СЂР°РЅРёС†С‹.
     /// </summary>
     private async void InitializeData()
     {
@@ -40,13 +40,13 @@ public partial class PageOrderCustomer : CustomContentPage
 
         if (this._currentOrder == null)
         {
-            await this.DisplayAlert("Ошибка", "Заказ не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ", "OK");
             return;
         }
 
         this.BindingContext = this;
 
-        // Устанавливаем обработчик удаления продукта
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРє СѓРґР°Р»РµРЅРёСЏ РїСЂРѕРґСѓРєС‚Р°
         this.ccvProducts.SetDeleteCommand<OrderDetailsView>(this.OnDeleteProduct);
 
         await this.LoadOrderProducts();
@@ -54,7 +54,7 @@ public partial class PageOrderCustomer : CustomContentPage
 
 
     /// <summary>
-    /// Загружает уникальные продукты текущего заказа.
+    /// Р—Р°РіСЂСѓР¶Р°РµС‚ СѓРЅРёРєР°Р»СЊРЅС‹Рµ РїСЂРѕРґСѓРєС‚С‹ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєР°Р·Р°.
     /// </summary>
     private async Task LoadOrderProducts()
     {
@@ -63,25 +63,20 @@ public partial class PageOrderCustomer : CustomContentPage
             return;
         }
 
-        // Получаем детали заказа
+        // РџРѕР»СѓС‡Р°РµРј РІСЃРµ РїРѕР·РёС†РёРё Р·Р°РєР°Р·Р°
         List<OrderDetailsView> orderDetails = await this.ApiClient.GetOrderDetailsByIdAsync(this._currentOrder.Id);
 
-        // Оставляем только уникальные продукты по ProductId
-        var productList = orderDetails
-            .GroupBy(d => d.ProductId)
-            .Select(g => g.First()) // Берем первый элемент каждой группы
-            .ToList();
+        // вќЊ РќР• РіСЂСѓРїРїРёСЂСѓРµРј вЂ” РїСЂРѕСЃС‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°РµРј РІСЃРµ РєР°Рє РµСЃС‚СЊ
+        this.OrderProducts.UpdateObservableCollection(orderDetails);
 
-        // Обновляем коллекцию
-        this.OrderProducts.UpdateObservableCollection(productList);
-
-        // Обновляем CustomCollectionView
+        // РћР±РЅРѕРІР»СЏРµРј РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ
         this.ccvProducts.SetDisplayedFields("ProductTitle");
         this.ccvProducts.SetItems(this.OrderProducts);
     }
 
+
     /// <summary>
-    /// Обработчик удаления продукта из заказа.
+    /// РћР±СЂР°Р±РѕС‚С‡РёРє СѓРґР°Р»РµРЅРёСЏ РїСЂРѕРґСѓРєС‚Р° РёР· Р·Р°РєР°Р·Р°.
     /// </summary>
     private async void OnDeleteProduct(OrderDetailsView selectedProduct)
     {
@@ -90,7 +85,7 @@ public partial class PageOrderCustomer : CustomContentPage
             return;
         }
 
-        bool confirm = await this.DisplayAlert("Подтверждение", $"Удалить продукт \"{selectedProduct.ProductTitle}\" из заказа?", "Да", "Нет");
+        bool confirm = await this.DisplayAlert("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", $"РЈРґР°Р»РёС‚СЊ РїСЂРѕРґСѓРєС‚ \"{selectedProduct.ProductTitle}\" РёР· Р·Р°РєР°Р·Р°?", "Р”Р°", "РќРµС‚");
         if (!confirm)
         {
             return;
@@ -100,42 +95,50 @@ public partial class PageOrderCustomer : CustomContentPage
 
         if (success)
         {
-            await this.DisplayAlert("Успех", "Продукт удалён из заказа", "OK");
-            await this.LoadOrderProducts(); // Обновляем список продуктов
+            await this.DisplayAlert("РЈСЃРїРµС…", "РџСЂРѕРґСѓРєС‚ СѓРґР°Р»С‘РЅ РёР· Р·Р°РєР°Р·Р°", "OK");
+            await this.LoadOrderProducts(); // РћР±РЅРѕРІР»СЏРµРј СЃРїРёСЃРѕРє РїСЂРѕРґСѓРєС‚РѕРІ
         }
         else
         {
-            await this.DisplayAlert("Ошибка", "Не удалось удалить продукт", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ РїСЂРѕРґСѓРєС‚", "OK");
         }
     }
 
     #endregion
 
-    #region Обработчики событий
+    #region РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
 
     /// <summary>
-    /// Обработчик нажатия кнопки "Добавить в корзину"
+    /// РћР±СЂР°Р±РѕС‚С‡РёРє РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё "Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕСЂР·РёРЅСѓ"
     /// </summary>
     private async void btnAddToCart_Clicked(object sender, EventArgs e)
     {
         if (this._currentOrder == null)
         {
-            await this.DisplayAlert("Ошибка", "Заказ не найден", "OK");
+            await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ. Р’С‹Р±РµСЂРёС‚Рµ РєР°С‚РµРіРѕСЂРёСЋ РїСЂРѕРґСѓРєС‚Р°", "OK");
+
+            var newSessionData = new SessionData
+            {
+                CurrentUser = this.SessionData?.CurrentUser
+            };
+
+            await this.Navigation.PushAsync(new PageProductTypes(newSessionData));
             return;
         }
 
-        var newSessionData = new SessionData
+        var session = new SessionData
         {
             CurrentUser = this.SessionData?.CurrentUser,
             Data = this._currentOrder
         };
 
-        await this.Navigation.PushAsync(new PageProductTypes(newSessionData));
+        await this.Navigation.PushAsync(new PageProductTypes(session));
     }
+
 
     private void btnPay_Clicked(object sender, EventArgs e)
     {
-        // Логика оплаты
+        // Р›РѕРіРёРєР° РѕРїР»Р°С‚С‹
     }
 
     #endregion

@@ -8,8 +8,9 @@
                          Title="{x:Static res:Strings.TitlePageProducts}"
                          BackgroundColor="{StaticResource MintGreen}">
 
-    <Grid RowDefinitions="Auto, *, Auto" Padding="10">
-
+    <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
+        <!-- Заголовок -->
+        <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
         <!-- Список продуктов -->
         <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
 
@@ -19,6 +20,6 @@
                 Clicked="OnAddProductClicked"
                 Text="{x:Static res:Strings.ButtonAddProduct}"
                 Style="{StaticResource ButtonPrimary}"/>
-    </Grid>
+    </VerticalStackLayout>
 
 </pages:CustomContentPage>

@@ -73,7 +73,7 @@ namespace Mobile_application.Pages
             this.UpdateItemsCollection();
 
             // Настраиваем CollectionView
-            this.ccvItems.SetDisplayedFields("Title", "Description", "Fee");
+            this.ccvItems.SetDisplayedFields("Title", "Description");
             this.ccvItems.SetItems(this.Items);
 
             bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);

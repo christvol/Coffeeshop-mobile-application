@@ -46,18 +46,32 @@ namespace Mobile_application.Controls
 
         #endregion
 
-        private void btnAvatar_Clicked(object sender, EventArgs e)
+        private async void btnAvatar_Clicked(object sender, EventArgs e)
         {
-            if (this.SessionData != null)
+            if (this.SessionData?.CurrentUser == null)
             {
-                this.SessionData.Mode = WindowMode.Update;
-                _ = Application.Current.MainPage.Navigation.PushAsync(new PageUserProfile(this.SessionData));
+                await Application.Current.MainPage.DisplayAlert("Ошибка", "Информация о пользователе не найдена", "OK");
+                return;
             }
+
+            this.SessionData.Mode = WindowMode.Update;
+            await Application.Current.MainPage.Navigation.PushAsync(new PageUserProfile(this.SessionData));
         }
 
-        private void btnCart_Clicked(object sender, EventArgs e)
+
+
+        private async void btnCart_Clicked(object sender, EventArgs e)
         {
-            // TODO: перейти на страницу корзины
+            if (this.SessionData == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ошибка", "Сеанс пользователя не найден", "OK");
+                return;
+            }
+
+            // Переход на страницу заказа с передачей SessionData
+            await Application.Current.MainPage.Navigation.PushAsync(new PageOrderCustomer(this.SessionData));
         }
+
+
     }
 }

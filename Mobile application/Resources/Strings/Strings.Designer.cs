@@ -385,6 +385,15 @@ namespace Mobile_application.Resources.Strings {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Shopping cart items.
+        /// </summary>
+        internal static string LabelShoppngCartList {
+            get {
+                return ResourceManager.GetString("LabelShoppngCartList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на SMS-code sent to your number.
         /// </summary>
         internal static string LabelSMSSent {

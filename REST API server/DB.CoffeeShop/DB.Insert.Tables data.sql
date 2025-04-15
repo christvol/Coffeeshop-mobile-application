@@ -71,6 +71,7 @@ GO
 
 -- Insert into OrderStatuses
 INSERT INTO [OrderStatuses] (title) VALUES
+('Created'),
 ('Pending'),
 ('In Progress'),
 ('Completed'),

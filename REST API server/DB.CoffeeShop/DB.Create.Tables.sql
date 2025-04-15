@@ -24,7 +24,7 @@ CREATE TABLE [Orders] (
   [creationDate] datetime NOT NULL,
   [idCustomer] int,
   [idEmployee] int,
-  [idStatus] int NOT NULL DEFAULT 1,         -- "Pending"
+  [idStatus] int NOT NULL DEFAULT 1,         -- "Created"
   [idStatusPayment] int NOT NULL DEFAULT 1,  -- "Not Paid"
   PRIMARY KEY ([id])
 ) ON [PRIMARY]
