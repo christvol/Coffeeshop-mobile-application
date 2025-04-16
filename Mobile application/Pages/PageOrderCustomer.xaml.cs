@@ -88,8 +88,17 @@ public partial class PageOrderCustomer : CustomContentPage
             this.OrderProducts.UpdateObservableCollection(grouped);
 
             // Обновляем CollectionView
-            this.ccvProducts.SetDisplayedFields("ProductTitle", "ProductPrice");
+            this.ccvProducts.SetDisplayedFields("ProductTitle", "OrderItemTotal");
             this.ccvProducts.SetItems(this.OrderProducts);
+
+            // Расчёт общей суммы заказа
+            if (filtered.Any())
+            {
+                decimal total = (decimal)filtered.FirstOrDefault().TotalSum;
+                // Обновление текста метки
+                this.lblTotalSum.Text = $"{total:0.00} €";
+            }
+
         }
         catch (Exception ex)
         {

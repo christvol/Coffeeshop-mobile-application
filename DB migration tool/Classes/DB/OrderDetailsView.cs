@@ -40,4 +40,8 @@ public partial class OrderDetailsView
     public float? IngredientFee { get; set; }
 
     public int? IngredientQuantity { get; set; }
+
+    public double? TotalSum { get; set; }
+
+    public double OrderItemTotal { get; set; }
 }

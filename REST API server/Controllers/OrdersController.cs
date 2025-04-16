@@ -292,7 +292,8 @@ namespace REST_API_SERVER.Controllers
             {
                 IdOrderProduct = orderProduct.Id,
                 IdIngredient = ingredientDto.IdIngredient,
-                Amount = ingredientDto.Quantity
+                //Amount = ingredientDto.Quantity
+                Amount = 1
             };
 
             _ = this._context.OrderItemIngredients.Add(orderIngredient);

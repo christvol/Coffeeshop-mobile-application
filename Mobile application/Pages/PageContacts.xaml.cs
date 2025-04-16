@@ -27,6 +27,7 @@ public partial class PageContacts : CustomContentPage
 
         bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
         this.adminPanel.IsVisible = isAdmin;
+        this.txtContactsEditor.IsEnabled = isAdmin;
     }
 
     private async Task LoadContactsTextAsync()

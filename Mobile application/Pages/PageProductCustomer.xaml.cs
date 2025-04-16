@@ -536,8 +536,5 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
         }
     }
 
-
-
-
     #endregion
 }

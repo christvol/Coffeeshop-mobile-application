@@ -18,6 +18,14 @@ BackgroundColor="{StaticResource MintGreen}">
                     Text="{x:Static res:Strings.LabelShoppngCartList}"
                     Style="{StaticResource LabelPrimary}" />
 
+                <Label x:Name="lblTotalSum"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   HorizontalOptions="End"
+                   Margin="10"
+                   TextColor="Black"/>
+
+
                 <controls:CustomCollectionView
     x:Name="ccvProducts"
     IsEditButtonVisible="False"

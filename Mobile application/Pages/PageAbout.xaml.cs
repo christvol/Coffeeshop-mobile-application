@@ -21,6 +21,7 @@ public partial class PageAbout : CustomContentPage
 
         bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
         this.adminPanel.IsVisible = isAdmin;
+        this.txtAdminEditor.IsEnabled = isAdmin;
     }
 
     private const string AboutFilePath = "Pages/about.txt";
