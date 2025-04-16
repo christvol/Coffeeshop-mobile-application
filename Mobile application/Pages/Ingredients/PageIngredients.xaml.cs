@@ -8,6 +8,11 @@ namespace Mobile_application.Pages
 {
     public partial class PageIngredients : CustomContentPage
     {
+        #region Поля
+        private List<AllowedIngredientsDTO> _allowedIngredients = new();
+
+        #endregion
+
         #region Свойства
 
         public ObservableCollection<IngredientDTO> Items { get; set; } = new();
@@ -39,6 +44,18 @@ namespace Mobile_application.Pages
                 this._currentProduct = dataObject.GetType().GetProperty("Product")?.GetValue(dataObject) as ProductDTO;
                 this._selectedType = dataObject.GetType().GetProperty("SelectedType")?.GetValue(dataObject) as IngredientTypeDTO;
             }
+
+            if (this.SessionData?.Data?.GetType().GetProperty("Ingredients") != null)
+            {
+                this.Items.UpdateObservableCollection(
+                    this.SessionData.Data.GetType().GetProperty("Ingredients")?.GetValue(this.SessionData.Data) as List<IngredientDTO> ?? new());
+            }
+
+            if (this.SessionData?.Data?.GetType().GetProperty("Allowed") != null)
+            {
+                this._allowedIngredients = this.SessionData.Data.GetType().GetProperty("Allowed")?.GetValue(this.SessionData.Data) as List<AllowedIngredientsDTO> ?? new();
+            }
+
         }
 
         #endregion
@@ -57,8 +74,17 @@ namespace Mobile_application.Pages
                 item.IdIngredientType = item.IngredientType == null ? null : item.IngredientType.Id;
             }
             List<IngredientDTO> filteredIngredients = this._selectedType != null
-                ? allIngredients.Where(i => i.IdIngredientType == this._selectedType.Id).OrderBy(i => i.Title).ToList()
-                : allIngredients.OrderBy(i => i.Title).ToList();
+                ? allIngredients
+                    .Where(i =>
+                        i.IdIngredientType == this._selectedType.Id &&
+                        this._allowedIngredients.Any(a => a.IdIngredient == i.Id))
+                    .OrderBy(i => i.Title)
+                    .ToList()
+                : allIngredients
+                    .Where(i => this._allowedIngredients.Any(a => a.IdIngredient == i.Id))
+                    .OrderBy(i => i.Title)
+                    .ToList();
+
 
             this.Items.UpdateObservableCollection(filteredIngredients);
         }

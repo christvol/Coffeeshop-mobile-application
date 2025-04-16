@@ -86,12 +86,23 @@ namespace Mobile_application.Pages
                 //    return;
                 //}
 
+                List<AllowedIngredientsDTO> allowed = new();
+
+                if (this.SessionData?.Data?.GetType().GetProperty("Allowed") != null)
+                {
+                    allowed = this.SessionData.Data.GetType().GetProperty("Allowed")?.GetValue(this.SessionData.Data) as List<AllowedIngredientsDTO> ?? new();
+                }
+
                 // ѕолучаем все ингредиенты и сортируем по Title
                 List<IngredientDTO> allIngredients = await this.ApiClient.GetAllIngredientsAsync();
+
                 var filteredIngredients = allIngredients
-                    .Where(i => i.IdIngredientType == selectedType.Id)
+                    .Where(i =>
+                        i.IdIngredientType == selectedType.Id &&
+                        allowed.Any(a => a.IdIngredient == i.Id))
                     .OrderBy(i => i.Title)
                     .ToList();
+
 
                 var newSessionData = new SessionData
                 {

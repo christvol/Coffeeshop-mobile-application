@@ -14,6 +14,7 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     public ObservableCollection<Common.Classes.DB.OrderDetailsView> ProductIngredients { get; set; } = new();
 
     private ObservableCollection<IngredientTypeDTO> IngredientTypes { get; set; } = new();
+    private List<AllowedIngredientsDTO> _allowedIngredients = new();
 
     #endregion
 
@@ -52,6 +53,27 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     }
 
 
+    /// <summary>
+    /// Проверяет, добавлен ли хотя бы один ингредиент каждого доступного типа.
+    /// </summary>
+    private bool AreAllIngredientTypesCovered()
+    {
+        // Получаем ID типов, которые уже добавлены
+        var addedTypeIds = this.ProductIngredients
+            .Where(i => i.IngredientTypeId != null)
+            .Select(i => i.IngredientTypeId.Value)
+            .Distinct()
+            .ToHashSet();
+
+        // Получаем все необходимые типы (возможно, стоит брать их из разрешённых)
+        var requiredTypeIds = this.IngredientTypes
+            .Select(t => t.Id)
+            .Distinct()
+            .ToHashSet();
+
+        // Все ли необходимые типы покрыты?
+        return requiredTypeIds.All(id => addedTypeIds.Contains(id));
+    }
 
 
     /// <summary>
@@ -251,6 +273,7 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
             .Where(t => allowedTypeIds.Contains(t.Id))
             .ToList();
 
+        this._allowedIngredients = await this.ApiClient.GetAllowedIngredientsByProductIdAsync(this._currentProduct.Id);
 
 
         this.IngredientTypes.UpdateObservableCollection(filteredTypes);
@@ -328,8 +351,14 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
         var newSessionData = new SessionData
         {
             CurrentUser = this.SessionData?.CurrentUser,
-            Data = new { Order = this._currentOrder, Product = this._currentProduct }
+            Data = new
+            {
+                Order = this._currentOrder,
+                Product = this._currentProduct,
+                Allowed = this._allowedIngredients
+            }
         };
+
 
         await this.Navigation.PushAsync(new PageIngredientTypes(newSessionData));
 
@@ -342,6 +371,12 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     /// </summary>
     private async void btnAddToCart_Clicked(object sender, EventArgs e)
     {
+        if (!this.AreAllIngredientTypesCovered())
+        {
+            await this.DisplayAlert("Предупреждение", "Не все типы ингредиентов выбраны. Пожалуйста, выберите хотя бы по одному ингредиенту каждого типа.", "OK");
+            return;
+        }
+
         if (this.SessionData?.CurrentUser == null)
         {
             await this.DisplayAlert("Ошибка", "Не удалось определить пользователя", "OK");
@@ -437,6 +472,8 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
             .OrderBy(i => i.Title)
             .ToList();
 
+        //await this.DisplayAlert("Allowed", $"Количество разрешённых: {this._allowedIngredients.Count}", "OK");
+
         var newSessionData = new SessionData
         {
             CurrentUser = this.SessionData?.CurrentUser,
@@ -445,7 +482,8 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
                 Order = this._currentOrder,
                 Product = this._currentProduct,
                 Ingredients = filtered,
-                SelectedType = selectedType
+                SelectedType = selectedType,
+                Allowed = this._allowedIngredients // <=== ЭТО ВАЖНО
             }
         };
 
