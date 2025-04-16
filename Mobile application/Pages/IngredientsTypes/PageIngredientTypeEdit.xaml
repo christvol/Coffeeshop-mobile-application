@@ -11,13 +11,13 @@
         <Entry x:Name="EntryTitle" Placeholder="Введите название..." />
 
         <!-- Кнопки -->
-        <VerticalStackLayout Spacing="10">
-            <Button Text="{x:Static res:Strings.ButtonSave}" 
-  Style="{StaticResource ButtonPrimary}"
-  Clicked="OnSaveClicked" />
-            <Button Text="{x:Static res:Strings.ButtonCancel}"
-  Style="{StaticResource ButtonDanger}"
-  Clicked="OnCancelClicked" />
+        <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
+                    <Button Text="{x:Static res:Strings.ButtonSave}" 
+          Style="{StaticResource ButtonPrimary}"
+          Clicked="OnSaveClicked" />
+                    <Button Text="{x:Static res:Strings.ButtonCancel}"
+          Style="{StaticResource ButtonTertiary}"
+          Clicked="OnCancelClicked" />
         </VerticalStackLayout>
     </VerticalStackLayout>
 </pages:CustomContentPage>

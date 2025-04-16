@@ -15,7 +15,7 @@ namespace Mobile_application.Pages
 
         #region Конструкторы/Деструкторы
 
-        public PageEditMenu(SessionData sessionData)
+        public PageEditMenu(SessionData sessionData) : base(sessionData)
         {
             this.InitializeComponent();
             this._sessionData = sessionData;
@@ -28,16 +28,11 @@ namespace Mobile_application.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            // Получаем данные пользователя
-            Common.Classes.DB.Users? user = await this.ApiClient.GetUserByIdAsync(1);
-
-            this.SessionData = new SessionData
+            // Попробуем найти PageHeader и установить ему SessionData
+            if (this.FindByName("PageHeader") is Controls.PageHeader header)
             {
-                CurrentUser = user,
-                Data = null,
-                Mode = WindowMode.Read
-            };
+                header.SessionData = this.SessionData;
+            }
         }
 
         private async void OnProductTypesClicked(object sender, EventArgs e)

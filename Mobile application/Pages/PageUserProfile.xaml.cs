@@ -144,11 +144,11 @@ public partial class PageUserProfile : CustomContentPage
     }
     private void btnAboutApp_Clicked(object sender, EventArgs e)
     {
-        _ = NavigateToPage(new PageAbout());
+        _ = NavigateToPage(new PageAbout(this.SessionData));
     }
     private void btnFeedback_Clicked(object sender, EventArgs e)
     {
-        _ = NavigateToPage(new PageFeedback());
+        _ = NavigateToPage(new PageContacts(this.SessionData));
     }
     #endregion
 

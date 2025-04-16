@@ -53,7 +53,7 @@
             <!-- Feedback -->
             <Button
                 x:Name="btnFeedback"
-                Text="{x:Static res:Strings.ButtonFeedback}"
+                Text="Contacts"
                 Clicked="btnFeedback_Clicked"
                 Style="{StaticResource ButtonPrimary}" />
             <!-- Save -->

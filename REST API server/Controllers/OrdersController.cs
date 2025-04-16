@@ -19,45 +19,6 @@ namespace REST_API_SERVER.Controllers
         /// <summary>
         /// Удаляет ингредиент из указанного продукта в заказе.
         /// </summary>
-        [HttpDelete("{orderId}/product/{productId}/ingredient/{ingredientId}")]
-        public async Task<IActionResult> RemoveIngredientFromOrder(int orderId, int productId, int ingredientId)
-        {
-            // Проверяем существование заказа
-            Orders? order = await this._context.Orders
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.IdOrderProductNavigation)
-                .ThenInclude(op => op.OrderItemIngredients)
-                .FirstOrDefaultAsync(o => o.Id == orderId);
-
-            if (order == null)
-            {
-                return this.NotFound("Заказ не найден");
-            }
-
-            // Проверяем существование продукта в заказе
-            OrderProducts? orderProduct = order.OrderItems
-                .Select(oi => oi.IdOrderProductNavigation)
-                .FirstOrDefault(op => op.IdProduct == productId);
-
-            if (orderProduct == null)
-            {
-                return this.NotFound("Продукт в заказе не найден");
-            }
-
-            // Проверяем существование ингредиента
-            OrderItemIngredients? ingredient = orderProduct.OrderItemIngredients.FirstOrDefault(oi => oi.IdIngredient == ingredientId);
-            if (ingredient == null)
-            {
-                return this.NotFound("Ингредиент не найден в продукте");
-            }
-
-            // Удаляем ингредиент
-            _ = this._context.OrderItemIngredients.Remove(ingredient);
-            _ = await this._context.SaveChangesAsync();
-
-            return this.Ok("Ингредиент удален из заказа");
-        }
-
         [HttpDelete("{orderId}/product/{productId}")]
         public async Task<IActionResult> DeleteProductFromOrder(int orderId, int productId)
         {
@@ -71,20 +32,22 @@ namespace REST_API_SERVER.Controllers
                 return this.NotFound("Заказ не найден");
             }
 
-            // Проверяем существование продукта в заказе
-            //OrderItems? orderItem = order.OrderItems
-            //    .FirstOrDefault(oi => oi.IdOrderProductNavigation.IdProduct == productId);
-            OrderDetailsView? orderItemView = this._context.OrderDetailsView.FirstOrDefault(x => x.OrderId == orderId && x.ProductId == productId);
+            // Ищем позицию заказа по OrderProductId, а не ProductId!
+            OrderDetailsView? orderItemView = await this._context.OrderDetailsView
+                .FirstOrDefaultAsync(x => x.OrderId == orderId && x.OrderProductId == productId);
+
             if (orderItemView == null)
             {
                 return this.NotFound("Продукт не найден в заказе");
             }
 
+            // Удаляем соответствующую запись OrderItems
             OrderItems? orderItem = order.OrderItems
-                .FirstOrDefault(oi => oi.IdOrder == orderItemView.OrderId && oi.IdOrderProduct == orderItemView.ProductId);
+                .FirstOrDefault(oi => oi.IdOrderProduct == orderItemView.OrderProductId);
+
             if (orderItem == null)
             {
-                return this.NotFound("Продукт не найден в заказе");
+                return this.NotFound("Элемент заказа не найден");
             }
 
             _ = this._context.OrderItems.Remove(orderItem);
@@ -92,6 +55,7 @@ namespace REST_API_SERVER.Controllers
 
             return this.NoContent();
         }
+
 
 
         #region Get Order Details
@@ -273,6 +237,24 @@ namespace REST_API_SERVER.Controllers
 
         #region Update Order
 
+        [HttpPut("{id}/payment-status")]
+        public async Task<IActionResult> UpdatePaymentStatus(int id, [FromBody] int newStatusId)
+        {
+            Orders? order = await this._context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return this.NotFound("Заказ не найден");
+            }
+
+            order.IdStatusPayment = newStatusId;
+
+            _ = await this._context.SaveChangesAsync();
+
+            return this.Ok("Статус оплаты обновлён");
+        }
+
+
         [HttpPost("{orderId}/product/{productId}/add-ingredient")]
         public async Task<IActionResult> AddIngredientToOrder(int orderId, int productId, [FromBody] OrderIngredientDTO ingredientDto)
         {
@@ -365,6 +347,50 @@ namespace REST_API_SERVER.Controllers
                 }
             }).ToList();
 
+            _ = await this._context.SaveChangesAsync();
+
+            return this.NoContent();
+        }
+
+
+        /// <summary>
+        /// Удаляет ингредиент из указанного продукта в заказе.
+        /// </summary>
+        [HttpDelete("{orderId}/product/{productId}/ingredient/{ingredientId}")]
+        public async Task<IActionResult> RemoveIngredientFromOrder(int orderId, int productId, int ingredientId)
+        {
+            // Находим заказ
+            Orders? order = await this._context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.IdOrderProductNavigation)
+                .ThenInclude(op => op.OrderItemIngredients)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                return this.NotFound("Заказ не найден");
+            }
+
+            // Находим нужный продукт в заказе
+            OrderProducts? orderProduct = order.OrderItems
+                .Select(oi => oi.IdOrderProductNavigation)
+                .FirstOrDefault(op => op.IdProduct == productId);
+
+            if (orderProduct == null)
+            {
+                return this.NotFound("Продукт в заказе не найден");
+            }
+
+            // Находим ингредиент
+            OrderItemIngredients? ingredient = orderProduct.OrderItemIngredients
+                .FirstOrDefault(i => i.IdIngredient == ingredientId);
+
+            if (ingredient == null)
+            {
+                return this.NotFound("Ингредиент не найден в продукте");
+            }
+
+            _ = this._context.OrderItemIngredients.Remove(ingredient);
             _ = await this._context.SaveChangesAsync();
 
             return this.NoContent();

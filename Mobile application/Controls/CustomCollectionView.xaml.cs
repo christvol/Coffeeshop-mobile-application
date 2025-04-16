@@ -5,30 +5,25 @@ namespace Mobile_application.Controls
 {
     public partial class CustomCollectionView : ContentView
     {
-        #region Поля
-
-        #endregion
-
         #region Свойства
 
-        public static readonly BindableProperty IsListItemEditButtonsVisibleProperty =
-            BindableProperty.Create(nameof(IsListItemEditButtonsVisible), typeof(bool), typeof(CustomCollectionView), true, propertyChanged: OnButtonsVisibilityChanged);
+        public static readonly BindableProperty IsEditButtonVisibleProperty =
+            BindableProperty.Create(nameof(IsEditButtonVisible), typeof(bool), typeof(CustomCollectionView), true, propertyChanged: OnButtonsVisibilityChanged);
 
-        public bool IsListItemEditButtonsVisible
+        public bool IsEditButtonVisible
         {
-            get => (bool)this.GetValue(IsListItemEditButtonsVisibleProperty);
-            set => this.SetValue(IsListItemEditButtonsVisibleProperty, value);
+            get => (bool)this.GetValue(IsEditButtonVisibleProperty);
+            set => this.SetValue(IsEditButtonVisibleProperty, value);
         }
 
-        private static void OnButtonsVisibilityChanged(BindableObject bindable, object oldValue, object newValue)
+        public static readonly BindableProperty IsDeleteButtonVisibleProperty =
+            BindableProperty.Create(nameof(IsDeleteButtonVisible), typeof(bool), typeof(CustomCollectionView), true, propertyChanged: OnButtonsVisibilityChanged);
+
+        public bool IsDeleteButtonVisible
         {
-            if (bindable is CustomCollectionView collectionView)
-            {
-                collectionView.UpdateItemTemplate();
-            }
+            get => (bool)this.GetValue(IsDeleteButtonVisibleProperty);
+            set => this.SetValue(IsDeleteButtonVisibleProperty, value);
         }
-
-
 
         public static readonly BindableProperty ItemsProperty =
             BindableProperty.Create(nameof(Items), typeof(IEnumerable), typeof(CustomCollectionView),
@@ -81,14 +76,11 @@ namespace Mobile_application.Controls
 
         #region События
 
-        /// <summary>
-        /// Событие, вызываемое при выборе элемента списка.
-        /// </summary>
         public event EventHandler<object> ItemSelected;
 
         #endregion
 
-        #region Конструкторы/Деструкторы
+        #region Конструкторы
 
         public CustomCollectionView()
         {
@@ -99,43 +91,28 @@ namespace Mobile_application.Controls
 
         #endregion
 
-        #region Методы
+        #region Методы API
 
-        /// <summary>
-        /// Устанавливает список отображаемых полей.
-        /// </summary>
         public void SetDisplayedFields(params string[] fields)
         {
             this.DisplayedFields = fields.ToList();
         }
 
-        /// <summary>
-        /// Устанавливает источник данных.
-        /// </summary>
         public void SetItems(IEnumerable items)
         {
             this.Items = items;
         }
 
-        /// <summary>
-        /// Устанавливает команду редактирования для указанного типа.
-        /// </summary>
         public void SetEditCommand<T>(Action<T> execute)
         {
             this.EditCommand = new Command<T>(execute);
         }
 
-        /// <summary>
-        /// Устанавливает команду удаления для указанного типа.
-        /// </summary>
         public void SetDeleteCommand<T>(Action<T> execute)
         {
             this.DeleteCommand = new Command<T>(execute);
         }
 
-        /// <summary>
-        /// Устанавливает команду выбора элемента списка.
-        /// </summary>
         public void SetItemSelectedCommand<T>(Action<T> execute)
         {
             this.ItemSelectedCommand = new Command<T>(execute);
@@ -143,7 +120,15 @@ namespace Mobile_application.Controls
 
         #endregion
 
-        #region Обработчики событий
+        #region Обработчики BindableProperty
+
+        private static void OnButtonsVisibilityChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is CustomCollectionView collectionView)
+            {
+                collectionView.UpdateItemTemplate();
+            }
+        }
 
         private static void OnItemsChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -161,9 +146,10 @@ namespace Mobile_application.Controls
             }
         }
 
-        /// <summary>
-        /// Обработчик события выбора элемента списка.
-        /// </summary>
+        #endregion
+
+        #region Обработчики событий
+
         private void OnItemSelectedInternal(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is object selectedItem)
@@ -175,7 +161,8 @@ namespace Mobile_application.Controls
 
         #endregion
 
-        #region Генерация разметки
+        #region Генерация шаблона
+
         private void UpdateItemTemplate()
         {
             if (this.DisplayedFields == null || !this.DisplayedFields.Any())
@@ -210,9 +197,8 @@ namespace Mobile_application.Controls
                     Spacing = 5
                 };
 
-                if (this.IsListItemEditButtonsVisible)
+                if (this.IsEditButtonVisible)
                 {
-                    // Кнопка редактирования
                     var editButton = new Button
                     {
                         Text = "✎",
@@ -223,8 +209,10 @@ namespace Mobile_application.Controls
                     editButton.SetBinding(Button.CommandProperty, new Binding(nameof(this.EditCommand), source: this));
                     editButton.SetBinding(Button.CommandParameterProperty, new Binding("."));
                     buttonsStack.Children.Add(editButton);
+                }
 
-                    // Кнопка удаления
+                if (this.IsDeleteButtonVisible)
+                {
                     var deleteButton = new Button
                     {
                         Text = "🗑",
@@ -248,10 +236,10 @@ namespace Mobile_application.Controls
                         Orientation = StackOrientation.Horizontal,
                         Spacing = 5,
                         Children =
-                {
-                    stackLayout,
-                    buttonsStack
-                }
+                        {
+                            stackLayout,
+                            buttonsStack
+                        }
                     }
                 };
 

@@ -7,12 +7,15 @@
                          x:Class="Mobile_application.Pages.PageEditMenu"
                          Title="PageEditMenu"
                          BackgroundColor="{StaticResource MintGreen}">
-    <Grid RowDefinitions="Auto,*" Padding="10">
+    <Grid RowDefinitions="Auto,*">
         <!-- Page Header -->
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0" />
-        <VerticalStackLayout Grid.Row="1" Spacing="10" VerticalOptions="CenterAndExpand">
+        <VerticalStackLayout 
+                Grid.Row="1" 
+                Style="{StaticResource VerticalStackPrimary}"
+                VerticalOptions="CenterAndExpand">
 
-            <!-- Кнопка Типы продуктов -->
+                <!-- Кнопка Типы продуктов -->
             <Button Clicked="OnProductTypesClicked"
                     Text="{x:Static res:Strings.ButtonProductTypes}"
                     Style="{StaticResource ButtonPrimary}"/>

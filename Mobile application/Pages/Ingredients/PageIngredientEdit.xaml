@@ -6,32 +6,30 @@
              x:Class="Mobile_application.Pages.PageIngredientEdit"
              Title="PageIngredientEdit"
              BackgroundColor="{StaticResource MintGreen}">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+    <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
 
-            <!-- Название ингредиента -->
-            <Label Text="Название ингредиента" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <Entry x:Name="EntryTitle" Text="{Binding Ingredient.Title}" Placeholder="Введите название" />
+        <!-- Название ингредиента -->
+        <Label Text="Название ингредиента" FontSize="16" TextColor="{StaticResource Gray900}" />
+        <Entry x:Name="EntryTitle" Text="{Binding Ingredient.Title}" Placeholder="Введите название" />
 
-            <!-- Описание ингредиента -->
-            <Label Text="Описание" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <Editor x:Name="EditorDescription" Text="{Binding Ingredient.Description}" Placeholder="Введите описание" HeightRequest="100" />
+        <!-- Описание ингредиента -->
+        <Label Text="Описание" FontSize="16" TextColor="{StaticResource Gray900}" />
+        <Editor x:Name="EditorDescription" Text="{Binding Ingredient.Description}" Placeholder="Введите описание" HeightRequest="100" />
 
-            <!-- Цена ингредиента -->
-            <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
-            <Entry x:Name="EntryFee" Text="{Binding Ingredient.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
+        <!-- Цена ингредиента -->
+        <Label Text="Цена" FontSize="16" TextColor="{StaticResource Gray900}" />
+        <Entry x:Name="EntryFee" Text="{Binding Ingredient.Fee, StringFormat='{0:F2}'}" Keyboard="Numeric" Placeholder="Введите цену" />
 
-            <Picker x:Name="pIngredientType"></Picker>
+        <Picker x:Name="pIngredientType"></Picker>
 
-            <!-- Кнопки -->
-            <VerticalStackLayout Spacing="10">
-                <Button Text="{x:Static res:Strings.ButtonSave}" 
+        <!-- Кнопки -->
+        <VerticalStackLayout>
+            <Button Text="{x:Static res:Strings.ButtonSave}" 
              Style="{StaticResource ButtonPrimary}"
              Clicked="OnSaveClicked" />
-                <Button Text="{x:Static res:Strings.ButtonCancel}"
-             Style="{StaticResource ButtonDanger}"
+            <Button Text="{x:Static res:Strings.ButtonCancel}"
+             Style="{StaticResource ButtonTertiary}"
              Clicked="OnCancelClicked" />
-            </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
+    </VerticalStackLayout>
 </pages:CustomContentPage>

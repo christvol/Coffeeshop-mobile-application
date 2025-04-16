@@ -10,6 +10,17 @@ GO
 SELECT * FROM [Orders];
 GO
 
+
+-- Select all data from OrderStatuses
+SELECT * FROM [OrderStatuses];
+GO
+
+
+-- Select all data from PaymentStatuses
+SELECT * FROM [PaymentStatuses];
+GO
+
+
 -- Select all data from Products
 SELECT * FROM [Products];
 GO

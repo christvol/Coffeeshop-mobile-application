@@ -1,3 +1,4 @@
+п»їusing Common.Classes.DB;
 using Common.Classes.DTO;
 using Common.Classes.Session;
 using Mobile_application.Classes.Utils;
@@ -7,13 +8,15 @@ namespace Mobile_application.Pages
 {
     public partial class PageOrders : CustomContentPage
     {
-        #region Свойства
+        #region РЎРІРѕР№СЃС‚РІР°
 
-        public ObservableCollection<OrderDTO> Orders { get; set; } = new();
+        public ObservableCollection<OrderDetailsView> Orders { get; set; } = new();
+
+
 
         #endregion
 
-        #region Конструкторы/Деструкторы
+        #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/Р”РµСЃС‚СЂСѓРєС‚РѕСЂС‹
 
         public PageOrders(SessionData? sessionData) : base(sessionData)
         {
@@ -22,47 +25,58 @@ namespace Mobile_application.Pages
 
             this.SessionData = sessionData ?? new SessionData();
 
-            // Устанавливаем обработчики событий
-            this.ccvOrders.SetEditCommand<OrderDTO>(this.OnEditOrderClicked);
-            this.ccvOrders.SetDeleteCommand<OrderDTO>(this.OnDeleteOrderClicked);
+            // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
+            this.ccvOrders.SetEditCommand<OrderDetailsView>(this.OnEditOrderClicked);
+            this.ccvOrders.SetDeleteCommand<OrderDetailsView>(this.OnDeleteOrderClicked);
+
         }
 
         #endregion
 
-        #region Методы
+        #region РњРµС‚РѕРґС‹
 
         /// <summary>
-        /// Загружает список заказов.
+        /// Р—Р°РіСЂСѓР¶Р°РµС‚ СЃРїРёСЃРѕРє Р·Р°РєР°Р·РѕРІ.
         /// </summary>
         private async void LoadOrders()
         {
             try
             {
-                List<OrderDTO> orders = await this.ApiClient.GetOrdersAsync();
-                this.Orders.UpdateObservableCollection(orders);
+                List<Common.Classes.DB.OrderDetailsView> details = await this.ApiClient.GetAllOrderDetailsAsync();
+                var grouped = details
+                    .GroupBy(d => d.OrderId)
+                    .Select(g => g.First())
+                    .ToList();
+
+                this.Orders.UpdateObservableCollection(grouped);
+
+                this.ccvOrders.SetDisplayedFields("OrderId", "OrderDate", "CustomerFirstName", "CustomerLastName", "OrderStatus", "PaymentStatus");
+                this.ccvOrders.SetItems(this.Orders);
+
             }
             catch (Exception ex)
             {
-                await this.DisplayAlert("Ошибка", $"Не удалось загрузить заказы: {ex.Message}", "OK");
+                await this.DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ Р·Р°РєР°Р·С‹: {ex.Message}", "OK");
             }
         }
 
+
         #endregion
 
-        #region Обработчики событий
+        #region РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             this.LoadOrders();
 
-            // Настраиваем CollectionView
+            // РќР°СЃС‚СЂР°РёРІР°РµРј CollectionView
             this.ccvOrders.SetDisplayedFields("Id", "IdEmployee", "IdCustomer", "CreationDate", "IdStatus");
             this.ccvOrders.SetItems(this.Orders);
         }
 
         /// <summary>
-        /// Обработчик кнопки "Добавить".
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє РєРЅРѕРїРєРё "Р”РѕР±Р°РІРёС‚СЊ".
         /// </summary>
         private async void OnAddOrderClicked(object sender, EventArgs e)
         {
@@ -77,15 +91,23 @@ namespace Mobile_application.Pages
         }
 
         /// <summary>
-        /// Обработчик кнопки "Редактировать".
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє РєРЅРѕРїРєРё "Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ".
         /// </summary>
-        private async void OnEditOrderClicked(OrderDTO order)
+        private async void OnEditOrderClicked(OrderDetailsView orderView)
         {
             try
             {
                 if (this.SessionData == null || this.SessionData.CurrentUser == null)
                 {
                     throw new InvalidOperationException("SessionData or CurrentUser is not set.");
+                }
+
+                // рџ”Ѕ Р—Р°РіСЂСѓР¶Р°РµРј СЂРµР°Р»СЊРЅС‹Р№ OrderDTO РїРѕ ID
+                OrderDTO? order = await this.ApiClient.GetOrderByIdAsync(orderView.OrderId);
+                if (order == null)
+                {
+                    await this.DisplayAlert("РћС€РёР±РєР°", "Р—Р°РєР°Р· РЅРµ РЅР°Р№РґРµРЅ", "OK");
+                    return;
                 }
 
                 var editSessionData = new SessionData
@@ -97,27 +119,23 @@ namespace Mobile_application.Pages
 
                 await this.Navigation.PushAsync(new PageOrderEdit(editSessionData));
 
-                // После закрытия страницы обновляем заказ
-                if (editSessionData.Mode == WindowMode.Update)
-                {
-                    _ = await this.ApiClient.UpdateOrderAsync(order.Id, order);
-                    await this.DisplayAlert("Успех", "Заказ успешно обновлен.", "OK");
-                    this.LoadOrders(); // Обновление списка заказов
-                }
+                this.LoadOrders(); // РћР±РЅРѕРІР»СЏРµРј СЃРїРёСЃРѕРє РїРѕСЃР»Рµ РІРѕР·РІСЂР°С‚Р°
             }
             catch (Exception ex)
             {
-                await this.DisplayAlert("Ошибка", $"Не удалось открыть редактирование: {ex.Message}", "OK");
+                await this.DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ: {ex.Message}", "OK");
             }
         }
 
 
+
         /// <summary>
-        /// Обработчик кнопки "Удалить".
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє РєРЅРѕРїРєРё "РЈРґР°Р»РёС‚СЊ".
         /// </summary>
-        private async void OnDeleteOrderClicked(OrderDTO order)
+        private async void OnDeleteOrderClicked(OrderDetailsView orderView)
+
         {
-            bool confirm = await this.DisplayAlert("Удаление", $"Вы уверены, что хотите удалить заказ #{order.Id}?", "Да", "Нет");
+            bool confirm = await this.DisplayAlert("РЈРґР°Р»РµРЅРёРµ", $"Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ Р·Р°РєР°Р· #{orderView.OrderId}?", "Р”Р°", "РќРµС‚");
             if (!confirm)
             {
                 return;
@@ -125,13 +143,13 @@ namespace Mobile_application.Pages
 
             try
             {
-                await this.ApiClient.DeleteOrderAsync(order.Id);
-                await this.DisplayAlert("Успех", "Заказ удален.", "OK");
+                await this.ApiClient.DeleteOrderAsync(orderView.OrderId);
+                await this.DisplayAlert("РЈСЃРїРµС…", "Р—Р°РєР°Р· СѓРґР°Р»РµРЅ.", "OK");
                 this.LoadOrders();
             }
             catch (Exception ex)
             {
-                await this.DisplayAlert("Ошибка", $"Не удалось удалить заказ: {ex.Message}", "OK");
+                await this.DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ Р·Р°РєР°Р·: {ex.Message}", "OK");
             }
         }
 

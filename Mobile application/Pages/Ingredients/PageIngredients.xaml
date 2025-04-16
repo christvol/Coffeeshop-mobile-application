@@ -11,7 +11,7 @@
         <!-- Заголовок -->
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
 
-        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
+        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1" MaximumHeightRequest="500"/>
 
         <!-- Кнопка добавления нового ингредиента -->
         <Button Grid.Row="2"   

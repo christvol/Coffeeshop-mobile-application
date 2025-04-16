@@ -8,22 +8,36 @@
              Title="{x:Static res:Strings.PageOrderCustomerTitle}"
 BackgroundColor="{StaticResource MintGreen}">
     <VerticalStackLayout>
+
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
-        <Label 
-            Text="{x:Static res:Strings.LabelShoppngCartList}"
-             Style="{StaticResource LabelPrimary}" />
-        <!-- Используем Items для передачи списка -->
-        <controls:CustomCollectionView x:Name="ccvProducts"/>
-        <!-- Кнопки -->
+
+        <ScrollView>
+            <VerticalStackLayout Padding="10" Spacing="10">
+
+                <Label 
+                    Text="{x:Static res:Strings.LabelShoppngCartList}"
+                    Style="{StaticResource LabelPrimary}" />
+
+                <controls:CustomCollectionView
+    x:Name="ccvProducts"
+    IsEditButtonVisible="False"
+    IsDeleteButtonVisible="True"
+    MaximumHeightRequest="500" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Кнопки остаются всегда внизу -->
         <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
             <Button x:Name="btnAddToCart"
-                 Text="{x:Static res:Strings.ButtonAddToCart}" 
-                 Style="{StaticResource ButtonPrimary}"
-                 Clicked="btnAddToCart_Clicked"/>
+                    Text="{x:Static res:Strings.ButtonAddToCart}" 
+                    Style="{StaticResource ButtonPrimary}"
+                    Clicked="btnAddToCart_Clicked"/>
             <Button x:Name="btnPay"
-                Text="{x:Static res:Strings.ButtonPay}" 
-                Style="{StaticResource ButtonPrimary}"
-                Clicked="btnPay_Clicked"/>
+                    Text="{x:Static res:Strings.ButtonPay}" 
+                    Style="{StaticResource ButtonPrimary}"
+                    Clicked="btnPay_Clicked"/>
         </VerticalStackLayout>
+
     </VerticalStackLayout>
 </pages:CustomContentPage>

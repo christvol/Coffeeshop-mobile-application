@@ -11,7 +11,7 @@
     <Grid RowDefinitions="Auto, *, Auto" Padding="10">
 
         <!-- Список заказов -->
-        <controls:CustomCollectionView x:Name="ccvOrders" Grid.Row="1"/>
+        <controls:CustomCollectionView x:Name="ccvOrders" Grid.Row="1" MaximumHeightRequest="500"/>
 
         <!-- Кнопка добавления нового заказа -->
         <Button Grid.Row="2"               

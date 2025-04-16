@@ -815,6 +815,22 @@
         #region AllowedIngredients
 
         /// <summary>
+        /// Получение всех разрешённых ингредиентов для конкретного продукта.
+        /// </summary>
+        public async Task<List<AllowedIngredientsDTO>> GetAllowedIngredientsByProductIdAsync(int productId)
+        {
+            try
+            {
+                List<AllowedIngredientsDTO> all = await this.GetAllowedIngredientsAsync();
+                return all.Where(ai => ai.IdProduct == productId).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Ошибка при получении разрешённых ингредиентов по ProductId {productId}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Получение всех разрешённых ингредиентов.
         /// </summary>
         public async Task<List<AllowedIngredientsDTO>> GetAllowedIngredientsAsync()
@@ -1328,6 +1344,20 @@
 
         #endregion
 
+        #region Images
+        public async Task<byte[]?> GetImageBytesAsync(int imageId)
+        {
+            HttpResponseMessage response = await this.httpClient.GetAsync($"Images/{imageId}/data");
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+
+        #endregion
+
         public async Task<RegistrationResponse?> GetCodeAsync(string phoneNumber)
         {
             try
@@ -1388,6 +1418,23 @@
                 throw new Exception($"Ошибка при удалении продукта ID {productId} из заказа {orderId}: {ex.Message}");
             }
         }
+
+        public async Task<bool> SetOrderPaymentStatusAsync(int orderId, int paymentStatusId)
+        {
+            HttpResponseMessage response = await this.httpClient.PutAsJsonAsync($"Orders/{orderId}/payment-status", paymentStatusId);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UploadProductImageAsync(int productId, Stream imageStream, string fileName)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(imageStream), "file", fileName);
+
+            HttpResponseMessage response = await this.httpClient.PostAsync($"Products/{productId}/upload-image", content);
+            return response.IsSuccessStatusCode;
+        }
+
+
 
 
     }

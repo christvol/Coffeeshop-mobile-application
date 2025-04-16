@@ -109,7 +109,55 @@ namespace Mobile_application.Pages
             // Настраиваем CollectionView
             this.ccvItems.SetDisplayedFields("Title", "Description");
             this.ccvItems.SetItems(this.Ingredients);
+            if (this.Product.ProductImageIds != null && this.Product.ProductImageIds.Any())
+            {
+                int imageId = this.Product.ProductImageIds.Last();
+                byte[]? imageBytes = await this.ApiClient.GetImageBytesAsync(imageId);
+
+                if (imageBytes != null)
+                {
+                    this.ProductImage.Source = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                }
+            }
+
+
         }
+
+        private async void OnUploadImageClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                FileResult? file = await FilePicker.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Выберите изображение",
+                    FileTypes = FilePickerFileType.Images
+                });
+
+                if (file == null)
+                {
+                    return;
+                }
+
+                using Stream stream = await file.OpenReadAsync();
+                byte[] imageData;
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    imageData = memoryStream.ToArray();
+                }
+
+                // Пока просто показываем
+                this.ProductImage.Source = ImageSource.FromStream(() => new MemoryStream(imageData));
+                _ = await this.ApiClient.UploadProductImageAsync(this.Product.Id, new MemoryStream(imageData), file.FileName);
+                await this.DisplayAlert("Успех", "Изображение загружено", "ОК");
+            }
+            catch (Exception ex)
+            {
+                await this.DisplayAlert("Ошибка", $"Ошибка загрузки изображения: {ex.Message}", "ОК");
+            }
+        }
+
 
         private async void OnSaveClicked(object sender, EventArgs e)
         {

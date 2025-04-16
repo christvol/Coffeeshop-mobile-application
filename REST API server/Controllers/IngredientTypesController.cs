@@ -109,8 +109,15 @@ namespace REST_API_SERVER.Controllers
             ingredientType.Title = dto.Title;
             _ = this._context.SaveChanges();
 
-            return this.NoContent();
+            var resultDto = new IngredientTypeDTO
+            {
+                Id = ingredientType.Id,
+                Title = ingredientType.Title
+            };
+
+            return this.Ok(resultDto); // 🔥 возвращаем обновлённый объект
         }
+
 
         /// <summary>
         /// Удалить тип ингредиента по ID.
@@ -132,7 +139,16 @@ namespace REST_API_SERVER.Controllers
 
             if (relatedIngredients.Any())
             {
-                // Удаляем сначала связанные ингредиенты
+                var ingredientIds = relatedIngredients.Select(i => i.Id).ToList();
+
+                // Удаляем связанные записи из AllowedIngredients
+                var allowedToDelete = this._context.AllowedIngredients
+                    .Where(ai => ingredientIds.Contains(ai.IdIngredient))
+                    .ToList();
+
+                this._context.AllowedIngredients.RemoveRange(allowedToDelete);
+
+                // Удаляем сами ингредиенты
                 this._context.Ingredients.RemoveRange(relatedIngredients);
             }
 
@@ -142,6 +158,7 @@ namespace REST_API_SERVER.Controllers
 
             return this.NoContent();
         }
+
 
     }
 }

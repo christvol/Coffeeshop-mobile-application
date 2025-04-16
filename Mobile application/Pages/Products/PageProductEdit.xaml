@@ -11,6 +11,20 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
+                <Image x:Name="ProductImage"
+           HeightRequest="200"
+           Aspect="AspectFill"
+           Margin="10"
+           HorizontalOptions="Center" />
+
+                <Button Text="Загрузить изображение"
+            Clicked="OnUploadImageClicked"
+            Margin="10"
+            BackgroundColor="{StaticResource Primary}"
+            TextColor="White"
+            CornerRadius="10" />
+
+
             <!-- Название продукта -->
             <Label Text="Название продукта" FontSize="16" TextColor="{StaticResource Gray900}" />
             <Entry x:Name="EntryTitle" Text="{Binding Product.Title}" 

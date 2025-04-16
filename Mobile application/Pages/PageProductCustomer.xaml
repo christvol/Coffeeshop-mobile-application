@@ -28,12 +28,13 @@
 
         <Label Text="{x:Static res:Strings.LabelSelectIngedientToAdd}" 
         Style="{StaticResource LabelListHeader}"/>
-        <controls:CustomCollectionView x:Name="cvIngredientTypes"  IsListItemEditButtonsVisible="False"/>
+        <controls:CustomCollectionView x:Name="cvIngredientTypes" 
+        IsEditButtonVisible="False" IsDeleteButtonVisible="False"/>
 
         <Label Text="{x:Static res:Strings.LabelSelectedIngredients}" 
                Style="{StaticResource LabelListHeader}" />
         <!-- Используем Items для передачи списка -->
-        <controls:CustomCollectionView x:Name="ccvProductIngredients" IsListItemEditButtonsVisible="False"/>
+        <controls:CustomCollectionView x:Name="ccvProductIngredients"                                    IsEditButtonVisible="False" IsDeleteButtonVisible="True"/>
 
         <Label Text="{x:Static res:Strings.LabelOrderTotal}" 
                FontSize="20"
@@ -45,7 +46,7 @@
                FontSize="20"/>
         <!-- Кнопки -->
         <VerticalStackLayout Spacing="10">
-           
+
             <Button x:Name="btnAddToCart"
                     Text="{x:Static res:Strings.ButtonAddToCart}" 
                     Style="{StaticResource ButtonPrimary}"

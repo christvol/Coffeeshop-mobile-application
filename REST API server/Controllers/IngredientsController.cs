@@ -176,21 +176,41 @@ namespace REST_API_SERVER.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIngredient(int id)
         {
-            Ingredients? ingredient = await this._context.Ingredients.FindAsync(id);
-
-            if (ingredient == null)
+            try
             {
-                return this.NotFound(new
+                Ingredients? ingredient = await this._context.Ingredients.FindAsync(id);
+
+                if (ingredient == null)
                 {
-                    Message = Strings.IngredientsController.IngredientNotFound
+                    return this.NotFound(new
+                    {
+                        Message = Strings.IngredientsController.IngredientNotFound
+                    });
+                }
+
+                // Удаляем связанные строки из AllowedIngredients
+                List<AllowedIngredients> allowed = await this._context.AllowedIngredients
+                    .Where(ai => ai.IdIngredient == id)
+                    .ToListAsync();
+
+                this._context.AllowedIngredients.RemoveRange(allowed);
+
+                // Теперь можно удалять сам ингредиент
+                _ = this._context.Ingredients.Remove(ingredient);
+                _ = await this._context.SaveChangesAsync();
+
+                return this.NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return this.StatusCode(500, new
+                {
+                    Message = "Ошибка при удалении ингредиента. Возможно, есть зависимые записи.",
+                    Details = ex.InnerException?.Message ?? ex.Message
                 });
             }
-
-            _ = this._context.Ingredients.Remove(ingredient);
-            _ = await this._context.SaveChangesAsync();
-
-            return this.NoContent();
         }
+
 
         // GET: api/Ingredients/{id}/IngredientType
         [HttpGet("{id}/IngredientType")]

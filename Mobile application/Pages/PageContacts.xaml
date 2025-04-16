@@ -2,31 +2,30 @@
 <pages:CustomContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:res="clr-namespace:Mobile_application.Resources.Strings"
-             xmlns:pages="clr-namespace:Mobile_application.Pages"
-             x:Class="Mobile_application.Pages.PageAbout"
-             Title="PageAbout"
+xmlns:pages="clr-namespace:Mobile_application.Pages"
+             x:Class="Mobile_application.Pages.PageContacts"
+             Title="PageContacts"
              BackgroundColor="{StaticResource MintGreen}">
     <VerticalStackLayout Style="{StaticResource VerticalStackPrimary}">
-        <!--<Label Text="Редактируемый текст (только для администратора):" />-->
+        <!--<Label Text="Контактная информация (только для администратора):" />-->
 
-        <Editor x:Name="txtAdminEditor"
+        <Editor x:Name="txtContactsEditor"
             HeightRequest="150"
-            Placeholder="Введите текст..."
+            Placeholder="Введите контакты..."
             AutoSize="TextChanges" />
-        
+
         <VerticalStackLayout 
             x:Name="adminPanel" 
             IsVisible="False">
             <Button 
-          Text="{x:Static res:Strings.ButtonSave}" 
-          Style="{StaticResource ButtonPrimary}" 
-                Clicked="OnSaveTextClicked" />
-            <Button  
+                Text="{x:Static res:Strings.ButtonSave}" 
+                Style="{StaticResource ButtonPrimary}" 
+                    Clicked="OnSaveContactsClicked" />
+            <Button 
                 Text="{x:Static res:Strings.ButtonCancel}" 
-                Style="{StaticResource ButtonTertiary}"  
-                Clicked="OnCancelClicked" />
+                Style="{StaticResource ButtonTertiary}" 
+                    Clicked="OnCancelClicked" />
         </VerticalStackLayout>
-
     </VerticalStackLayout>
 
 </pages:CustomContentPage>

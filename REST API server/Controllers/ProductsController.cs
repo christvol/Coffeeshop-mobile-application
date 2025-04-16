@@ -31,7 +31,8 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
+                    ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList(),
+                    ProductImageIds = p.ProductImages.Select(pi => pi.IdImage).ToList()
                 })
                 .ToListAsync();
 
@@ -52,7 +53,7 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
+                    ProductImageIds = p.ProductImages.Select(pi => pi.IdImage).ToList()
                 })
                 .FirstOrDefaultAsync(p => p.Id == id);
 
@@ -82,7 +83,8 @@ namespace REST_API_SERVER.Controllers
                     Description = p.Description,
                     Fee = p.Fee,
                     IdProductType = p.IdProductType,
-                    ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList()
+                    ProductImages = p.ProductImages.Select(img => img.IdImageNavigation.Url).ToList(),
+                    ProductImageIds = p.ProductImages.Select(pi => pi.IdImage).ToList()
                 })
                 .ToListAsync();
 
@@ -137,6 +139,50 @@ namespace REST_API_SERVER.Controllers
                 id = product.Id
             }, createdProductDTO);
         }
+
+        [HttpPost("{productId}/upload-image")]
+        public async Task<IActionResult> UploadProductImage(int productId, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return this.BadRequest("Файл не передан");
+            }
+
+            Products? product = await this._context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return this.NotFound("Продукт не найден");
+            }
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+
+            var image = new Images
+            {
+                Title = file.FileName,
+                Description = $"Загружено для продукта {product.Title}",
+                Url = $"/images/{file.FileName}",
+                Data = memoryStream.ToArray()
+            };
+
+            _ = this._context.Images.Add(image);
+            _ = await this._context.SaveChangesAsync();
+
+            _ = this._context.ProductImages.Add(new ProductImages
+            {
+                IdProduct = productId,
+                IdImage = image.Id
+            });
+
+            _ = await this._context.SaveChangesAsync();
+
+            return this.Ok(new
+            {
+                image.Id
+            });
+        }
+
+
         #endregion
 
         #region PUT Methods
@@ -184,20 +230,39 @@ namespace REST_API_SERVER.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            Products? product = await this._context.Products.FindAsync(id);
-            if (product == null)
+            try
             {
-                return this.NotFound(new
+                Products? product = await this._context.Products.FindAsync(id);
+                if (product == null)
                 {
-                    Message = "Продукт не найден"
+                    return this.NotFound(new
+                    {
+                        Message = "Продукт не найден"
+                    });
+                }
+
+                List<AllowedIngredients> allowedIngredients = await this._context.AllowedIngredients
+                    .Where(ai => ai.IdProduct == id)
+                    .ToListAsync();
+
+                this._context.AllowedIngredients.RemoveRange(allowedIngredients);
+
+                _ = this._context.Products.Remove(product);
+                _ = await this._context.SaveChangesAsync();
+
+                return this.NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return this.StatusCode(500, new
+                {
+                    Message = "Ошибка при удалении продукта. Убедитесь, что нет зависимостей.",
+                    Details = ex.InnerException?.Message ?? ex.Message
                 });
             }
-
-            _ = this._context.Products.Remove(product);
-            _ = await this._context.SaveChangesAsync();
-
-            return this.NoContent();
         }
+
+
         #endregion
 
         private bool ProductExists(int id)

@@ -77,7 +77,8 @@ namespace Mobile_application.Pages
             this.ccvItems.SetItems(this.Items);
 
             bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
-            this.ccvItems.IsListItemEditButtonsVisible = isAdmin;
+            this.ccvItems.IsEditButtonVisible = isAdmin;
+            this.ccvItems.IsDeleteButtonVisible = isAdmin;
             this.btnAdd.IsVisible = isAdmin;
         }
 

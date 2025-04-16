@@ -45,28 +45,85 @@ GO
 INSERT INTO [Ingredient types] (title) VALUES
 ('Milk'),
 ('Sugar'),
-('Syrup');
+('Syrup'),
+('Spice'),
+('Topping'),
+('Cream');
 GO
 
 -- Insert into Ingredients
 INSERT INTO [Ingredients] (idIngredientType, title, description, fee) VALUES
 (1, 'Whole Milk', 'Rich and creamy milk', 0.50),
 (2, 'Brown Sugar', 'Unrefined sugar', 0.30),
-(3, 'Vanilla Syrup', 'Sweet vanilla flavor', 0.70);
+(3, 'Vanilla Syrup', 'Sweet vanilla flavor', 0.70),
+(1, 'Skim Milk', 'Low fat milk', 0.40),
+(1, 'Soy Milk', 'Plant-based milk alternative', 0.60),
+(2, 'White Sugar', 'Refined sugar', 0.25),
+(3, 'Caramel Syrup', 'Sweet caramel flavor', 0.70),
+(3, 'Hazelnut Syrup', 'Nutty and sweet', 0.75),
+(4, 'Cinnamon', 'Spicy and aromatic', 0.20),
+(5, 'Chocolate Chips', 'Sweet topping', 0.50),
+(6, 'Whipped Cream', 'Fluffy cream topping', 0.60);
 GO
 
 -- Insert into Images
-INSERT INTO [Images] (title, description, url) VALUES
-('Espresso Image', 'Image of espresso', 'https://example.com/espresso.jpg'),
-('Green Tea Image', 'Image of green tea', 'https://example.com/greentea.jpg'),
-('Croissant Image', 'Image of croissant', 'https://example.com/croissant.jpg');
+-- Вставка изображений в таблицу Images с данными из файлов
+-- Каждый путь — локальный. Убедись, что SQL Server имеет доступ к этим файлам
+
+-- Espresso
+INSERT INTO Images (title, description, url, data)
+SELECT 
+    'Espresso Image',
+    'Image of espresso',
+    '/images/Espresso.png',
+    BulkColumn
+FROM OPENROWSET(BULK N'C:\Users\FossW\source\repos\Coffeeshop-mobile-application\REST API server\DB.CoffeeShop\images\Espresso.png', SINGLE_BLOB) AS img;
+
+-- Green Tea
+INSERT INTO Images (title, description, url, data)
+SELECT 
+    'Green Tea Image',
+    'Image of green tea',
+    '/images/Green Tea.png',
+    BulkColumn
+FROM OPENROWSET(BULK N'C:\Users\FossW\source\repos\Coffeeshop-mobile-application\REST API server\DB.CoffeeShop\images\Green Tea.png', SINGLE_BLOB) AS img;
+
+-- Croissant
+INSERT INTO Images (title, description, url, data)
+SELECT 
+    'Croissant Image',
+    'Image of croissant',
+    '/images/Croissant.png',
+    BulkColumn
+FROM OPENROWSET(BULK N'C:\Users\FossW\source\repos\Coffeeshop-mobile-application\REST API server\DB.CoffeeShop\images\Croissant.png', SINGLE_BLOB) AS img;
+
+-- NoImageAvailable (заглушка)
+INSERT INTO Images (title, description, url, data)
+SELECT 
+    'NoImageAvailable',
+    'Placeholder for missing images',
+    '/images/NoImageAvailable.png',
+    BulkColumn
+FROM OPENROWSET(BULK N'C:\Users\FossW\source\repos\Coffeeshop-mobile-application\REST API server\DB.CoffeeShop\images\NoImageAvailable.png', SINGLE_BLOB) AS img;
 GO
 
--- Insert into Allowed ingredients
+-- Insert into Allowed ingredients (каждому продукту — минимум 1-2 ингредиента)
 INSERT INTO [Allowed ingredients] (idIngredient, idProduct, allowedNumber) VALUES
-(1, 1, 1), -- Whole Milk, Espresso
-(2, 1, 2), -- Brown Sugar, Espresso
-(3, 3, 1); -- Vanilla Syrup, Croissant
+(1, 1, 2), (4, 1, 1),        -- Espresso
+(2, 2, 2), (9, 2, 1),        -- Green Tea
+(3, 3, 1), (10, 3, 1),       -- Croissant
+(1, 4, 2), (11, 4, 1),       -- Latte
+(1, 5, 2), (9, 5, 1),        -- Cappuccino
+(2, 6, 2), (7, 6, 1),        -- Americano
+(7, 7, 1), (11, 7, 1),       -- Mocha
+(3, 8, 1), (9, 8, 1),        -- Black Tea
+(3, 9, 1), (6, 9, 1),        -- Chamomile Tea
+(2, 10, 1), (10, 10, 1),     -- Mint Tea
+(2, 11, 1), (9, 11, 1),      -- Jasmine Tea
+(3, 12, 1), (10, 12, 1),     -- Muffin
+(3, 13, 1), (10, 13, 1),     -- Bagel
+(3, 14, 1), (8, 14, 1),      -- Cheesecake
+(3, 15, 1), (7, 15, 1);      -- Danish Pastry
 GO
 
 -- Insert into OrderStatuses
@@ -113,10 +170,26 @@ INSERT INTO [Order item ingredients] (idOrderProduct, idIngredient, amount) VALU
 GO
 
 -- Insert into Product images
-INSERT INTO [Product images] (idProduct, idImage) VALUES
+-- Привязка товаров к изображениям
+-- Предположим, что id изображений: 1 = Espresso, 2 = Green Tea, 3 = Croissant, 4 = Заглушка
+
+INSERT INTO [Product images] (idProduct, idImage)
+VALUES
 (1, 1),
 (2, 2),
-(3, 3);
+(3, 3),
+(4, 4),
+(5, 4),
+(6, 4),
+(7, 4),
+(8, 4),
+(9, 4),
+(10, 4),
+(11, 4),
+(12, 4),
+(13, 4),
+(14, 4),
+(15, 4);
 GO
 
 -- Insert into Ingredient images

@@ -26,5 +26,8 @@ public class ProductDTO
     }
 
     public List<string> ProductImages { get; set; } = new();
+
+    public List<int> ProductImageIds { get; set; } = new(); // id изображений, а не url
+
     #endregion
 }

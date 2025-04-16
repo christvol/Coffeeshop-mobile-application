@@ -21,7 +21,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductTypeDTO>>> GetProductTypes()
         {
-            var productTypes = await this._context.ProductTypes
+            List<ProductTypeDTO> productTypes = await this._context.ProductTypes
                 .Select(pt => new ProductTypeDTO
                 {
                     Id = pt.Id,
@@ -36,7 +36,7 @@ namespace REST_API_SERVER.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductTypeDTO>> GetProductType(int id)
         {
-            var productType = await this._context.ProductTypes
+            ProductTypeDTO? productType = await this._context.ProductTypes
                 .Where(pt => pt.Id == id)
                 .Select(pt => new ProductTypeDTO
                 {
@@ -104,7 +104,7 @@ namespace REST_API_SERVER.Controllers
                 });
             }
 
-            var productType = await this._context.ProductTypes.FindAsync(id);
+            ProductTypes? productType = await this._context.ProductTypes.FindAsync(id);
 
             if (productType == null)
             {
@@ -142,21 +142,50 @@ namespace REST_API_SERVER.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductType(int id)
         {
-            var productType = await this._context.ProductTypes.FindAsync(id);
-
-            if (productType == null)
+            try
             {
-                return this.NotFound(new
+                ProductTypes? productType = await this._context.ProductTypes.FindAsync(id);
+                if (productType == null)
                 {
-                    Message = Strings.ProductTypesController.ProductTypeNotFound
+                    return this.NotFound(new
+                    {
+                        Message = "Тип продукта не найден"
+                    });
+                }
+
+                // Найдём продукты этого типа
+                List<Products> products = await this._context.Products
+                    .Where(p => p.IdProductType == id)
+                    .ToListAsync();
+
+                foreach (Products? product in products)
+                {
+                    // Удалим разрешённые ингредиенты
+                    List<AllowedIngredients> allowedIngredients = await this._context.AllowedIngredients
+                        .Where(ai => ai.IdProduct == product.Id)
+                        .ToListAsync();
+                    this._context.AllowedIngredients.RemoveRange(allowedIngredients);
+
+                    // Можно также удалить ProductImages и другие связанные сущности
+
+                    _ = this._context.Products.Remove(product);
+                }
+
+                _ = this._context.ProductTypes.Remove(productType);
+                _ = await this._context.SaveChangesAsync();
+
+                return this.NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return this.StatusCode(500, new
+                {
+                    Message = "Ошибка при удалении типа продукта. Убедитесь, что нет зависимых записей.",
+                    Details = ex.InnerException?.Message ?? ex.Message
                 });
             }
-
-            _ = this._context.ProductTypes.Remove(productType);
-            _ = await this._context.SaveChangesAsync();
-
-            return this.NoContent();
         }
+
 
         private bool ProductTypeExists(int id)
         {

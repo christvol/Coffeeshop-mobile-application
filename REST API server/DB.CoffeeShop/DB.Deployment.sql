@@ -48,3 +48,4 @@ GO
 :r "C:\Users\FossW\source\repos\Coffeeshop-mobile-application\REST API server\DB.CoffeeShop\DB.Select.Views.sql"
 --#endregion
 GO
+

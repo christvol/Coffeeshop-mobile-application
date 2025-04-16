@@ -12,7 +12,7 @@
         <!-- Заголовок -->
         <controls:PageHeader x:Name="PageHeader" Grid.Row="0"/>
         <!-- Список продуктов -->
-        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1"/>
+        <controls:CustomCollectionView x:Name="ccvItems" Grid.Row="1" MaximumHeightRequest="500"/>
 
         <!-- Кнопка добавления нового продукта -->
         <Button Grid.Row="2"   

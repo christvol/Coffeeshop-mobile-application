@@ -27,6 +27,33 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
 
     #region Методы
 
+    private async Task LoadProductImageAsync()
+    {
+        if (this._currentProduct?.ProductImageIds == null || !this._currentProduct.ProductImageIds.Any())
+        {
+            return;
+        }
+
+        try
+        {
+            int imageId = this._currentProduct.ProductImageIds.Last(); // берём последнее (или первое)
+            byte[]? imageData = await this.ApiClient.GetImageBytesAsync(imageId);
+
+            if (imageData != null && imageData.Length > 0)
+            {
+                this._productImageSource = ImageSource.FromStream(() => new MemoryStream(imageData));
+                this.OnPropertyChanged(nameof(this.ProductImage));
+            }
+        }
+        catch (Exception ex)
+        {
+            await this.DisplayAlert("Ошибка", $"Не удалось загрузить изображение продукта: {ex.Message}", "OK");
+        }
+    }
+
+
+
+
     /// <summary>
     /// Проверка существующего заказа и добавление продукта
     /// </summary>
@@ -160,6 +187,8 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
         }
 
         await this.LoadProductIngredients();
+        await this.LoadProductImageAsync();
+
     }
 
     /// <summary>
@@ -181,25 +210,56 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
             .ToList();
 
         this.ProductIngredients.UpdateObservableCollection(productIngredients);
-        // ⬇️ Уведомляем UI, что сумма изменилась
-        this.OnPropertyChanged(nameof(this.OrderTotal));
+
 
         // Настраиваем CustomCollectionView
         this.ccvProductIngredients.SetDisplayedFields("IngredientTitle", "IngredientFee");
         this.ccvProductIngredients.SetItems(this.ProductIngredients);
-        this.ccvProductIngredients.SetDeleteCommand<Common.Classes.DB.OrderDetailsView>(this.OnIngredientDelete);
 
-        this.OnPropertyChanged(nameof(this.OrderTotal)); // ⬅️ здесь пересчитываем!
+
+        // ⬇️ Уведомляем UI, что сумма изменилась
+        this.OnPropertyChanged(nameof(this.OrderTotal));
     }
 
     private async Task LoadIngredientTypes()
     {
-        List<IngredientTypeDTO> types = await this.ApiClient.GetAllIngredientTypesAsync();
-        this.IngredientTypes.UpdateObservableCollection(types);
+        if (this._currentProduct == null)
+        {
+            await this.DisplayAlert("Ошибка", "Продукт не выбран", "OK");
+            return;
+        }
+
+        // Получаем все типы
+        List<IngredientTypeDTO> allTypes = await this.ApiClient.GetAllIngredientTypesAsync();
+
+        // Получаем все разрешённые ингредиенты для продукта
+        List<AllowedIngredientsDTO> allowed = await this.ApiClient.GetAllowedIngredientsByProductIdAsync(this._currentProduct.Id);
+
+        // Загружаем все ингредиенты (чтобы определить их типы)
+        List<IngredientDTO> allIngredients = await this.ApiClient.GetAllIngredientsAsync();
+
+        var allowedTypeIds = allIngredients
+            .Where(i => allowed.Any(a => a.IdIngredient == i.Id))
+            .Select(i =>
+                i.IdIngredientType ?? i.IngredientType?.Id ?? -1 // <- берём напрямую из объекта
+            )
+            .Where(id => id != -1)
+            .Distinct()
+            .ToHashSet();
+
+        var filteredTypes = allTypes
+            .Where(t => allowedTypeIds.Contains(t.Id))
+            .ToList();
+
+
+
+        this.IngredientTypes.UpdateObservableCollection(filteredTypes);
+
         this.cvIngredientTypes.SetItems(this.IngredientTypes);
         this.cvIngredientTypes.SetDisplayedFields("Title");
-        this.cvIngredientTypes.SetItemSelectedCommand<IngredientTypeDTO>(this.OnIngredientTypeSelected);
+
     }
+
 
 
     /// <summary>
@@ -230,11 +290,23 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
         {
             await this.DisplayAlert("Ошибка", "Не удалось удалить ингредиент", "OK");
         }
+
+        // ⬇️ Уведомляем UI, что сумма изменилась
+        this.OnPropertyChanged(nameof(this.OrderTotal));
     }
 
     #endregion
 
     #region Обработчики событий
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        this.InitializeData();
+        this.cvIngredientTypes.SetItemSelectedCommand<IngredientTypeDTO>(this.OnIngredientTypeSelected);
+        this.ccvProductIngredients.SetDeleteCommand<Common.Classes.DB.OrderDetailsView>(this.OnIngredientDelete);
+    }
 
     /// <summary>
     /// Обработчик нажатия кнопки "Выбрать ингредиент"
@@ -260,6 +332,9 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
         };
 
         await this.Navigation.PushAsync(new PageIngredientTypes(newSessionData));
+
+        // ⬇️ Уведомляем UI, что сумма изменилась
+        this.OnPropertyChanged(nameof(this.OrderTotal));
     }
 
     /// <summary>
@@ -380,6 +455,8 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     #endregion
 
     #region Свойства
+    private ImageSource? _productImageSource;
+
     public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string propertyName)
     {
@@ -387,45 +464,35 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     }
     public string ProductTitle => this._currentProduct?.Title ?? "Без названия";
     public string ProductDescription => this._currentProduct?.Description ?? "Описание отсутствует";
-    public string ProductImage => "coffedefaultpreview.png";
+    public ImageSource ProductImage => this._productImageSource ?? ImageSource.FromFile("coffedefaultpreview.png");
+
+
     public string OrderTotal
     {
         get
         {
-            if (this._currentOrder == null)
+            if (this._currentProduct == null)
             {
                 return "Сумма не определена";
             }
 
-            float total = 0;
+            float total = this._currentProduct.Fee;
 
-            // Группируем продукты — один раз учитываем каждый
-            IEnumerable<int> productIds = this.ProductIngredients
-                .Where(i => i.ProductId != null)
-                .Select(i => i.ProductId.Value)
-                .Distinct();
-
-            foreach (int productId in productIds)
-            {
-                Common.Classes.DB.OrderDetailsView? product = this.ProductIngredients.FirstOrDefault(i => i.ProductId == productId);
-                if (product != null)
-                {
-                    total += product.ProductPrice;
-                }
-            }
-
-            // Добавляем стоимость ингредиентов
+            // Добавляем стоимость ингредиентов (если есть)
             foreach (Common.Classes.DB.OrderDetailsView ing in this.ProductIngredients)
             {
                 if (ing.IngredientFee != null && ing.IngredientQuantity != null)
                 {
-                    total += ing.IngredientFee.Value * ing.IngredientQuantity.Value;
+                    //total += ing.IngredientFee.Value * ing.IngredientQuantity.Value;
+                    total += ing.IngredientFee.Value;
                 }
             }
+            //return $"{total:C}";
+            return $"{total:0.00} €";
 
-            return $"{total:C}";
         }
     }
+
 
 
 

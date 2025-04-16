@@ -63,7 +63,8 @@ namespace Mobile_application.Pages
 
             // Проверяем, является ли пользователь администратором
             bool isAdmin = await this.IsUserAdminAsync(this.SessionData.CurrentUser.Id);
-            this.ccvItems.IsListItemEditButtonsVisible = isAdmin;
+            this.ccvItems.IsEditButtonVisible = isAdmin;
+            this.ccvItems.IsDeleteButtonVisible = isAdmin;
             this.btnAdd.IsVisible = isAdmin;
 
 
