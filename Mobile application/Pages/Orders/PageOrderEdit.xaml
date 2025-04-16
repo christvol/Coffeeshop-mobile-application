@@ -20,11 +20,13 @@
 
         <!-- Клиент -->
         <Label Text="{x:Static res:Strings.LabelCustomer}" />
-        <Entry x:Name="EntryCustomer"/>
+        <!--<Entry x:Name="EntryCustomer"/>-->
+        <Picker x:Name="pCustomer" Title="Customer" />
 
         <!-- Сотрудник -->
         <Label Text="{x:Static res:Strings.LabelEmployee}" />
-        <Entry x:Name="EntryEmployee"/>
+        <!--<Entry x:Name="EntryEmployee"/>-->
+        <Picker x:Name="pEmployee" Title="Employee" />
 
         <!-- Статус заказа -->
         <Label Text="{x:Static res:Strings.LabelOrderStatus}" />

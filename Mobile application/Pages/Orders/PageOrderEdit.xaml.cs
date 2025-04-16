@@ -1,4 +1,4 @@
-using Common.Classes.DB;
+п»їusing Common.Classes.DB;
 using Common.Classes.DTO;
 using Common.Classes.Session;
 
@@ -6,19 +6,21 @@ namespace Mobile_application.Pages
 {
     public partial class PageOrderEdit : CustomContentPage
     {
-        #region Поля
+        #region РџРѕР»СЏ
         private List<OrderStatusDTO> _orderStatuses = new();
         private List<OrderDetailsView> _orderDetails = new();
+        private List<Users> _allUsers = new();
+
         #endregion
 
-        #region Свойства
+        #region РЎРІРѕР№СЃС‚РІР°
         public OrderDTO Order
         {
             get; set;
         }
         #endregion
 
-        #region Конструкторы/Деструкторы
+        #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹/Р”РµСЃС‚СЂСѓРєС‚РѕСЂС‹
         public PageOrderEdit(SessionData sessionData)
             : base(sessionData)
         {
@@ -27,7 +29,7 @@ namespace Mobile_application.Pages
 
             this.Order = this.SessionData.Data as OrderDTO ?? new OrderDTO();
 
-            // Если создается новый заказ, устанавливаем текущую дату
+            // Р•СЃР»Рё СЃРѕР·РґР°РµС‚СЃСЏ РЅРѕРІС‹Р№ Р·Р°РєР°Р·, СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚РµРєСѓС‰СѓСЋ РґР°С‚Сѓ
             if (this.SessionData.Mode == WindowMode.Create && this.Order.CreationDate == null)
             {
                 this.Order.CreationDate = DateTime.UtcNow;
@@ -38,30 +40,49 @@ namespace Mobile_application.Pages
         }
         #endregion
 
-        #region Методы
+        #region РњРµС‚РѕРґС‹
+
+        private void SetupUserPickers()
+        {
+            //var customers = this._allUsers.Where(u => u.IdUserTypeNavigation?.Title == "Customer").ToList();
+            //var employees = this._allUsers.Where(u => u.IdUserTypeNavigation?.Title == "Employee").ToList();
+            List<Users> customers = this._allUsers;
+            List<Users> employees = this._allUsers;
+
+            Users? selectedCustomer = customers.FirstOrDefault(u => u.Id == this.Order?.IdCustomer);
+            Users? selectedEmployee = employees.FirstOrDefault(u => u.Id == this.Order?.IdEmployee);
+
+            this.pCustomer.ConfigurePicker<Users>(customers, "FullName", "Id", selectedCustomer);
+            this.pEmployee.ConfigurePicker<Users>(employees, "FullName", "Id", selectedEmployee);
+        }
+
+
+
 
         /// <summary>
-        /// Заполняет поля формы.
+        /// Р—Р°РїРѕР»РЅСЏРµС‚ РїРѕР»СЏ С„РѕСЂРјС‹.
         /// </summary>
         private async void FillFields()
         {
             this.EntryCreationDate.Text = this.Order?.CreationDate?.ToString("dd.MM.yyyy HH:mm") ?? "";
-            this.EntryCustomer.Text = this.Order?.IdCustomer?.ToString() ?? "";
-            this.EntryEmployee.Text = this.Order?.IdEmployee?.ToString() ?? "";
 
-            this.pStatus.ConfigurePicker<OrderStatusDTO>(this._orderStatuses, "Title", "Id", this.Order?.IdStatus);
+            // РЎС‚Р°С‚СѓСЃ Р·Р°РєР°Р·Р°
+            OrderStatusDTO? selectedStatus = this._orderStatuses.FirstOrDefault(s => s.Id == this.Order?.IdStatus);
+            this.pStatus.ConfigurePicker<OrderStatusDTO>(this._orderStatuses, "Title", "Id", selectedStatus);
 
+            // Р—Р°РіСЂСѓР·РєР° РґРµС‚Р°Р»РµР№ Р·Р°РєР°Р·Р°
             await this.LoadOrderDetails();
 
             this.ccvOrderItems.SetDisplayedFields("ProductTitle", "Total");
             this.ccvOrderItems.SetItems(this._orderDetails);
 
-            // Устанавливаем обработчик выбора элемента
-            this.ccvOrderItems.SetItemSelectedCommand<OrderDetailsView>(this.OnOrderItemSelected);
+            this.ccvOrderItems.SetEditCommand<OrderDetailsView>(this.OnEditOrderProduct);
+            this.ccvOrderItems.SetDeleteCommand<OrderDetailsView>(this.OnDeleteOrderProduct);
+
         }
 
         /// <summary>
-        /// Загружает детали заказа из `OrderDetailsView`.
+        /// Р—Р°РіСЂСѓР¶Р°РµС‚ РґРµС‚Р°Р»Рё Р·Р°РєР°Р·Р° РёР· `OrderDetailsView`.
         /// </summary>
         private async Task LoadOrderDetails()
         {
@@ -70,37 +91,99 @@ namespace Mobile_application.Pages
                 return;
             }
 
-            this._orderDetails = await this.ApiClient.GetOrderDetailsByIdAsync(this.Order.Id);
+            this._orderDetails = (await this.ApiClient.GetOrderDetailsByIdAsync(this.Order.Id))
+                .GroupBy(d => d.OrderProductId)
+                .Select(g => g.First()) // РѕРґРЅР° Р·Р°РїРёСЃСЊ РЅР° РїСЂРѕРґСѓРєС‚
+                .ToList();
+
         }
 
         /// <summary>
-        /// Устанавливает доступность полей.
+        /// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РґРѕСЃС‚СѓРїРЅРѕСЃС‚СЊ РїРѕР»РµР№.
         /// </summary>
         private void SetFieldAccessibility()
         {
             if (this.SessionData.Mode == WindowMode.Read)
             {
-                this.EntryCustomer.IsEnabled = false;
-                this.EntryEmployee.IsEnabled = false;
+                this.pCustomer.IsEnabled = false;
+                this.pEmployee.IsEnabled = false;
                 this.pStatus.IsEnabled = false;
             }
 
-            // Дата создания всегда только для просмотра
+            // Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ РІСЃРµРіРґР° С‚РѕР»СЊРєРѕ РґР»СЏ РїСЂРѕСЃРјРѕС‚СЂР°
             this.EntryCreationDate.IsEnabled = false;
         }
         #endregion
 
-        #region Обработчики событий
+        #region РћР±СЂР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
             this._orderStatuses = await this.ApiClient.GetAllOrderStatusesAsync();
-            this.pStatus.ConfigurePicker<OrderStatusDTO>(this._orderStatuses, "Title", "Id", this.Order?.IdStatus);
+            this._allUsers = await this.ApiClient.GetAllUsersAsync();
+
+            this.SetupUserPickers(); // РЎРЅР°С‡Р°Р»Р° РЅР°СЃС‚СЂР°РёРІР°РµРј РёСЃС‚РѕС‡РЅРёРєРё
+            this.FillFields();       // РџРѕС‚РѕРј РІС‹Р±РёСЂР°РµРј Р·РЅР°С‡РµРЅРёСЏ
         }
 
+        private async void OnEditOrderProduct(OrderDetailsView selectedProduct)
+        {
+            if (selectedProduct == null || this.Order == null)
+            {
+                return;
+            }
+
+            ProductDTO? product = await this.ApiClient.GetProductByIdAsync(selectedProduct.ProductId ?? 0);
+            if (product == null)
+            {
+                await this.DisplayAlert("РћС€РёР±РєР°", "РџСЂРѕРґСѓРєС‚ РЅРµ РЅР°Р№РґРµРЅ", "OK");
+                return;
+            }
+
+            var newSessionData = new SessionData
+            {
+                Mode = WindowMode.Update,
+                CurrentUser = this.SessionData?.CurrentUser,
+                Data = new { Order = this.Order, Product = product }
+            };
+
+            await this.Navigation.PushAsync(new PageProductCustomer(newSessionData));
+        }
+
+        private async void OnDeleteOrderProduct(OrderDetailsView selectedProduct)
+        {
+            if (this.Order == null || selectedProduct.OrderProductId == null)
+            {
+                return;
+            }
+
+            bool confirm = await this.DisplayAlert("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", $"РЈРґР°Р»РёС‚СЊ РїСЂРѕРґСѓРєС‚ \"{selectedProduct.ProductTitle}\" РёР· Р·Р°РєР°Р·Р°?", "Р”Р°", "РќРµС‚");
+            if (!confirm)
+            {
+                return;
+            }
+
+            bool success = await this.ApiClient.DeleteProductFromOrderAsync(this.Order.Id, selectedProduct.OrderProductId);
+
+            if (success)
+            {
+                await this.DisplayAlert("РЈСЃРїРµС…", "РџСЂРѕРґСѓРєС‚ СѓРґР°Р»С‘РЅ РёР· Р·Р°РєР°Р·Р°", "OK");
+                await this.LoadOrderDetails();
+                this.ccvOrderItems.SetItems(this._orderDetails);
+            }
+            else
+            {
+                await this.DisplayAlert("РћС€РёР±РєР°", "РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ РїСЂРѕРґСѓРєС‚", "OK");
+            }
+        }
+
+
+
+
         /// <summary>
-        /// Обработчик выбора элемента списка.
+        /// РћР±СЂР°Р±РѕС‚С‡РёРє РІС‹Р±РѕСЂР° СЌР»РµРјРµРЅС‚Р° СЃРїРёСЃРєР°.
         /// </summary>
         private async void OnOrderItemSelected(OrderDetailsView selectedItem)
         {
@@ -128,32 +211,36 @@ namespace Mobile_application.Pages
             {
                 if (this.Order == null)
                 {
-                    await this.DisplayAlert("Ошибка", "Данные заказа отсутствуют.", "OK");
+                    await this.DisplayAlert("РћС€РёР±РєР°", "Р”Р°РЅРЅС‹Рµ Р·Р°РєР°Р·Р° РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚.", "OK");
                     return;
                 }
 
-                this.Order.IdCustomer = int.TryParse(this.EntryCustomer.Text, out int customerId) ? customerId : null;
-                this.Order.IdEmployee = int.TryParse(this.EntryEmployee.Text, out int employeeId) ? employeeId : null;
+                // РџРѕР»СѓС‡Р°РµРј Id РІС‹Р±СЂР°РЅРЅС‹С… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
+                this.Order.IdCustomer = (this.pCustomer.SelectedItem as Users)?.Id;
+                this.Order.IdEmployee = (this.pEmployee.SelectedItem as Users)?.Id;
+
+                // РЎС‚Р°С‚СѓСЃ
                 this.Order.IdStatus = (this.pStatus.SelectedItem as OrderStatusDTO)?.Id ?? this.Order.IdStatus;
 
                 if (this.SessionData.Mode == WindowMode.Create)
                 {
                     _ = await this.ApiClient.CreateOrderAsync(this.Order);
-                    await this.DisplayAlert("Успех", "Заказ успешно добавлен.", "OK");
+                    await this.DisplayAlert("РЈСЃРїРµС…", "Р—Р°РєР°Р· СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ.", "OK");
                 }
                 else if (this.SessionData.Mode == WindowMode.Update)
                 {
                     _ = await this.ApiClient.UpdateOrderAsync(this.Order.Id, this.Order);
-                    await this.DisplayAlert("Успех", "Заказ успешно обновлен.", "OK");
+                    await this.DisplayAlert("РЈСЃРїРµС…", "Р—Р°РєР°Р· СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅ.", "OK");
                 }
 
                 _ = await this.Navigation.PopAsync();
             }
             catch (Exception ex)
             {
-                await this.DisplayAlert("Ошибка", $"Не удалось сохранить заказ: {ex.Message}", "OK");
+                await this.DisplayAlert("РћС€РёР±РєР°", $"РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕС…СЂР°РЅРёС‚СЊ Р·Р°РєР°Р·: {ex.Message}", "OK");
             }
         }
+
 
         private async void OnCancelClicked(object sender, EventArgs e)
         {

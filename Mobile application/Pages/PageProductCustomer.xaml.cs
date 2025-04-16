@@ -184,6 +184,11 @@ public partial class PageProductCustomer : CustomContentPage, INotifyPropertyCha
     /// </summary>
     private async void InitializeData()
     {
+        if (this.SessionData?.Mode == WindowMode.Update)
+        {
+            this.btnAddToCart.IsVisible = false;
+        }
+
         if (this.SessionData?.Data is { } dataObject &&
             dataObject.GetType().GetProperty("Order") != null &&
             dataObject.GetType().GetProperty("Product") != null)

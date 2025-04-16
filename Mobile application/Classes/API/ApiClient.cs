@@ -216,6 +216,19 @@
 
         #region Users
 
+        public async Task<List<Users>> GetAllUsersAsync()
+        {
+            HttpResponseMessage response = await this.httpClient.GetAsync("Users");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException($"Ошибка при получении пользователей: {response.StatusCode}");
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<Users>>() ?? new List<Users>();
+        }
+
+
         /// <summary>
         /// Создание нового пользователя.
         /// </summary>

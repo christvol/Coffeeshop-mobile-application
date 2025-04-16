@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Users>> GetUserById(int id)
     {
-        var user = await this._context.Set<Users>().FindAsync(id);
+        Users? user = await this._context.Set<Users>().FindAsync(id);
 
         if (user == null)
         {
@@ -51,9 +51,9 @@ public class UsersController : ControllerBase
     [HttpGet("phone/{phoneNumber}")]
     public async Task<ActionResult<Users>> GetUserByPhoneNumber(string phoneNumber)
     {
-        var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(phoneNumber);
+        string cleanedPhoneNumber = StringHelper.CleanPhoneNumber(phoneNumber);
 
-        var user = await this._context.Set<Users>()
+        Users? user = await this._context.Set<Users>()
             .FirstOrDefaultAsync(u => u.PhoneNumber == cleanedPhoneNumber);
 
         if (user == null)
@@ -71,9 +71,9 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Users>> CreateUser([FromBody] UserDTO userDto)
     {
-        var cleanedPhoneNumber = StringHelper.CleanPhoneNumber(userDto.PhoneNumber);
+        string cleanedPhoneNumber = StringHelper.CleanPhoneNumber(userDto.PhoneNumber);
 
-        var existingUser = await this._context.Users
+        Users? existingUser = await this._context.Users
             .FirstOrDefaultAsync(u => u.PhoneNumber == cleanedPhoneNumber);
 
         if (existingUser != null)
@@ -113,7 +113,7 @@ public class UsersController : ControllerBase
             });
         }
 
-        var existingUser = await this._context.Users.FindAsync(id);
+        Users? existingUser = await this._context.Users.FindAsync(id);
 
         if (existingUser == null)
         {
@@ -149,7 +149,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        var user = await this._context.Users.FindAsync(id);
+        Users? user = await this._context.Users.FindAsync(id);
 
         if (user == null)
         {
@@ -169,7 +169,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}/UserType")]
     public async Task<ActionResult<UserTypeDTO>> GetUserType(int id)
     {
-        var user = await this._context.Set<Users>()
+        Users? user = await this._context.Set<Users>()
             .Include(u => u.IdUserTypeNavigation)
             .FirstOrDefaultAsync(u => u.Id == id);
 
